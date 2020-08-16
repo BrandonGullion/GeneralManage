@@ -5,8 +5,97 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmployeeManagementSystem"
         mc:Ignorable="d"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        WindowStartupLocation="CenterScreen"
+        MinWidth="400"
+        MinHeight="100"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0"
+                      CaptionHeight="{Binding CaptionHeight, UpdateSourceTrigger=PropertyChanged, FallbackValue=40}"
+                      ResizeBorderThickness="{Binding ResizeBorderThickness}"/>
+    </WindowChrome.WindowChrome>
+
+    <Border CornerRadius="{Binding CornerRadius, UpdateSourceTrigger=PropertyChanged}"
+            Margin="{Binding Margin, UpdateSourceTrigger=PropertyChanged, FallbackValue=10}"
+            Background="White">
+        <Border.Effect>
+            <DropShadowEffect Color="Black"
+                              BlurRadius="10"
+                              Opacity="0.5"
+                              ShadowDepth="0"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{Binding CaptionHeight, UpdateSourceTrigger=PropertyChanged,FallbackValue=30}"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Image Source="/Icons/tasklist.png"
+                   HorizontalAlignment="Left"
+                   Margin="5 5 2 2"/>
+
+            <TextBlock Grid.Row="0"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center">
+                <Run Text="G" 
+                     FontSize="24"
+                     Foreground="{StaticResource BlueToPurpleGradient}"/>
+                <Run Text="M"
+                     FontSize="24"
+                     Foreground="{StaticResource PurpleToBlueGradient}"/>
+            </TextBlock>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+
+                <Button Content="-"
+                        Width="30"
+                        FontWeight="Bold"
+                        FontSize="20"
+                        Command="{Binding MinWindowCommand}"
+                        Style="{StaticResource IconButton}"/>
+
+                <Button Content="[ ]"
+                        Width="30"
+                        Command="{Binding MaxWindowCommand}"
+                        Style="{StaticResource IconButton}"/>
+
+                <Button Content="X"
+                        Margin="5 5 10 5"
+                        Width="30"
+                        Command="{Binding CloseWindowCommand}"
+                        Style="{StaticResource CloseIconButton}"/>
+            </StackPanel>
+
+            <Border Grid.Row="1"
+                    Style="{StaticResource LineBreak}"/>
+
+            <Border Grid.Row="2"
+                    CornerRadius="0 0 5 5"
+                    Padding="3">
+                <Border.Background>
+                    <LinearGradientBrush>
+                        <GradientStop Color="{StaticResource LightBlue}" Offset="0.0"/>
+                        <GradientStop Color="{StaticResource LightPurple}" Offset="1.0"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <Frame Grid.Row="2"
+                       x:Name="MainContentFrame"
+                       Content="{Binding CurrentPage, Converter={local:ApplicationPageValueConverter}}"/>
+
+            </Border>
+
+        </Grid>
         
-    </Grid>
+    </Border>
+
+
+
 </Window>

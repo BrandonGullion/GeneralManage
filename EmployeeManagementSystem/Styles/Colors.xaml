@@ -1,0 +1,42 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:EmployeeManagementSystem.Styles">
+
+    <Color x:Key="LightPurple">#edabff</Color>
+    <SolidColorBrush x:Key="LightPurpleBrush" Color="{StaticResource LightPurple}"/>
+
+    <Color x:Key="LightBlue">#add6ff</Color>
+    <SolidColorBrush x:Key="LightBlueBrush" Color="{StaticResource LightBlue}"/>
+
+    <Color x:Key="Blue">#82d1ff</Color>
+    <SolidColorBrush x:Key="BlueBrush" Color="{StaticResource Blue}"/>
+
+    <Color x:Key="DarkBlue">#0da8ff</Color>
+    <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
+
+    <Color x:Key="VeryLightBlue">#e6f6ff</Color>
+    <SolidColorBrush x:Key="VeryLightBlueBrush" Color="{StaticResource VeryLightBlue}"/>
+    
+    <Color x:Key="LightGrey">#cfcfcf</Color>
+    <SolidColorBrush x:Key="LightGreyBrush" Color="{StaticResource LightGrey}"/>
+
+    <Color x:Key="DarkGrey">#4d4d4d</Color>
+    <SolidColorBrush x:Key="DarkGreyBrush" Color="{StaticResource DarkGrey}"/>
+
+    <Color x:Key="CloseButtonHover">#ff8c8c</Color>
+    <SolidColorBrush x:Key="CloseButtonHoverBrush" Color="{StaticResource CloseButtonHover}"/>
+
+    <Color x:Key="Grey">#858585</Color>
+    <SolidColorBrush x:Key="GreyBrush" Color="{StaticResource Grey}"/>
+
+    <LinearGradientBrush x:Key="PurpleToBlueGradient">
+        <GradientStop Color="{StaticResource LightPurple}" Offset="0"/>
+        <GradientStop Color="{StaticResource LightBlue}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="BlueToPurpleGradient">
+        <GradientStop Color="{StaticResource LightBlue}" Offset="0"/>
+        <GradientStop Color="{StaticResource LightPurple}" Offset="1"/>
+    </LinearGradientBrush>
+
+</ResourceDictionary>

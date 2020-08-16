@@ -1,0 +1,64 @@
+﻿<Page x:Class="EmployeeManagementSystem.Pages.LoginPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:EmployeeManagementSystem.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="500" d:DesignWidth="400"
+      Title="LoginPage">
+
+    <Grid VerticalAlignment="Center"
+          HorizontalAlignment="Center">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <Border Background="White"
+                        CornerRadius="10"
+                        Width="250"
+                        Opacity="0.8"
+                        Padding="20">
+                    <StackPanel VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+                        <TextBlock Text="Login"
+                                   Margin="0 30 0 10"
+                                   HorizontalAlignment="Center"
+                                   Foreground="{StaticResource BlueBrush}"
+                                   FontSize="40"/>
+
+
+                        <TextBox Style="{StaticResource DefaultTextBox}"
+                                 BorderThickness="2"
+                                 FontSize="14"
+                                 Width="200"
+                                 Foreground="{StaticResource GreyBrush}"
+                                 Tag="User Name"/>
+
+
+                        <PasswordBox Style="{StaticResource DefaultPasswordBox}"
+                                     FontSize="14"
+                                     Width="200"
+                                     BorderThickness="2"
+                                     Foreground="{StaticResource GreyBrush}"
+                                     FontFamily="{StaticResource LatoRegular}"
+                                     Tag="Password"/>
+
+                        <Button Content="Submit"
+                                Style="{StaticResource TextButton}"
+                                HorizontalAlignment="Center"
+                                Margin="5 5 5 20"/>
+
+
+                    </StackPanel>
+                </Border>
+
+                <Button Margin="10"
+                        Content="Add Management Member"
+                        HorizontalAlignment="Center"
+                        Style="{StaticResource TextButtonW/OBorder}"
+                        FontSize="16"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
