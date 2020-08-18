@@ -88,7 +88,8 @@
 
                 <Frame Grid.Row="2"
                        x:Name="MainContentFrame"
-                       Content="{Binding CurrentPage, Converter={local:ApplicationPageValueConverter}}"/>
+                       NavigationUIVisibility="Hidden"
+                       Content="{Binding CurrentPage}"/>
 
             </Border>
 

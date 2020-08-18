@@ -14,6 +14,9 @@
     <Color x:Key="DarkBlue">#0da8ff</Color>
     <SolidColorBrush x:Key="DarkBlueBrush" Color="{StaticResource DarkBlue}"/>
 
+    <Color x:Key="HoverBlue">#d1e8ff</Color>
+    <SolidColorBrush x:Key="HoveBlueBrush" Color="{StaticResource HoverBlue}"/>
+
     <Color x:Key="VeryLightBlue">#e6f6ff</Color>
     <SolidColorBrush x:Key="VeryLightBlueBrush" Color="{StaticResource VeryLightBlue}"/>
     
@@ -37,6 +40,13 @@
     <LinearGradientBrush x:Key="BlueToPurpleGradient">
         <GradientStop Color="{StaticResource LightBlue}" Offset="0"/>
         <GradientStop Color="{StaticResource LightPurple}" Offset="1"/>
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="BlueToPurpleFadeGradient">
+        <GradientStop Color="Transparent" Offset="0"/>
+        <GradientStop Color="{StaticResource LightBlue}" Offset="0.25"/>
+        <GradientStop Color="{StaticResource LightPurple}" Offset=".75"/>
+        <GradientStop Color="Transparent" Offset="1"/>
     </LinearGradientBrush>
 
 </ResourceDictionary>

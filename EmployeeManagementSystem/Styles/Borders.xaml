@@ -15,5 +15,18 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <Style TargetType="{x:Type Border}" x:Key="LineBreakGradient">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush>
+                    <GradientStop Color="Transparent" Offset="0"/>
+                    <GradientStop Color="{StaticResource LightBlue}" Offset="0.25"/>
+                    <GradientStop Color="{StaticResource LightPurple}" Offset="0.75"/>
+                    <GradientStop Color="Transparent" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

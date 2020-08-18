@@ -1,10 +1,12 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using EmployeeManagementSystem.Pages;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace EmployeeManagementSystem
 {
@@ -59,7 +61,7 @@ namespace EmployeeManagementSystem
             set { captionHeight = value; OnPropertyChanged(nameof(CaptionHeight)); }
         }
 
-        public ApplicationPage CurrentPage { get; set; } = ApplicationPage.Login;
+        public Page CurrentPage { get; set; } = new Dashboard();
 
         #endregion
 

@@ -20,8 +20,11 @@ namespace EmployeeManagementSystem
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static MainWindow mainWindow { get; set; }
+
         public MainWindow()
         {
+            mainWindow = this;
             DataContext = new MainWindowViewModel(this);
             InitializeComponent();
         }
