@@ -87,6 +87,7 @@
                 </Border.Background>
 
                 <Frame Grid.Row="2"
+                       ClipToBounds="True"
                        x:Name="MainContentFrame"
                        NavigationUIVisibility="Hidden"
                        Content="{Binding CurrentPage}"/>

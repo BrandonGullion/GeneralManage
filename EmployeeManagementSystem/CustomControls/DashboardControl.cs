@@ -51,7 +51,7 @@ namespace EmployeeManagementSystem
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DashboardControl), new FrameworkPropertyMetadata(typeof(DashboardControl)));
         }
-
+        
 
         /// <summary>
         /// Templated binding for the textbox
@@ -94,7 +94,17 @@ namespace EmployeeManagementSystem
             DependencyProperty.Register("Image", typeof(ImageSource), typeof(DashboardControl), new PropertyMetadata(null));
 
 
+        public MouseEventArgs Clicked
+        {
+            get { return (MouseEventArgs)GetValue(ClickedProperty); }
+            set { SetValue(ClickedProperty, value); }
+        }
 
+        // Using a DependencyProperty as the backing store for Clicked.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ClickedProperty =
+            DependencyProperty.Register("Clicked", typeof(MouseEventArgs), typeof(DashboardControl), new PropertyMetadata(null));
+
+        
 
 
     }

@@ -8,7 +8,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Dashboard">
-
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -22,37 +22,47 @@
         </Grid.ColumnDefinitions>
 
         <local:DashboardControl Grid.Row="0"
-                                Image="/Icons/tasklist.png"
+                                Image="/Icons/Schedule.png"
                                 ItemText="Schedule"
                                 Grid.Column="0"
+                                MouseDown="DashboardControl_MouseDown"
                                 DesiredCornerRadius="5"
                                 Margin="30"/>
 
         <local:DashboardControl Grid.Row="0"
+                                Image="/Icons/Contact.png"
                                 ItemText="Employees"
                                 Grid.Column="1"
+                                MouseDown="DashboardControl_MouseDown_1"
                                 DesiredCornerRadius="5"
                                 Margin="30"/>
 
         <local:DashboardControl Grid.Row="0"
+                                Image="/Icons/Vacation.png"
                                 ItemText="Vacation"
+                                MouseDown="DashboardControl_MouseDown_2"
                                 Grid.Column="2"
                                 DesiredCornerRadius="5"
                                 Margin="30"/>
 
         <local:DashboardControl Grid.Row="1"
+                                Image="/Icons/Money.png"
+                                MouseDown="DashboardControl_MouseDown_3"
                                 ItemText="Payroll"
                                 Grid.Column="0"
                                 DesiredCornerRadius="5"
                                 Margin="30"/>
 
         <local:DashboardControl Grid.Row="1"
+                                MouseDown="DashboardControl_MouseDown_4"
                                 Grid.Column="1"
                                 DesiredCornerRadius="5"
                                 Margin="30"/>
 
         <local:DashboardControl Grid.Row="1"
                                 Grid.Column="2"
+                                MouseDown="DashboardControl_MouseDown_5"
+                                Image="/Icons/Settings.png"
                                 DesiredCornerRadius="5"
                                 ItemText="Settings"
                                 Margin="30"/>

@@ -3,8 +3,6 @@ using System.Windows.Controls;
 using System.Windows;
 using System;
 using System.Threading.Tasks;
-using System.Windows.Media.Animation;
-using EmployeeManagementSystem.Pages;
 
 namespace EmployeeManagementSystem.Pages
 {
@@ -65,6 +63,10 @@ namespace EmployeeManagementSystem.Pages
 
                     await PageAnimations.Fade(0, 1, 0.9f, this);
 
+                    break;
+
+                case PageAnimationEnum.FadeOut:
+                    await PageAnimations.Fade(1, 0, 0.3f, this);
                     break;
             }
         }

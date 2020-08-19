@@ -23,7 +23,7 @@
                                 Margin="{TemplateBinding Padding}"
                                 x:Name="border"
                                 CornerRadius="{TemplateBinding DesiredCornerRadius}">
-
+                                
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
@@ -31,7 +31,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
 
-                                <Border Padding="10">
+                                <Border Padding="20">
                                     <Image Source="{TemplateBinding Image}"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"/>
@@ -45,11 +45,10 @@
                                            Grid.Row="2"
                                            FontFamily="{StaticResource LatoRegular}"
                                            Foreground="{StaticResource DarkGreyBrush}"
-                                           FontSize="16"
+                                           FontSize="18"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
                                            Margin="10"/>
-
 
                             </Grid>
                         </Border>

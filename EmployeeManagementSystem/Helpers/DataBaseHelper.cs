@@ -1,9 +1,11 @@
-﻿using SQLite;
+﻿using EmployeeManagementSystem.Model;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,8 +17,15 @@ namespace EmployeeManagementSystem
         public static string CurrentDirectory { get; set; } = Directory.GetCurrentDirectory();
         // Static naming for user db
         public static string UserDatabaseName { get; set; } = "User.db";
+        public static string EmployeeDatabaseName { get; set; } = "Employee.db";
+        public static string PositionDatabaseName { get; set; } = "Position.db";
+
         // Combine to save to current directory 
         public static string UserDatabase { get; set; } = Path.Combine(CurrentDirectory, UserDatabaseName);
+        public static string EmployeeDatabase { get; set; } = Path.Combine(CurrentDirectory, EmployeeDatabaseName);
+        public static string PositionDatabase { get; set; } = Path.Combine(CurrentDirectory, PositionDatabaseName);
+
+        #region Management User DB Methods 
 
         /// <summary>
         /// DB Used to access SQL server and return a list of users for login 
@@ -39,6 +48,7 @@ namespace EmployeeManagementSystem
             return UserList;
         }
 
+        // Create User TODO:: Implement only when manager is logged in 
         public static void AddUser(string userName, string password, int authorityLevel = 1)
         {
             using (SQLiteConnection conn = new SQLiteConnection(UserDatabase))
@@ -55,11 +65,16 @@ namespace EmployeeManagementSystem
             }
         }
 
-        public static void DeleteUser()
+        // Delete the user that is selected 
+        public static void DeleteUser(Users users)
         {
-
+            using (SQLiteConnection conn = new SQLiteConnection(UserDatabase))
+            {
+                conn.Delete(users);
+            }
         }
 
+        // Checking DB upon login to make sure they match someone in the db
         public static bool ValidateUser(string userName, string password)
         {
             using (SQLiteConnection conn = new SQLiteConnection(UserDatabase))
@@ -80,6 +95,133 @@ namespace EmployeeManagementSystem
                 return false;
             }
         }
+        #endregion
+
+        #region EmployeeDB Methods 
+
+        public static List<EmployeeModel> ReadEmployeeDB()
+        {
+            var EmployeeList = new List<EmployeeModel>();
+
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // Create table if not currently there
+                conn.CreateTable<EmployeeModel>();
+
+                // Store all employees into the user list 
+                EmployeeList = conn.Table<EmployeeModel>().ToList();
+            }
+
+            // Return the list 
+            return EmployeeList;
+        }
+
+        // Add employee to db 
+        public static void AddEmplyee(string firstName, string lastName, int authorityLevel, 
+            string employeeId, string phoneNumber, string position, string hourlyWage)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // Create table if not currently there
+                conn.CreateTable<EmployeeModel>();
+
+                var NewEmployee = new EmployeeModel
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    AuthorityLevel = authorityLevel,
+                    EmployeeId = employeeId,
+                    PhoneNumber = phoneNumber,
+                    Position = position,
+                    HourlyWage = hourlyWage,
+                    FirstLetter = firstName.First().ToString(),
+                };
+
+                // Store all management users into the user list 
+                conn.Insert(NewEmployee);
+            }
+        }
+
+        public static void DeleteEmployee(EmployeeModel employeeModel)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // Make sure table is present 
+                conn.CreateTable<EmployeeModel>();
+
+                // Delete the passed in model 
+                conn.Delete(employeeModel);
+            }
+        }
+
+        public static void UpdateEmployee(EmployeeModel employeeModel)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // sends to db 
+                conn.Update(employeeModel);
+            }
+        }
+
+
+        #endregion
+
+        #region PositionDB Methods
+
+        // Read position db and store in list 
+        public static List<PositionModel> ReadPositionDB()
+        {
+            var PositionList = new List<PositionModel>();
+
+            using (SQLiteConnection conn = new SQLiteConnection(PositionDatabase))
+            {
+                // Create table if not currently there
+                conn.CreateTable<PositionModel>();
+
+                // Store all management users into the user list 
+                PositionList = conn.Table<PositionModel>().ToList();
+            }
+
+            // Return the list 
+            return PositionList;
+        }
+
+        // Insert a desired position 
+        public static void AddPosition(string position)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(PositionDatabase))
+            {
+                // Create table if not currently there
+                conn.CreateTable<PositionModel>();
+
+                PositionModel positionModel = new PositionModel();
+                positionModel.Position = position;
+
+                // Store all management users into the user list 
+                conn.Insert(positionModel);
+            }
+        }
+
+        public static void DeletePosition(PositionModel positionModel)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(PositionDatabase))
+            {
+                conn.Delete(positionModel);
+            }
+        }
+
+        public static void UpdatePosition(PositionModel positionModel, string updatedPositionName)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(PositionDatabase))
+            {
+                positionModel.Position = updatedPositionName;
+                conn.Update(positionModel);
+            }
+        }
+
+
+
+        #endregion
     }
 
 }

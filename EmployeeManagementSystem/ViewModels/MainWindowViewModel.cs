@@ -43,15 +43,6 @@ namespace EmployeeManagementSystem
             set { cornerRadius = value; OnPropertyChanged(nameof(CornerRadius)); } 
         }
 
-        // Margin to allow for drop shadow
-        private int margin = 10;
-
-        public int Margin
-        {
-            get { return window.WindowState == WindowState.Maximized ? 0 : margin; }
-            set { margin = value; OnPropertyChanged(nameof(Margin)); }
-        }
-
         // Caption click and drag height 
         private int captionHeight;
 
@@ -80,12 +71,11 @@ namespace EmployeeManagementSystem
             // Listen Out for window state changes 
             window.StateChanged += (sender, e) =>
             { 
-                OnPropertyChanged(nameof(Margin));
                 OnPropertyChanged(nameof(CornerRadius));
             };
 
             // Adds the margin associated with the drop shadow effect 
-            CaptionHeight = 30 + Margin;
+            CaptionHeight = 40;
             
         }
         #endregion

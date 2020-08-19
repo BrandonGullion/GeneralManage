@@ -32,6 +32,9 @@
     <Color x:Key="Grey">#858585</Color>
     <SolidColorBrush x:Key="GreyBrush" Color="{StaticResource Grey}"/>
 
+    <Color x:Key="HoverWhite">#f0f0f0</Color>
+    <SolidColorBrush x:Key="HoverWhiteBrush" Color="{StaticResource HoverWhite}"/>
+
     <LinearGradientBrush x:Key="PurpleToBlueGradient">
         <GradientStop Color="{StaticResource LightPurple}" Offset="0"/>
         <GradientStop Color="{StaticResource LightBlue}" Offset="1"/>
