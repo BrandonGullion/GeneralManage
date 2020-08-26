@@ -1,7 +1,10 @@
-﻿using EmployeeManagementSystem.Model;
+﻿using EmployeeManagementSystem.Helpers;
+using EmployeeManagementSystem.Model;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -135,6 +138,7 @@ namespace EmployeeManagementSystem
                     Position = position,
                     HourlyWage = hourlyWage,
                     FirstLetter = firstName.First().ToString(),
+                    RandomHex = RandomRGBHelper.GenerateRandomColor(),
                 };
 
                 // Store all management users into the user list 
@@ -161,6 +165,71 @@ namespace EmployeeManagementSystem
                 // sends to db 
                 conn.Update(employeeModel);
             }
+        }
+
+        // Read Database and return list 
+        public static List<ShiftModel> ReadShiftDb()
+        {
+            List<ShiftModel> ShiftModelList = new List<ShiftModel>();
+
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // Creates table
+                conn.CreateTable<ShiftModel>();
+
+                // Reads db and generates the list 
+                ShiftModelList = conn.Table<ShiftModel>().ToList();
+            }
+            return ShiftModelList;
+        }
+
+        public static void AddShift(EmployeeModel employeeModel, int startHourValue, int startMinValue, int endHourValue,
+            int endMinValue, int day, int month, int year)
+        {
+
+            // Creates a new instance of a shift and adds it to the database 
+            ShiftModel shiftModel = new ShiftModel()
+            {
+                EmployeeId = employeeModel.Id,
+                StartHourValue = startHourValue,
+                StartMinValue = startMinValue,
+                EndtHourValue = endHourValue,
+                EndMinValue = endMinValue,
+                Day = day,
+                Month = month,
+                Year = year,
+                Name = $"{employeeModel.FirstName} {employeeModel.LastName}",
+                Hex = employeeModel.RandomHex,
+                Width = (Math.Abs(startHourValue - endHourValue) * 60) + Math.Abs(startMinValue - endMinValue),
+                Margin = (startHourValue * 60) + startMinValue,
+            };
+
+            using(SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // Creates the table 
+                conn.CreateTable<ShiftModel>();
+
+                // Inserts the shift into the db 
+                conn.Insert(shiftModel);
+            }
+
+        }
+
+        public static void DeleteShift(ShiftModel shiftModel)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // make sure that the table is present 
+                conn.CreateTable<ShiftModel>();
+
+                // Delete the selected model 
+                conn.Delete(shiftModel);
+            }
+        }
+
+        public static void UpdateShift()
+        {
+
         }
 
 
@@ -222,6 +291,15 @@ namespace EmployeeManagementSystem
 
 
         #endregion
+
+        // May need to set it up so it takes in a list to work with 
+        public static void MergeTables()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // TODO:: Will have to get the two tables, create them into a new table and return that 
+            }
+        }
     }
 
 }

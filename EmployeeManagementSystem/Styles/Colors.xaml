@@ -35,6 +35,12 @@
     <Color x:Key="HoverWhite">#f0f0f0</Color>
     <SolidColorBrush x:Key="HoverWhiteBrush" Color="{StaticResource HoverWhite}"/>
 
+    <LinearGradientBrush x:Key="ClockNumberHover">
+        <GradientStop Color="Transparent" Offset="0"/>
+        <GradientStop Color="{StaticResource LightBlue}" Offset="0.5"/>
+        <GradientStop Color="Transparent" Offset="1"/>
+    </LinearGradientBrush>
+    
     <LinearGradientBrush x:Key="PurpleToBlueGradient">
         <GradientStop Color="{StaticResource LightPurple}" Offset="0"/>
         <GradientStop Color="{StaticResource LightBlue}" Offset="1"/>

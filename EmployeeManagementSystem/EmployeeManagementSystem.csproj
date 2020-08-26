@@ -112,6 +112,8 @@
     <Compile Include="CustomControls\DashboardControl.cs" />
     <Compile Include="DataModels\ApplicationPage.cs" />
     <Compile Include="Helpers\DataBaseHelper.cs" />
+    <Compile Include="Helpers\RandomRGBHelper.cs" />
+    <Compile Include="Model\ShiftModel.cs" />
     <Compile Include="Model\EmployeeModel.cs" />
     <Compile Include="Model\PositionModel.cs" />
     <Compile Include="Model\Users.cs" />
@@ -125,8 +127,17 @@
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\SchedulePage.xaml.cs">
+      <DependentUpon>SchedulePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ClockMinSelectionControl.xaml.cs">
+      <DependentUpon>ClockMinSelectionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ClockSelectionControl.xaml.cs">
+      <DependentUpon>ClockSelectionControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\EmployeePageControls\AddEmployeeMenuControl.xaml.cs">
       <DependentUpon>AddEmployeeMenuControl.xaml</DependentUpon>
@@ -144,14 +155,29 @@
     <Compile Include="UserControls\EmployeePageControls\EmployeeSideMenu.xaml.cs">
       <DependentUpon>EmployeeSideMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Scheduler\AppointmentItemControl.xaml.cs">
+      <DependentUpon>AppointmentItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Scheduler\CalendarControlViewModel.cs" />
+    <Compile Include="UserControls\Scheduler\SchedulerControl.xaml.cs">
+      <DependentUpon>SchedulerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Scheduler\SchedulerTopBar.xaml.cs">
+      <DependentUpon>SchedulerTopBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Scheduler\TimeSlotControl.xaml.cs">
+      <DependentUpon>TimeSlotControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="ValueConverters\BoolToVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\MarginToThicknessConverter.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\DashboardViewModel.cs" />
     <Compile Include="ViewModels\EmployeePageViewModel.cs" />
     <Compile Include="ViewModels\LoginPageViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\ScheduleViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -176,6 +202,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\SchedulePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -185,6 +215,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\Buttons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Calendars.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -208,6 +242,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UserControls\ClockMinSelectionControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\ClockSelectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\EmployeePageControls\AddEmployeeMenuControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -225,6 +267,22 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\EmployeePageControls\EmployeeSideMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Scheduler\AppointmentItemControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Scheduler\SchedulerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Scheduler\SchedulerTopBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Scheduler\TimeSlotControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -303,6 +361,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icons\DownArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\LeftArrow.png" />
+    <Resource Include="Icons\RightArrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />

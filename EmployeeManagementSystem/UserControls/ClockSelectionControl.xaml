@@ -1,0 +1,270 @@
+﻿<UserControl x:Class="EmployeeManagementSystem.UserControls.ClockSelectionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EmployeeManagementSystem.UserControls"
+             mc:Ignorable="d"
+             Height="330"
+             Width="330"
+             Background="Transparent"
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <UserControl.Resources>
+        <ControlTemplate x:Key="ClockNumberButton" TargetType="{x:Type ButtonBase}">
+            <Border x:Name="border" 
+                    BorderThickness="0" 
+                    Padding="{TemplateBinding Padding}"
+                    Background="{TemplateBinding Background}" 
+                    SnapsToDevicePixels="True">
+                <ContentPresenter x:Name="contentPresenter"
+                                  ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                  Content="{TemplateBinding Content}"
+                                  ContentStringFormat="{TemplateBinding ContentStringFormat}" 
+                                  Focusable="False" 
+                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  RecognizesAccessKey="True" 
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Button.IsDefaulted" Value="True">
+                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" TargetName="border">
+                        <Setter.Value>
+                            <RadialGradientBrush>
+                                <GradientStop Color="{StaticResource LightBlue}" Offset="0"/>
+                                <GradientStop Color="{StaticResource LightBlue}" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF3C7FB1"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" TargetName="border">
+                        <Setter.Value>
+                            <RadialGradientBrush>
+                                <GradientStop Color="{StaticResource LightGrey}" Offset="0"/>
+                                <GradientStop Color="{StaticResource LightGrey}" Offset="0.5"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF245A83"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" TargetName="border" Value="#FFF4F4F4"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FFADB2B5"/>
+                    <Setter Property="Foreground" Value="#FF838383"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </UserControl.Resources>
+
+    <!-- Outline for the clock -->
+    <Grid>
+        <!-- 1 Button -->
+        <Button Margin="200,30,70,240"
+                Content="1"
+                Padding="0"
+                MouseEnter="Button_MouseEnter"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="OneHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=OneHourButton}"/>
+
+        <!-- 2 Button -->
+        <Button Margin="240,77,30,193"
+                Content="2"
+                Padding="0"
+                MouseEnter="Button_MouseEnter"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="TwoHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=TwoHourButton}"/>
+        
+        <!-- 3 Button -->
+        <Button Margin="260,137,10,133"
+                MouseEnter="Button_MouseEnter"
+                Content="3"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="ThreeHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=ThreeHourButton}"/>
+
+        <!-- 4 Button -->
+        <Button Margin="240,198,30,72"
+                MouseEnter="Button_MouseEnter"
+                Content="4"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="FourHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=FourHourButton}"/>
+        
+        <!-- 5 Button -->
+        <Button Margin="200,240,70,30"
+                MouseEnter="Button_MouseEnter"
+                Content="5"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="FiveHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=FiveHourButton}"/>
+
+        <!-- 6 Button -->
+        <Button Margin="137,260,133,10"
+                Content="6"
+                MouseEnter="Button_MouseEnter"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="SixHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=SixHourButton}"/>
+
+        <!-- 7 Button -->
+        <Button Margin="76,240,194,30"
+                MouseEnter="Button_MouseEnter"
+                Content="7"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="SevenHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=SevenHourButton}"/>
+
+        <!-- 8 Button -->
+        <Button Margin="32,198,238,72"
+                Content="8"
+                MouseEnter="Button_MouseEnter"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="EightHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=EightHourButton}"/>
+        
+        <!-- 9 Button -->
+        <Button Margin="10,137,260,133"
+                Content="9"
+                MouseEnter="Button_MouseEnter"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="NineHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=NineHourButton}"/>
+
+        <!-- 10 Button -->
+        <Button Margin="32,77,238,193"
+                MouseEnter="Button_MouseEnter"
+                Content="10"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="TenHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=TenHourButton}"/>
+
+        <!-- 11 Button -->
+        <Button Margin="76,30,194,240"
+                Width="60"
+                Template="{DynamicResource ClockNumberButton}"
+                Content="11"
+                Height="60"
+                MouseEnter="Button_MouseEnter"
+                Padding="0"
+                FontSize="16"
+                Background="Transparent"
+                Panel.ZIndex="3"
+                x:Name="ElevenHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=ElevenHourButton}"/>
+
+        <!-- 12 Button -->
+        <Button Margin="4 0 0 250"
+                Content="12"
+                MouseEnter="Button_MouseEnter"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="TwelveHourButton"
+                Command="{Binding HourSelectCommand}"
+                CommandParameter="{Binding ElementName=TwelveHourButton}"/>
+
+        <Line X1="168"
+              X2="168"
+              Y1="165"
+              Y2="60"
+              Name="HourClockHand"
+              Opacity="1"
+              StrokeThickness="2"
+              Stroke="{StaticResource GreyBrush}"
+              Panel.ZIndex="5"/>
+
+        <!-- Background for the clock -->
+        <Grid>
+            <Border CornerRadius="200"
+                    Background="White"
+                    Opacity="0.8"
+                    Margin="12 10 10 10"/>
+        </Grid>
+    </Grid>
+</UserControl>

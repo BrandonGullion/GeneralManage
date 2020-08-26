@@ -1,0 +1,116 @@
+﻿<local:BaseControl x:Class="EmployeeManagementSystem.UserControls.Scheduler.SchedulerTopBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EmployeeManagementSystem.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1200">
+    <local:BaseControl.Resources>
+        <Image Source="/Icons/LeftArrow.png" x:Key="LeftArrow"/>
+        <Image Source="/Icons/RightArrow.png" x:Key="RightArrow"/>
+        <Image Source="/Icons/plus.png" x:Key="plus"/>
+    </local:BaseControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Background="White"
+                        HorizontalAlignment="Left"
+                        CornerRadius="5"
+                        Padding="5"
+                        Margin="5 5 5 5"
+                        Grid.Column="0">
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock Text="Select Employee"
+                                       Foreground="{StaticResource DarkGreyBrush}"
+                                       Margin="5"
+                                       VerticalAlignment="Center"/>
+
+                    <ComboBox Width="200"
+                                  Style="{StaticResource ComboBoxStyle1}"
+                                  ItemsSource="{Binding EmployeeList}"
+                                  DisplayMemberPath="FirstName"
+                                  SelectedItem="{Binding SelectedEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  VerticalAlignment="Center"/>
+
+                    <Button Style="{StaticResource ImageButton}"
+                                    Content="{StaticResource plus}"
+                                    Width="30"
+                                    Command="{Binding AddShiftCommand}"
+                                    Height="30"
+                                    BorderThickness="1"
+                                    BorderBrush="{StaticResource LightBlueBrush}"/>
+
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1"
+                            Background="White"
+                            CornerRadius="5"
+                            Margin="15 5 5 5"
+                            Padding="5">
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource TextButton}"
+                                    Command="{Binding EditShiftCommand}"
+                                    Content="Edit"/>
+
+                    <Button Style="{StaticResource TextWRedHoverButton}"
+                                    Command="{Binding DeleteShiftCommand}"
+                                    Content="Delete"/>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" 
+                                Grid.Column="2"
+                                Margin="5 0 0 0">
+                <Border Background="White"
+                                CornerRadius="5"
+                                Margin="5 5 5 5">
+                    <Button Content="{StaticResource LeftArrow}"
+                                    Style="{StaticResource ImageButton}"
+                                    Command="{Binding PreviousWeekCommand}"
+                                    Width="40"
+                                    Height="40"/>
+                </Border>
+
+                <Border Margin="5"
+                                CornerRadius="5"
+                                Background="White">
+                    <Button Style="{StaticResource ImageButton}"
+                                    Content="{StaticResource RightArrow}"
+                                    Width="40"
+                                    Command="{Binding NextWeekCommand}"
+                                    Height="40"/>
+                </Border>
+
+                <Border Margin="265 5 5 5"
+                        CornerRadius="5"
+                        Padding="5"
+                        Width="90"
+                        Background="White">
+                    <Button Content="Return"
+                                    Command="{Binding ReturnCommand}"
+                                    Style="{StaticResource TextButton}"/>
+                </Border>
+
+            </StackPanel>
+        </Grid>
+    </Grid>
+</local:BaseControl>

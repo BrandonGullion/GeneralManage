@@ -260,6 +260,13 @@ namespace EmployeeManagementSystem
         }
 
         // Save New Employee
+
+        /// <summary>
+        /// 
+        /// TODO:: Clear the results and return to the information page with the selected Employee only!
+        /// 
+        /// </summary>
+
         public void Save()
         {
             // Saves Employee and updates the Employee List 

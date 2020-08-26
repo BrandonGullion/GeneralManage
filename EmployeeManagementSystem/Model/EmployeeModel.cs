@@ -25,6 +25,7 @@ namespace EmployeeManagementSystem
         public int AuthorityLevel { get; set; }
         public string Ext { get; set; }
         public string FirstLetter { get; set; }
+        public string RandomHex { get; set; }
 
     }
 }

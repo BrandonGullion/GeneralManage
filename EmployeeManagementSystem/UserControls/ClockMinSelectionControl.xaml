@@ -1,0 +1,214 @@
+﻿<UserControl x:Class="EmployeeManagementSystem.UserControls.ClockMinSelectionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EmployeeManagementSystem.UserControls"
+             x:Name="root"
+             mc:Ignorable="d"
+             Height="330"
+             Width="330"
+             Background="Transparent"
+             d:DesignHeight="300" d:DesignWidth="300">
+    
+    <!-- Outline for the clock -->
+    <Grid>
+        <!-- 1 Button -->
+        <Button Margin="200,30,70,240"
+                x:Name="FiveMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=FiveMinButton}"
+                Content="5"
+                Padding="0"
+                MouseEnter="Button_MouseEnter"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"/>
+
+        <!-- 2 Button -->
+        <Button Margin="240,77,30,193"
+                Content="10"
+                Padding="0"
+                MouseEnter="Button_MouseEnter"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="TenMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=TenMinButton}"/>
+        
+        <!-- 3 Button -->
+        <Button Margin="260,137,10,133"
+                MouseEnter="Button_MouseEnter"
+                Content="15"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                x:Name="FifteenMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=FifteenMinButton}"
+                Template="{DynamicResource ClockNumberButton}"/>
+
+        <!-- 4 Button -->
+        <Button Margin="240,198,30,72"
+                MouseEnter="Button_MouseEnter"
+                Content="20"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                x:Name="TwentyMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=TwentyMinButton}"
+                Template="{DynamicResource ClockNumberButton}"/>
+        
+        <!-- 5 Button -->
+        <Button Margin="200,240,70,30"
+                MouseEnter="Button_MouseEnter"
+                Content="25"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="TwentyFiveMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=TwentyFiveMinButton}"/>
+
+        <!-- 6 Button -->
+        <Button Margin="137,260,133,10"
+                Content="30"
+                MouseEnter="Button_MouseEnter"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="ThirtyMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=ThirtyMinButton}"/>
+
+        <!-- 7 Button -->
+        <Button Margin="76,240,194,30"
+                MouseEnter="Button_MouseEnter"
+                Content="35"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="ThirtyFiveMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=ThirtyFiveMinButton}"/>
+
+        <!-- 8 Button -->
+        <Button Margin="32,198,238,72"
+                Content="40"
+                MouseEnter="Button_MouseEnter"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="FortyMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=FortyMinButton}"/>
+        
+        <!-- 9 Button -->
+        <Button Margin="10,137,260,133"
+                Content="45"
+                MouseEnter="Button_MouseEnter"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="FortyFiveMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=FortyFiveMinButton}"/>
+
+        <!-- 10 Button -->
+        <Button Margin="32,77,238,193"
+                MouseEnter="Button_MouseEnter"
+                Content="50"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="FiftyMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=FiftyMinButton}"/>
+
+        <!-- 11 Button -->
+        <Button Margin="76,30,194,240"
+                Width="60"
+                Template="{DynamicResource ClockNumberButton}"
+                Content="55"
+                Height="60"
+                MouseEnter="Button_MouseEnter"
+                Padding="0"
+                FontSize="16"
+                Background="Transparent"
+                Panel.ZIndex="3"
+                x:Name="FiftyFiveMinButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=FiftyFiveMinButton}"/>
+
+        <!-- 12 Button -->
+        <Button Margin="4 0 0 250"
+                Content="0"
+                MouseEnter="Button_MouseEnter"
+                Padding="0"
+                Height="60"
+                Width="60"
+                Background="Transparent"
+                FontSize="16"
+                Panel.ZIndex="3" 
+                Template="{DynamicResource ClockNumberButton}"
+                x:Name="ZeroButton"
+                Command="{Binding Path=MinSelectCommand}"
+                CommandParameter="{Binding ElementName=ZeroButton}"/>
+
+        <Line X1="168"
+              X2="168"
+              Y1="165"
+              Y2="60"
+              Name="HourClockHand"
+              Opacity="1"
+              StrokeThickness="2"
+              Stroke="{StaticResource GreyBrush}"
+              Panel.ZIndex="5"/>
+
+        <!-- Background for the clock -->
+        <Grid>
+            <Border CornerRadius="200"
+                    Background="White"
+                    Opacity="0.8"
+                    Margin="12 10 10 10"/>
+        </Grid>
+    </Grid>
+</UserControl>
