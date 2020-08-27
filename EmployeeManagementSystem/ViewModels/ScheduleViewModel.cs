@@ -30,6 +30,7 @@ namespace EmployeeManagementSystem
         public RelayCommand NextWeekCommand { get; set; }
         public RelayCommand PreviousWeekCommand { get; set; }
         public RelayCommand ReturnCommand { get; set; }
+        public RelayCommand ManualSaveCommand { get; set; }
 
         #endregion
 
@@ -98,6 +99,15 @@ namespace EmployeeManagementSystem
         public bool HasStartTimeBeenSet { get; set; }
         public int WeekCounter { get; set; }
 
+        private bool manualShiftInputBool;
+
+        public bool ManualShiftInputBool
+        {
+            get { return manualShiftInputBool; }
+            set { manualShiftInputBool = value; OnPropertyChanged(nameof(ManualShiftInputBool)); }
+        }
+
+
         private int calcWorkHours;
 
         public int CalcWorkHours
@@ -105,6 +115,18 @@ namespace EmployeeManagementSystem
             get { return calcWorkHours; }
             set { calcWorkHours = value; OnPropertyChanged(nameof(CalcWorkHours)); }
         }
+
+        private bool manualInputBool;
+
+        // If true, disable the clock, else clock will be used 
+        public bool ManualInputBool
+        {
+            get { return manualInputBool; }
+            set { manualInputBool = value; OnPropertyChanged(nameof(ManualInputBool)); }
+        }
+
+        public List<int> HourList { get; set; }
+        public List<int> MinList { get; set; }
 
 
         private List<EmployeeModel> employeeList;
@@ -238,7 +260,12 @@ namespace EmployeeManagementSystem
         public int StartSelectedHour
         {
             get { return startSelectedHour; }
-            set { startSelectedHour = value; OnPropertyChanged(nameof(StartSelectedHour)); }
+            set 
+            { 
+                startSelectedHour = value; 
+                OnPropertyChanged(nameof(StartSelectedHour)); 
+                ManualSaveCommand.RaiseCanExecuteChanged(); 
+            }
         }
 
         private int startSelectedMinute;
@@ -254,7 +281,12 @@ namespace EmployeeManagementSystem
         public int EndSelectedHour
         {
             get { return endSelectedHour; }
-            set { endSelectedHour = value; OnPropertyChanged(nameof(EndSelectedHour)); }
+            set 
+            { 
+                endSelectedHour = value; 
+                OnPropertyChanged(nameof(EndSelectedHour)); 
+                ManualSaveCommand.RaiseCanExecuteChanged();
+            }
         }
 
         private int endSelectedMinute;
@@ -350,7 +382,6 @@ namespace EmployeeManagementSystem
             ReturnCommand = new RelayCommand(() => Return());
 
             // Init Lists
-
             SundayList = new ObservableCollection<ShiftModel>();
             MondayList = new ObservableCollection<ShiftModel>();
             TuesdayList = new ObservableCollection<ShiftModel>();
@@ -359,11 +390,13 @@ namespace EmployeeManagementSystem
             FridayList = new ObservableCollection<ShiftModel>();
             SaturdayList = new ObservableCollection<ShiftModel>();
 
-
+            HourList = new List<int>() {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 };
+            MinList = new List<int>() {0,5,10,15,20,25,30,35,40,45,50,55};
 
             // This will be used to commit the shift and save 
             CompleteShiftAddCommand = new RelayCommand(() => SaveShift(), () => CheckIfShiftReadyToSave());
             CancelShiftAddCommand = new RelayCommand(() => CancelShiftAdd());
+            ManualSaveCommand = new RelayCommand(() => SaveShift(), () => CheckInt(StartSelectedHour, EndSelectedHour));
 
             // Generates the list for the Combobox 
             EmployeeList = DataBaseHelper.ReadEmployeeDB();
@@ -676,6 +709,7 @@ namespace EmployeeManagementSystem
             }
         }
 
+        // Checks objects to make sure they are not null 
         public bool CheckValue<T>(object value)
         {
             if ((T)value != null)
@@ -684,11 +718,22 @@ namespace EmployeeManagementSystem
                 return false;
         }
 
+        // Checks ints to make sure they are not all 0, allows for 1 val, or 2
+        public bool CheckInt(int val1, int val2)
+        {
+            if (val1 != 0 && val2 != 0)
+                return true;
+            else
+                return false;
+        }
+
+        // Calc shift hours to display total work times 
         public void CalculateShiftHours()
         {
             CalcWorkHours = (Math.Abs(StartSelectedHour - EndSelectedHour) + (StartSelectedMinute - EndSelectedMinute));
         }
 
+        // Return to dashboard 
         public void Return()
         {
             MainWindow.mainWindow.MainContentFrame.Content = new Dashboard();

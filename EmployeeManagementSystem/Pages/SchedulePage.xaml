@@ -44,8 +44,8 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Panel.ZIndex="3">
@@ -68,6 +68,77 @@
                                          Foreground="{StaticResource DarkGreyBrush}"/>
                         </StackPanel>
 
+                        <Border Style="{StaticResource LineBreakGradient}"
+                                Margin="0 5 0 0"/>
+
+                        <!-- Manual Time Input -->
+                        
+                        <!-- Input shift option -->
+                        <Grid Margin="5 15 5 0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Input Shift Manually?"/>
+                                <CheckBox IsChecked="{Binding ManualShiftInputBool, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Margin="20 0 0 0"/>
+                            </StackPanel>
+                        </Grid>
+                                
+                        <!-- Inside Border that will be deactivated is manual input is false -->
+                        <Border IsEnabled="{Binding ManualShiftInputBool, UpdateSourceTrigger=PropertyChanged}">
+                            <StackPanel>
+
+                                <TextBlock Text="Please use Military Time"
+                                           HorizontalAlignment="Center"
+                                           Margin="0 5 0 0"/>
+
+                                <TextBlock HorizontalAlignment="Center"
+                                           Text="Start Time :"
+                                           Margin="0 5 0 0"/>
+
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+
+                                    <ComboBox Style="{StaticResource ComboBoxStyle1}"
+                                              ItemsSource="{Binding HourList}"
+                                              SelectedValue="{Binding StartSelectedHour, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              Width="50"
+                                              Margin="5"/>
+
+                                    <ComboBox Style="{StaticResource ComboBoxStyle1}"
+                                              Width="50"
+                                              Margin="5"
+                                              SelectedValue="{Binding StartSelectedMinute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              ItemsSource="{Binding MinList}"/>
+                                </StackPanel>
+
+                                <TextBlock Text="End Time :"
+                                           HorizontalAlignment="Center"/>
+
+                                <StackPanel Orientation="Horizontal"
+                                            HorizontalAlignment="Center">
+                                    
+                                    <ComboBox ItemsSource="{Binding HourList}"
+                                              Style="{StaticResource ComboBoxStyle1}"
+                                              Width="50"
+                                              Margin="5"
+                                              VerticalAlignment="Center"
+                                              SelectedValue="{Binding EndSelectedHour, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                    <ComboBox SelectedValue="{Binding EndSelectedMinute, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                              Style="{StaticResource ComboBoxStyle1}"
+                                              Width="50"
+                                              Margin="5"
+                                              ItemsSource="{Binding MinList}"/>
+                                </StackPanel>
+
+                                <Button Style="{StaticResource TextButton}"
+                                        Content="Confirm"
+                                        Command="{Binding ManualSaveCommand}"
+                                        HorizontalAlignment="Right"/>
+
+
+                            </StackPanel>
+                        </Border>
+                        
                     </StackPanel>
 
                     <Button Content="Cancel"

@@ -287,19 +287,62 @@ namespace EmployeeManagementSystem
                 conn.Update(positionModel);
             }
         }
-
-
-
         #endregion
 
-        // May need to set it up so it takes in a list to work with 
-        public static void MergeTables()
+        #region Vacation Methods
+
+
+        public static ObservableCollection<VacationModel> ReadVacatinDB()
         {
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
             {
-                // TODO:: Will have to get the two tables, create them into a new table and return that 
+                // Create table if not currently there
+                conn.CreateTable<VacationModel>();
+
+                // Store all management users into the user list 
+                var VacationList = new ObservableCollection<VacationModel>(conn.Table<VacationModel>().OrderBy(v => v.Name).ToList());
+
+                // Return the obsCollection 
+                return VacationList;
             }
         }
+
+        public static void DeleteVacation<T>(object value)
+        {
+            using(SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // Creates the table depending on the generic class inserted 
+                conn.CreateTable<T>();
+
+                // Deletes the value passed in, after casting as 
+                conn.Delete((T)value);
+            }
+        }
+
+        public static void AddVacation(EmployeeModel employeeModel, DateTime startDate, DateTime endDate)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // Creates the table depending on the generic class inserted 
+                conn.CreateTable<VacationModel>();
+
+                // Creates instance of Vacation model to be inserted 
+                VacationModel vacationModel = new VacationModel()
+                {
+                    Name = $"{employeeModel.FirstName} {employeeModel.LastName}",
+                    StartDate = startDate.ToString("MMMM dd, yyyy"),
+                    EndDate = endDate.ToString("MMMM dd, yyyy"),
+                    Hex = employeeModel.RandomHex,
+                };
+
+                // inserts the desired vacation model 
+                conn.Insert(vacationModel);
+            }
+        }
+
+        #endregion
+
+
     }
 
 }

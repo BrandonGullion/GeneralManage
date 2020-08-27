@@ -35,8 +35,13 @@ namespace EmployeeManagementSystem.Pages
             MainWindow.mainWindow.MainContentFrame.Content = new EmployeePage();
         }
 
-        private void DashboardControl_MouseDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async void DashboardControl_MouseDown_2(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            SelectedPageAnimation = PageAnimationEnum.FadeOut;
+            await Animate();
+
+            await Task.Delay(1000);
+            MainWindow.mainWindow.MainContentFrame.Content = new VacationPage();
 
         }
 
