@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EmployeeManagementSystem.UserControls.VacationControls
+namespace EmployeeManagementSystem.UserControls.EmployeePageControls
 {
     /// <summary>
-    /// Interaction logic for VacationListItemControl.xaml
+    /// Interaction logic for EmployeeWageControl.xaml
     /// </summary>
-    public partial class VacationListItemControl : BaseControl
+    public partial class EmployeeWageControl : UserControl
     {
-        public VacationListItemControl()
+        public EmployeeWageControl()
         {
             InitializeComponent();
         }

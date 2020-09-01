@@ -12,15 +12,7 @@ namespace EmployeeManagementSystem.UserControls
        
         public EmployeeInformationSideMenuControl()
         {
-            SelectedAnimation = ControlAnimationEnum.SlideControlFromRight; 
-            this.Loaded += EmployeeInformationSideMenuControl_Loaded;
             InitializeComponent();
-        }
-
-        private async void EmployeeInformationSideMenuControl_Loaded(object sender, RoutedEventArgs e)
-        {
-            await Animate();
-            await Task.Delay(1000);
         }
     }
 }

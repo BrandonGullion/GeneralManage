@@ -120,7 +120,7 @@ namespace EmployeeManagementSystem
         }
 
         // Add employee to db 
-        public static void AddEmplyee(string firstName, string lastName, int authorityLevel, 
+        public static EmployeeModel AddEmplyee(string firstName, string lastName, int authorityLevel, 
             string employeeId, string phoneNumber, string position, string hourlyWage)
         {
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
@@ -143,6 +143,9 @@ namespace EmployeeManagementSystem
 
                 // Store all management users into the user list 
                 conn.Insert(NewEmployee);
+
+                return NewEmployee;
+
             }
         }
 

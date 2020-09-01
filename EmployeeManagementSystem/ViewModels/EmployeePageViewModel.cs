@@ -51,7 +51,12 @@ namespace EmployeeManagementSystem
         public EmployeeModel SelectedEmployee
         {
             get { return selectedEmployee; }
-            set { selectedEmployee = value; OnPropertyChanged(nameof(SelectedEmployee)); DeleteCommand.RaiseCanExecuteChanged(); } 
+            set { 
+                selectedEmployee = value; 
+                OnPropertyChanged(nameof(SelectedEmployee)); 
+                DeleteCommand.RaiseCanExecuteChanged();
+                EditCommand.RaiseCanExecuteChanged();
+            } 
         }
 
         private bool leftControlEnabled;
@@ -168,13 +173,13 @@ namespace EmployeeManagementSystem
         {
             // Commands 
             DashboardCommand = new RelayCommand(() => ReturnToDashboard());
-            EditCommand = new RelayCommand(() => EditEmployee());
+            EditCommand = new RelayCommand(() => EditEmployee(), () => CheckSelected<EmployeeModel>(SelectedEmployee));
             CancelAddCommand = new RelayCommand(() => CancelAdd());
             CancelEditCommand = new RelayCommand(() => CancelEdit());
             SaveCommand = new RelayCommand(() => Save(), () => CheckBeforeSave());
             AddCommand = new RelayCommand(() => OpenAddControl());
-            DeleteCommand = new RelayCommand(() => DeleteEmployee(SelectedEmployee), () => CheckForSelectedEmployee());
-            UpdateCommand = new RelayCommand(() => UpdateEmployee());
+            DeleteCommand = new RelayCommand(() => DeleteEmployee(SelectedEmployee), () => CheckSelected<EmployeeModel>(SelectedEmployee));
+            UpdateCommand = new RelayCommand(() => UpdateEmployee(), () => CheckSelected<EmployeeModel>(SelectedEmployee));
 
             // False means not collapsed, true is collapsed 
             EmployeeInfoControlVisibility = false;
@@ -226,12 +231,9 @@ namespace EmployeeManagementSystem
         }
 
         // Check if there is a selected employee for the listview 
-        public bool CheckIfSelectedEmployee()
+        public bool CheckSelected<T>(object value)
         {
-            if (SelectedEmployee != null)
-                return true;
-            else 
-                return false;
+            return (T)value != null ? true : false;
         }
 
         // Return to main employee information page from add
@@ -259,28 +261,22 @@ namespace EmployeeManagementSystem
             LeftControlEnabled = true;
         }
 
-        // Save New Employee
-
-        /// <summary>
-        /// 
-        /// TODO:: Clear the results and return to the information page with the selected Employee only!
-        /// 
-        /// </summary>
-
+        // Save New Employee, update selected and change vis
         public void Save()
         {
-            // Saves Employee and updates the Employee List 
-            DataBaseHelper.AddEmplyee(FirstName, LastName, AuthorityLevel, EmployeeId, PhoneNumber, Position, Wage);
+            // Saves Employee, updates selectedEmployee and updates the Employee List 
+            SelectedEmployee = DataBaseHelper.AddEmplyee(FirstName, LastName, AuthorityLevel, EmployeeId, PhoneNumber, Position, Wage);
             EmployeeList = DataBaseHelper.ReadEmployeeDB();
+
+            // Updates Visiblity of Controls 
+            AddEmployeeControlVisibility = true;
+            EmployeeInfoControlVisibility = false;
         }
 
         // Check desired textboxes before saving 
         public bool CheckBeforeSave()
         {
-            if (!string.IsNullOrEmpty(FirstName) && !string.IsNullOrWhiteSpace(LastName))
-                return true;
-            else
-                return false;
+            return !string.IsNullOrEmpty(FirstName) && !string.IsNullOrWhiteSpace(LastName) ? true : false;
         }
 
         // Selected selected employee
@@ -288,15 +284,6 @@ namespace EmployeeManagementSystem
         {
             DataBaseHelper.DeleteEmployee(employeeModel);
             EmployeeList = DataBaseHelper.ReadEmployeeDB();
-        }
-
-        // Check if there is a selected Employee 
-        public bool CheckForSelectedEmployee()
-        {
-            if (SelectedEmployee != null)
-                return true;
-            else
-                return false;
         }
 
         // Updates the selected employee

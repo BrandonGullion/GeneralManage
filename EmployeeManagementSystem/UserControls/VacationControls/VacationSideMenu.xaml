@@ -14,7 +14,8 @@
     </userControls:BaseControl.Resources>
     
     <Border Background="White"
-                CornerRadius="10">
+            CornerRadius="10"
+            Margin="5">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

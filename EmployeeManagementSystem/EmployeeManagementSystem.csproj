@@ -159,6 +159,12 @@
     <Compile Include="UserControls\EmployeePageControls\EmployeeSideMenu.xaml.cs">
       <DependentUpon>EmployeeSideMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\EmployeePageControls\EmployeeTabMenuControl.xaml.cs">
+      <DependentUpon>EmployeeTabMenuControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EmployeePageControls\EmployeeWageControl.xaml.cs">
+      <DependentUpon>EmployeeWageControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Scheduler\AppointmentItemControl.xaml.cs">
       <DependentUpon>AppointmentItemControl.xaml</DependentUpon>
     </Compile>
@@ -252,6 +258,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Styles\TabControlStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Text.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -285,6 +295,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\EmployeePageControls\EmployeeSideMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\EmployeePageControls\EmployeeTabMenuControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\EmployeePageControls\EmployeeWageControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -395,6 +413,12 @@
   <ItemGroup>
     <Resource Include="Icons\LeftArrow.png" />
     <Resource Include="Icons\RightArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Eye.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Minus.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />

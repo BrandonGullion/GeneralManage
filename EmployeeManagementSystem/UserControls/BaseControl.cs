@@ -22,7 +22,7 @@ namespace EmployeeManagementSystem.UserControls
                     break;
 
                 case ControlAnimationEnum.SlideControlFromLeft:
-                    await ControlAnimations.Slide(-Width, 0, Width, 0, 0, 0, 0, 0,0.3f, this);
+                    await ControlAnimations.Slide(-ActualWidth, 0, ActualWidth, 0, 0, 0, 0, 0,0.3f, this);
                     break;
 
                 case ControlAnimationEnum.SmallFadeIn:

@@ -17,7 +17,7 @@
 
     <Grid>
         <Border Background="White"
-                Margin="5"
+                Margin="0 0 0 -2"
                 CornerRadius="10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -139,6 +139,7 @@
 
                 <ComboBox Grid.Row="5"
                           Grid.Column="0" 
+                          Height="43"
                           Style="{DynamicResource ComboBoxStyle1}"
                           BorderThickness="2"
                           Margin="10 5 10 10"/>

@@ -47,7 +47,6 @@ namespace EmployeeManagementSystem.Pages
 
         private void DashboardControl_MouseDown_3(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
         }
 
         private void DashboardControl_MouseDown_4(object sender, System.Windows.Input.MouseButtonEventArgs e)

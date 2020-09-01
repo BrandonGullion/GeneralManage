@@ -10,6 +10,7 @@
         <Image Source="/Icons/LeftArrow.png" x:Key="LeftArrow"/>
         <Image Source="/Icons/RightArrow.png" x:Key="RightArrow"/>
         <Image Source="/Icons/plus.png" x:Key="plus"/>
+        <Image Source="/Icons/Home.png" x:Key="Home"/>
     </local:BaseControl.Resources>
 
     <Grid>
@@ -100,14 +101,17 @@
                                     Height="40"/>
                 </Border>
 
-                <Border Margin="265 5 5 5"
+                <Border Margin="205 5 5 5"
                         CornerRadius="5"
                         Padding="5"
-                        Width="90"
+                        Width="150"
                         Background="White">
-                    <Button Content="Return"
-                                    Command="{Binding ReturnCommand}"
-                                    Style="{StaticResource TextButton}"/>
+                    <Button Content="{StaticResource Home}"
+                            Command="{Binding ReturnCommand}"
+                            Height="30"
+                            Width="120"
+                            Style="{StaticResource TextImageButton}"
+                            Name="Dashboard"/>
                 </Border>
 
             </StackPanel>

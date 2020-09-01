@@ -1,0 +1,29 @@
+﻿<userControls:BaseControl x:Class="EmployeeManagementSystem.UserControls.EmployeePageControls.EmployeeTabMenuControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:EmployeeManagementSystem.UserControls.EmployeePageControls"
+             xmlns:userControls="clr-namespace:EmployeeManagementSystem.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="400">
+    
+    <TabControl Style="{StaticResource DefaultTabControlStyle}">
+        <TabItem Header="Employee Info" 
+                 Style="{StaticResource DefaultTabItemStyle}"
+                 FontSize="16">
+
+            <userControls:EmployeeInformationSideMenuControl/>
+
+        </TabItem>
+
+        <TabItem Header="Wages" 
+                 Style="{StaticResource DefaultTabItemStyle}"
+                 FontSize="16">
+
+            <local:EmployeeWageControl Margin="10 0 0 0"/>
+
+
+        </TabItem>
+    </TabControl>
+</userControls:BaseControl>

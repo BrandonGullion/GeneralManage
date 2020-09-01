@@ -1,11 +1,9 @@
 ﻿using EmployeeManagementSystem.Model;
+using EmployeeManagementSystem.Pages;
 using GalaSoft.MvvmLight.Command;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmployeeManagementSystem.ViewModels
 {
@@ -19,6 +17,7 @@ namespace EmployeeManagementSystem.ViewModels
         public RelayCommand DeleteVacationCommand { get; set; }
         public RelayCommand EditVacationCommand { get; set; }
 
+        public RelayCommand ReturnCommand { get; set; }
 
         // Search bar text used to filter results 
         private string searchBarText;
@@ -93,10 +92,6 @@ namespace EmployeeManagementSystem.ViewModels
             set { vacationEndDate = value; OnPropertyChanged(nameof(VacationEndDate)); }
         }
 
-
-
-
-
         #endregion
 
         #region Constructor
@@ -108,11 +103,16 @@ namespace EmployeeManagementSystem.ViewModels
                 () => CheckObject<EmployeeModel>(SelectedEmployeeModel));
             DeleteVacationCommand = new RelayCommand(() => DeleteVacation(), () => CheckObject<VacationModel>(SelectedVacation));
             EditVacationCommand = new RelayCommand(() => EditVacation());
+            ReturnCommand = new RelayCommand(() => Return());
 
 
             // Reads db, returns a list which is then turned into an observable collection 
             EmployeeList = new ObservableCollection<EmployeeModel>(DataBaseHelper.ReadEmployeeDB());
-            VacationList = DataBaseHelper.ReadVacatinDB(); 
+            VacationList = DataBaseHelper.ReadVacatinDB();
+
+            // Sets the vacation dates to the current day 
+            VacationStartDate = DateTime.Now;
+            VacationEndDate = DateTime.Now;
         }
 
 
@@ -136,13 +136,10 @@ namespace EmployeeManagementSystem.ViewModels
         }
 
         // Generic check for any desired types, with ability to check multiple values 
-        public bool CheckObject<T>(object value, object value2 = null, object value3 = null)
+        public bool CheckObject<T>(object value)
         {
-            if ((T)value != null)
-                return true;
-
-            else
-                return false;
+            // Smaller Version of using if statements, if value != null return true, else false        
+            return (T)value != null ? true : false;
         }
 
         public void PopulateVacationList()
@@ -166,6 +163,11 @@ namespace EmployeeManagementSystem.ViewModels
         {
             DataBaseHelper.AddVacation(SelectedEmployeeModel, VacationStartDate, VacationEndDate);
             VacationList = DataBaseHelper.ReadVacatinDB();
+        }
+
+        public void Return()
+        {
+            MainWindow.mainWindow.MainContentFrame.Content = new Dashboard();
         }
 
         #endregion

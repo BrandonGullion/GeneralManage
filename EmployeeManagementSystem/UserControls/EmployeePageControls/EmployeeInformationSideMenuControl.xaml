@@ -14,7 +14,7 @@
     
     <Grid>
         <Border Background="White"
-                Margin="5"
+                Margin="-5 0 -5 -5"
                 CornerRadius="10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -124,13 +124,6 @@
                            FontSize="16"
                            Margin="15 0 0 0"/>
 
-                <TextBlock Text="Wage :"
-                           Grid.Column="1"
-                           Grid.Row="3"
-                           Style="{StaticResource BaseTextBlockStyle}"
-                           FontSize="16"
-                           Margin="15 0 0 0"/>
-
                 <Border Padding="10"
                         Margin="10 5 10 10"
                         Grid.Row="4"
@@ -144,18 +137,7 @@
                                FontSize="16"/>
                 </Border>
 
-                <Border Padding="10"
-                        Margin="10 5 10 10"
-                        Grid.Row="4"
-                        Grid.Column="1"
-                        BorderBrush="{StaticResource LightBlueBrush}"
-                        CornerRadius="10"
-                        BorderThickness="2">
 
-                    <TextBlock Text="{Binding SelectedEmployee.HourlyWage}"
-                               Foreground="{StaticResource DarkGreyBrush}"
-                               FontSize="16"/>
-                </Border>
 
                 <Button Style="{StaticResource ImageButton}"
                         Command="{Binding EditCommand}"

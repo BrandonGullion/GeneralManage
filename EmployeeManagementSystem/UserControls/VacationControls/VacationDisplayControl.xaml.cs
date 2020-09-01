@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EmployeeManagementSystem.Animations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,19 @@ namespace EmployeeManagementSystem.UserControls.VacationControls
     /// <summary>
     /// Interaction logic for VacationDisplayControl.xaml
     /// </summary>
-    public partial class VacationDisplayControl : UserControl
+    public partial class VacationDisplayControl : BaseControl
     {
         public VacationDisplayControl()
         {
+            SelectedAnimation = ControlAnimationEnum.SmallFadeIn;
             InitializeComponent();
+            this.Loaded += VacationDisplayControl_Loaded;
+        }
+
+        private async void VacationDisplayControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            await Animate();
+            await Task.Delay(1000);
         }
     }
 }
