@@ -12,14 +12,17 @@
         <Image Source="/Icons/Home.png" x:Key="Home"/>
         <Image Source="/Icons/Delete.png" x:Key="Cancel"/>
         <Image Source="/Icons/Check.png" x:Key="Check"/>
+        <Image Source="/Icons/Update.png" x:Key="Update"/>
     </local:BaseControl.Resources>
 
     <Grid>
         <Border Background="White"
-                Margin="5"
+                Margin="0 0 0 -2"
                 CornerRadius="10">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -31,11 +34,17 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
+                <!-- Add Employee and Line Break -->
                 <StackPanel Margin="10"
-                            Grid.ColumnSpan="2">
+                            Grid.ColumnSpan="4">
                     <TextBlock Text="Edit Employee : "
                                FontSize="20"
                                Foreground="{StaticResource DarkGreyBrush}"
@@ -44,6 +53,7 @@
 
                 </StackPanel>
 
+                <!-- First Name Section -->
                 <TextBlock Text="First Name :"
                            Grid.Row="1"
                            Foreground="{StaticResource DarkGreyBrush}"
@@ -51,29 +61,68 @@
                            FontSize="16"/>
 
                 <TextBox Grid.Row="2"
+                         Grid.ColumnSpan="2"
                          Text="{Binding SelectedEmployee.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          BorderThickness="2"
+                         Foreground="{StaticResource DarkGreyBrush}"
                          FontSize="16"
                          Style="{StaticResource DefaultTextBox}"
                          HorizontalAlignment="Stretch"
                          Margin="10 0"/>
 
+                <!-- Last Name Section -->
                 <TextBlock Text="Last Name :"
                            Grid.Row="1"
+                           Grid.Column="2"
                            Foreground="{StaticResource DarkGreyBrush}"
                            Margin="5 10 0 0"
-                           Grid.Column="1"
                            FontSize="16"/>
 
                 <TextBox Grid.Row="2"
+                         Grid.Column="2"
+                         Grid.ColumnSpan="2"
+                         Foreground="{StaticResource DarkGreyBrush}"
                          FontSize="16"
-                         Grid.Column="1"
                          Style="{StaticResource DefaultTextBox}"
                          HorizontalAlignment="Stretch"
                          BorderThickness="2"
                          Text="{Binding SelectedEmployee.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
 
+                <!-- DOB Section -->
+                <TextBlock Text="DOB :"
+                           Grid.Row="3"
+                           Margin="5 0 5 0"
+                           Foreground="{StaticResource DarkGreyBrush}"
+                           Grid.Column="2"/>
+
+                <TextBox Style="{StaticResource DefaultTextBox}"
+                         Text="{Binding SelectedEmployee.DOB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="3"
+                         Grid.Column="2"
+                         Foreground="{StaticResource DarkGreyBrush}"
+                         Margin="5 17 5 5"
+                         BorderThickness="2"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"/>
+
+                <!-- Start Date Section -->
+                <TextBlock Text="Start Date :"
+                           Foreground="{StaticResource DarkGreyBrush}"
+                           Grid.Row="3"
+                           Grid.Column="4"
+                           Margin="5 0 5 0"/>
+
+                <TextBox Grid.Row="3"
+                         Grid.Column="4"
+                         Text="{Binding SelectedEmployee.StartDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource DefaultTextBox}"
+                         Foreground="{StaticResource DarkGreyBrush}"
+                         Margin="5 17 5 5"
+                         HorizontalAlignment="Stretch"
+                         BorderThickness="2"/>
+
+                <!-- Phone Number Section -->
                 <Grid Grid.Row="3"
                       Grid.Column="0"
                       Grid.ColumnSpan="2">
@@ -95,6 +144,7 @@
 
                         <TextBox Text="{Binding SelectedEmployee.PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Style="{StaticResource DefaultTextBox}"
+                                 Foreground="{StaticResource DarkGreyBrush}"
                                  HorizontalAlignment="Stretch"
                                  Margin="10 5 10 10"
                                  FontSize="16"
@@ -112,6 +162,7 @@
                                    FontSize="16"/>
                         <TextBox Text="{Binding SelectedEmployee.Ext, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  FontSize="16"
+                                 Foreground="{StaticResource DarkGreyBrush}"
                                  Style="{StaticResource DefaultTextBox}"
                                  HorizontalAlignment="Stretch"
                                  Margin="10 5 10 10"
@@ -120,6 +171,7 @@
 
                 </Grid>
 
+                <!-- Position Section -->
                 <TextBlock Text="Position :"
                            Grid.Column="0"
                            Grid.Row="4"
@@ -128,7 +180,16 @@
                            FontSize="16"
                            Margin="15 0 0 0"/>
 
-                <TextBlock Text="Wage :"
+                <ComboBox Grid.Row="5"
+                          Grid.Column="0" 
+                          Height="43"
+                          Style="{DynamicResource ComboBoxStyle1}"
+                          BorderThickness="2"
+                          Foreground="{StaticResource DarkGreyBrush}"
+                          Margin="10 5 10 10"/>
+
+                <!-- Address Section -->
+                <TextBlock Text="Address :"
                            Grid.Column="1"
                            Grid.Row="4"
                            Foreground="{StaticResource DarkGreyBrush}"
@@ -136,29 +197,104 @@
                            FontSize="16"
                            Margin="15 0 0 0"/>
 
-                <ComboBox Grid.Row="5"
-                          Grid.Column="0" 
-                          Style="{StaticResource ComboBoxStyle1}"
-                          BorderThickness="2"
-                          Margin="10 5 10 10"/>
-
                 <TextBox Style="{StaticResource DefaultTextBox}"
+                         Text="{Binding SelectedEmployee.Address, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          HorizontalAlignment="Stretch"
                          FontSize="16"
                          BorderThickness="2"
+                         Foreground="{StaticResource DarkGreyBrush}"
                          Grid.Row="5"
                          Grid.Column="1"
-                         Margin="10 5 10 10"
-                         Text="{Binding SelectedEmployee.HourlyWage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                         Grid.ColumnSpan="3"
+                         Margin="10 5 10 10"/>
 
-                <Button Style="{StaticResource ImageButton}"
-                        Content="{StaticResource Check}"
-                        Grid.Row="6"
+                <Image Grid.Row="5"
+                       Grid.Column="0"
+                       Panel.ZIndex="2"
+                       Source="/Icons/DownArrow.png"
+                       Width="20"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       Margin="0 0 20 5"
+                       Height="20"
+                       IsHitTestVisible="False"/>
+
+                <!-- Line Break -->
+                <Border Grid.Row="6"
+                        Grid.ColumnSpan="4"
+                        Style="{StaticResource LineBreakGradient}"/>
+
+                <!-- Emergency Contact Section -->
+                <TextBlock Text="Emergency Contact Information : "
+                           Margin="15 5 0 0 "
+                           Grid.Row="7"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           FontSize="20"
+                           Foreground="{StaticResource DarkGreyBrush}"/>
+
+                <TextBlock Text="Contact Name :"
+                           Foreground="{StaticResource DarkGreyBrush}"
+                           FontSize="16"
+                           Grid.Row="8"
+                           Margin="15 10 0 0"/>
+
+                <TextBox Style="{StaticResource DefaultTextBox}"
+                         Text="{Binding SelectedEmployee.EmergencyContactName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="9"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="2"
+                         BorderThickness="2"
+                         Foreground="{StaticResource DarkGreyBrush}"
+                         HorizontalAlignment="Stretch"
+                         Margin="15 5 5 5"/>
+
+                <TextBlock Text="Phone Number :"
+                           Grid.Row="8"
+                           Grid.Column="2"
+                           Grid.ColumnSpan="2"
+                           FontSize="16"
+                           Margin="15 10 0 0"
+                           Foreground="{StaticResource DarkGreyBrush}"/>
+
+                <TextBox Style="{StaticResource DefaultTextBox}"
+                         Grid.Column="2"
+                         Text="{Binding SelectedEmployee.EmergencyContactNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="9"
+                         Grid.ColumnSpan="1"
+                         Foreground="{StaticResource DarkGreyBrush}"
+                         HorizontalAlignment="Stretch"
+                         Margin="15 0 0 0"
+                         BorderThickness="2"/>
+
+                <TextBlock Text="Ext :"
+                           Grid.Column="3"
+                           Grid.Row="8"
+                           Margin="10 10 0 0"
+                           Foreground="{StaticResource DarkGreyBrush}"
+                           FontSize="16"/>
+
+                <TextBox Grid.Row="9"
+                         Grid.Column="3"
+                         Text="{Binding SelectedEmployee.EmergencyContactExt, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource DefaultTextBox}"
+                         BorderThickness="2"
+                         HorizontalAlignment="Stretch"
+                         Foreground="{StaticResource DarkGreyBrush}"
+                         Margin="5 3 5 3"/>
+
+
+                <!-- Confirmation and cancel buttons -->
+                <Button Style="{StaticResource TextImageButton}"
+                        Content="{StaticResource Update}"
+                        Name="Update" 
+                        Foreground="{StaticResource DarkGreyBrush}"
+                        Grid.Row="11"
                         Command="{Binding UpdateCommand}"
-                        Grid.Column="1"
+                        Grid.Column="4"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
-                        Height="50"/>
+                        Height="40"/>
 
                 <Button Style="{StaticResource TextImageButton}"
                         Content="{StaticResource Cancel}"
@@ -166,13 +302,12 @@
                         Command="{Binding CancelEditCommand}"
                         Foreground="{StaticResource DarkGreyBrush}"
                         Height="40"
-                        Grid.Row="6"
+                        Grid.Row="11"
                         Grid.Column="0"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Left"/>
+
             </Grid>
-
-
         </Border>
     </Grid>
 

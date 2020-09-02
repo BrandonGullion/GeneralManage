@@ -51,7 +51,7 @@ namespace EmployeeManagementSystem.Pages
 
         private void DashboardControl_MouseDown_4(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-
+            MainWindow.mainWindow.MainContentFrame.Content = new Test();
         }
 
         private void DashboardControl_MouseDown_5(object sender, System.Windows.Input.MouseButtonEventArgs e)

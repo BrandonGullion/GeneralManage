@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EmployeeManagementSystem.UserControls.EmployeePageControls"
              xmlns:userControls="clr-namespace:EmployeeManagementSystem.UserControls"
+             xmlns:Converters="clr-namespace:EmployeeManagementSystem.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="400">
     
@@ -13,7 +14,18 @@
                  Style="{StaticResource DefaultTabItemStyle}"
                  FontSize="16">
 
-            <userControls:EmployeeInformationSideMenuControl/>
+            <Grid>
+                
+                <userControls:EmployeeInformationSideMenuControl
+                    Visibility="{Binding EmployeeInfoControlVisibility, Converter={Converters:BoolToVisibilityConverter}}"/>
+
+                <userControls:AddEmployeeMenuControl
+                    Visibility="{Binding AddEmployeeControlVisibility, Converter={Converters:BoolToVisibilityConverter}}"/>
+
+                <local:EditEmployeeControl
+                    Visibility="{Binding EditEmployeeControlVisibility, Converter={Converters:BoolToVisibilityConverter}}"/>
+
+            </Grid>
 
         </TabItem>
 
@@ -21,7 +33,11 @@
                  Style="{StaticResource DefaultTabItemStyle}"
                  FontSize="16">
 
-            <local:EmployeeWageControl Margin="10 0 0 0"/>
+            <Grid>
+                
+                <local:EmployeeWageControl Margin="10 0 0 0"/>
+
+            </Grid>
 
 
         </TabItem>

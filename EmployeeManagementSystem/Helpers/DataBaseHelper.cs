@@ -90,7 +90,6 @@ namespace EmployeeManagementSystem
                 {
                     if (User.UserName == userName && User.Password == password)
                         return true;
-
                     else
                         return false;
                 }
@@ -120,32 +119,30 @@ namespace EmployeeManagementSystem
         }
 
         // Add employee to db 
-        public static EmployeeModel AddEmplyee(string firstName, string lastName, int authorityLevel, 
-            string employeeId, string phoneNumber, string position, string hourlyWage)
+        public static EmployeeModel AddEmplyee(EmployeeModel employeeModel)
         {
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
             {
                 // Create table if not currently there
                 conn.CreateTable<EmployeeModel>();
 
-                var NewEmployee = new EmployeeModel
-                {
-                    FirstName = firstName,
-                    LastName = lastName,
-                    AuthorityLevel = authorityLevel,
-                    EmployeeId = employeeId,
-                    PhoneNumber = phoneNumber,
-                    Position = position,
-                    HourlyWage = hourlyWage,
-                    FirstLetter = firstName.First().ToString(),
-                    RandomHex = RandomRGBHelper.GenerateRandomColor(),
-                };
+                // Generates random color for the employee
+                employeeModel.RandomHex = RandomRGBHelper.GenerateRandomColor();
+
+                // Convert First Name to char array, using the first letter to populate the field 
+                employeeModel.FirstLetter = employeeModel.FirstName.ToCharArray().FirstOrDefault().ToString();
+
+                // Insert employee model into the 
+                conn.Insert(employeeModel);
+                /// Creates the generic availability for the employee
+                /// this can be changed within the employee page 
 
                 // Store all management users into the user list 
-                conn.Insert(NewEmployee);
 
-                return NewEmployee;
+                AddAvailability(employeeModel);
 
+                // Return to populate the selected employee field 
+                return employeeModel;
             }
         }
 
@@ -161,13 +158,15 @@ namespace EmployeeManagementSystem
             }
         }
 
-        public static void UpdateEmployee(EmployeeModel employeeModel)
+        public static EmployeeModel UpdateEmployee(EmployeeModel employeeModel)
         {
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
             {
                 // sends to db 
                 conn.Update(employeeModel);
             }
+
+            return employeeModel;
         }
 
         // Read Database and return list 
@@ -345,6 +344,79 @@ namespace EmployeeManagementSystem
 
         #endregion
 
+        #region Availability Methods 
+
+        public static AvailabilityModel ReadAvailability(EmployeeModel employeeModel)
+        {
+            // new instance of ava. model 
+            AvailabilityModel availabilityModel = new AvailabilityModel();
+
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                /// Reads the list, updates depending on the passed in selected Employee
+                /// And returns a single instance of an availability model to be displayed
+                availabilityModel = conn.Table<AvailabilityModel>().Where(a => a.EmployeeId == employeeModel.Id).ToList().FirstOrDefault();
+
+            }
+            return availabilityModel;
+        }
+
+        public static void AddAvailability(EmployeeModel employeeModel)
+        {
+            AvailabilityModel availabilityModel = new AvailabilityModel
+            {
+                // Creates the availability for that employee and sets all to false 
+                EmployeeId = employeeModel.Id,
+                SundayMorning = true,
+                MondayMorning = true,
+                TuesdayMorning = true,
+                WednesdayMorning = true,
+                ThursdayMorning = true,
+                FridayMorning = true,
+                SaturdayMorning = true,
+                SundayAfternoon = true,
+                MondayAfternoon = true,
+                TuesdayAfternoon = true,
+                WednesdayAfternoon = true,
+                ThursdayAfternoon = true,
+                FridayAfternoon = true,
+                SaturdayAfternoon = true,
+                SundayEvening = true,
+                MondayEvening = true,
+                TuesdayEvening = true,
+                WednesdayEvening = true,
+                ThursdayEvening = true,
+                FridayEvening = true,
+                SaturdayEvening = true,
+                SundayNight = true,
+                MondayNight = true,
+                TuesdayNight = true,
+                WednesdayNight = true,
+                ThursdayNight = true,
+                FridayNight = true,
+                SaturdayNight = true,
+            };
+
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                // Creates the table to avoid breaks 
+                conn.CreateTable<AvailabilityModel>();
+
+                // Inserts the availability model 
+                conn.Insert(availabilityModel);
+            }
+        }
+
+        public static void UpdateAvailability(AvailabilityModel availabilityModel)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                conn.CreateTable<AvailabilityModel>();
+                conn.Update(availabilityModel);
+            }
+        }
+
+        #endregion
 
     }
 

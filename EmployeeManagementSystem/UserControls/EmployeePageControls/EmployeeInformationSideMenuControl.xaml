@@ -14,10 +14,11 @@
     
     <Grid>
         <Border Background="White"
-                Margin="-5 0 -5 -5"
                 CornerRadius="10">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
@@ -28,15 +29,23 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 
+                <!-- First Name -->
                 <TextBlock Text="First Name :"
                            Margin="15 10 0 0"
-                           FontSize="16"/>
+                           FontSize="16"
+                           Foreground="{StaticResource DarkGreyBrush}"/>
 
                 <Border Padding="10"
                         Grid.Row="1"
+                        Grid.ColumnSpan="2"
                         Margin="10 5 10 10"
                         BorderBrush="{StaticResource LightBlueBrush}"
                         CornerRadius="10"
@@ -47,14 +56,17 @@
                     
                 </Border>
 
+                <!-- Last Name -->
                 <TextBlock Text="Last Name :"
+                           Foreground="{StaticResource DarkGreyBrush}"
                            Margin="15 10 0 0"
-                           Grid.Column="1"
+                           Grid.Column="2"
                            FontSize="16"/>
 
                 <Border Padding="10"
                         Grid.Row="1"
-                        Grid.Column="1"
+                        Grid.Column="2"
+                        Grid.ColumnSpan="2"
                         Margin="10 5 10 10"
                         BorderBrush="{StaticResource LightBlueBrush}"
                         CornerRadius="10"
@@ -77,17 +89,18 @@
                     <!-- Phone Number Grid Space -->
                     <StackPanel>
                         <TextBlock Text="Phone Number :"
-                           Margin="10 0 0 0"
-                           VerticalAlignment="Center"
-                           Grid.Column="0"
-                           Grid.Row="2"
-                           FontSize="16"/>
+                                   Margin="10 0 0 0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource DarkGreyBrush}"
+                                   Grid.Column="0"
+                                   Grid.Row="2"
+                                   FontSize="16"/>
 
                         <Border Padding="10"
-                            Margin="10 5 10 10"
-                            BorderBrush="{StaticResource LightBlueBrush}"
-                            CornerRadius="10"
-                            BorderThickness="2">
+                                Margin="10 5 10 10"
+                                BorderBrush="{StaticResource LightBlueBrush}"
+                                CornerRadius="10"
+                                BorderThickness="2">
                             
                             <TextBlock Text="{Binding SelectedEmployee.PhoneNumber}"
                                        Foreground="{StaticResource DarkGreyBrush}"
@@ -98,6 +111,7 @@
                     <!-- Extension Grid Space -->
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Ext :"
+                                   Foreground="{StaticResource DarkGreyBrush}"
                                    Style="{StaticResource BaseTextBlockStyle}"
                                    Grid.Column="1"
                                    Margin="15 0 0 0"
@@ -114,53 +128,225 @@
                                        FontSize="16"/>
                         </Border>
                     </StackPanel>
-
                 </Grid>
 
-                <TextBlock Text="Position :"
-                           Grid.Column="0"
-                           Grid.Row="3"
+                <!-- DOB Section -->
+                <StackPanel Grid.Row="2"
+                            Grid.Column="2"
+                            Margin="15 0 0 0">
+                    
+                    <TextBlock Grid.Row="2"
+                               Text="DOB :"
+                               FontSize="16"
+                               Foreground="{StaticResource DarkGreyBrush}"/>
+
+                    <Border Padding="10"
+                                Margin="-1 5 5 5"
+                                BorderBrush="{StaticResource LightBlueBrush}"
+                                CornerRadius="10"
+                                BorderThickness="2">
+
+                        <TextBlock Text="{Binding SelectedEmployee.DOB}"
+                                       Foreground="{StaticResource DarkGreyBrush}"
+                                       FontSize="16"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Start Date -->
+                <StackPanel Grid.Row="2"
+                            Grid.Column="3"
+                            Margin="5 0 5 5">
+
+                    <TextBlock Text="Start Date :"
+                               FontSize="16"
+                               Foreground="{StaticResource DarkGreyBrush}"/>
+
+                    <Border Padding="10"
+                                Margin="0 5 5 5"
+                                BorderBrush="{StaticResource LightBlueBrush}"
+                                CornerRadius="10"
+                                BorderThickness="2">
+
+                        <TextBlock Text="{Binding SelectedEmployee.StartDate}"
+                                       Foreground="{StaticResource DarkGreyBrush}"
+                                       FontSize="16"/>
+                    </Border>
+                </StackPanel>
+
+
+
+                <!-- Emergency Contact Label -->
+                <TextBlock Text="Emergency Contact"
                            Style="{StaticResource BaseTextBlockStyle}"
-                           FontSize="16"
-                           Margin="15 0 0 0"/>
-
-                <Border Padding="10"
-                        Margin="10 5 10 10"
-                        Grid.Row="4"
-                        Grid.Column="0"
-                        BorderBrush="{StaticResource LightBlueBrush}"
-                        CornerRadius="10"
-                        BorderThickness="2">
-
-                    <TextBlock Text="{Binding SelectedEmployee.Position}"
+                           Grid.Column="0"
+                           Foreground="{StaticResource DarkGreyBrush}"
+                           Grid.Row="6"
+                           FontWeight="DemiBold"
+                           Grid.ColumnSpan="2"
+                           Margin="15 5 0 0"
+                           FontSize="16"/>
+                
+                <!-- Emergency Contact Name -->
+                <StackPanel Grid.Row="7"
+                            Margin="0 5 0 0"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2">
+                    
+                    <TextBlock Text="Name : "
+                               Style="{StaticResource BaseTextBlockStyle}"
+                               Grid.Column="1"
                                Foreground="{StaticResource DarkGreyBrush}"
+                               Margin="15 0 0 0"
+                               Grid.Row="2"
                                FontSize="16"/>
-                </Border>
+
+                    <Border Padding="10"
+                                Margin="10 5 10 10"
+                                BorderBrush="{StaticResource LightBlueBrush}"
+                                CornerRadius="10"
+                                BorderThickness="2">
+
+                        <TextBlock Text="{Binding SelectedEmployee.EmergencyContactName}"
+                                       Foreground="{StaticResource DarkGreyBrush}"
+                                       FontSize="16"/>
+                    </Border>
+
+                </StackPanel>
+                
+                        
+                <Grid Grid.Row="7"
+                      Grid.Column="2"
+                      Margin="0 5 0 0"
+                      Grid.ColumnSpan="2">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2.5*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Emergency Phone Number Grid Space -->
+                    <StackPanel>
+                        <TextBlock Text="Phone Number :"
+                                   Margin="10 0 0 0"
+                                   Foreground="{StaticResource DarkGreyBrush}"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="0"
+                                   Grid.Row="2"
+                                   FontSize="16"/>
+
+                        <Border Padding="10"
+                                Margin="10 5 10 10"
+                                BorderBrush="{StaticResource LightBlueBrush}"
+                                CornerRadius="10"
+                                BorderThickness="2">
+
+                            <TextBlock Text="{Binding SelectedEmployee.EmergencyContactNumber}"
+                                       Foreground="{StaticResource DarkGreyBrush}"
+                                       FontSize="16"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Extension Grid Space -->
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Ext :"
+                                   Style="{StaticResource BaseTextBlockStyle}"
+                                   Grid.Column="1"
+                                   Foreground="{StaticResource DarkGreyBrush}"
+                                   Margin="15 0 0 0"
+                                   Grid.Row="2"
+                                   FontSize="16"/>
+                        <Border Padding="10"
+                                Margin="10 5 10 10"
+                                BorderBrush="{StaticResource LightBlueBrush}"
+                                CornerRadius="10"
+                                BorderThickness="2">
+
+                            <TextBlock Text="{Binding SelectedEmployee.EmergencyContactExt}"
+                                       Foreground="{StaticResource DarkGreyBrush}"
+                                       FontSize="16"/>
+                        </Border>
+                    </StackPanel>
+                </Grid>
 
 
+                <!-- Position Section -->
+                <StackPanel Grid.Column="0"
+                            Grid.Row="3"
+                            Grid.ColumnSpan="1">
+                    
+                    <TextBlock Text="Position :"
+                               Grid.Column="0"
+                               Grid.Row="3"
+                               Foreground="{StaticResource DarkGreyBrush}"
+                               Style="{StaticResource BaseTextBlockStyle}"
+                               FontSize="16"
+                               Margin="15 0 0 0"/>
+
+                    <Border Padding="10"
+                            Margin="10 5 10 10"
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            BorderBrush="{StaticResource LightBlueBrush}"
+                            CornerRadius="10"
+                            BorderThickness="2">
+
+                        <TextBlock Text="{Binding SelectedEmployee.Position}"
+                                   Foreground="{StaticResource DarkGreyBrush}"
+                                   FontSize="16"/>
+                    </Border>
+                </StackPanel>
+
+                <!-- Address Section -->
+                <StackPanel Grid.Row="3"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="3">
+                    <TextBlock Text="Address"
+                               FontSize="16"
+                               Foreground="{StaticResource DarkGreyBrush}"/>
+
+                    <Border Padding="10"
+                            Margin="-1 5 10 5"
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            BorderBrush="{StaticResource LightBlueBrush}"
+                            CornerRadius="10"
+                            BorderThickness="2">
+
+                        <TextBlock Text="{Binding SelectedEmployee.Address}"
+                                   Foreground="{StaticResource DarkGreyBrush}"
+                                   FontSize="16"/>
+                    </Border>
+
+                </StackPanel>
+
+
+                <Border Style="{StaticResource LineBreakGradient}"
+                        Grid.Row="5"
+                        Grid.ColumnSpan="4"/>
 
                 <Button Style="{StaticResource ImageButton}"
                         Command="{Binding EditCommand}"
                         Content="{StaticResource Edit}"
-                        Grid.Row="5"
-                        Grid.Column="1"
+                        Margin="5"
+                        Grid.Row="10"
+                        Grid.Column="3"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
                         Height="40"/>
 
                 <Button Style="{StaticResource TextImageButton}"
                         Content="{StaticResource Home}"
+                        Margin="5"
                         Name="Dashboard"
+                        Grid.ColumnSpan="2"
                         Foreground="{StaticResource DarkGreyBrush}"
                         Height="40"
                         Command="{Binding DashboardCommand}"
-                        Grid.Row="5"
+                        Grid.Row="10"
                         Grid.Column="0"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Left"/>
             </Grid>
-            
-            
         </Border>
     </Grid>
 </local:BaseControl>

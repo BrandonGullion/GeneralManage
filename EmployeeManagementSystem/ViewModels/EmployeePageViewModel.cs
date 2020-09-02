@@ -1,8 +1,12 @@
 ﻿using EmployeeManagementSystem.Model;
 using EmployeeManagementSystem.Pages;
 using GalaSoft.MvvmLight.Command;
+using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Windows.Markup;
 
 namespace EmployeeManagementSystem
 {
@@ -19,11 +23,27 @@ namespace EmployeeManagementSystem
         public RelayCommand AddCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
         public RelayCommand UpdateCommand { get; set; }
+        public RelayCommand TestCommand { get; set; }
+        public RelayCommand<object> AvailabilityCheck { get; set; }
+        public RelayCommand UpdateWageControlCommand { get; set; }
+        public RelayCommand ClearAllCommand { get; set; }
+        public RelayCommand SelectAllCommand { get; set; }
 
 
         // Regular Properties 
-        private List<EmployeeModel> employeeList;
 
+
+        // Used to check if there are any changes to the Availability Control 
+        private bool isDirty;
+        public bool IsDirty
+        {
+            get { return isDirty; }
+            set { isDirty = value; OnPropertyChanged(nameof(IsDirty)); }
+        }
+
+
+
+        private List<EmployeeModel> employeeList;
         public List<EmployeeModel> EmployeeList
         {
             get { return employeeList; }
@@ -56,7 +76,32 @@ namespace EmployeeManagementSystem
                 OnPropertyChanged(nameof(SelectedEmployee)); 
                 DeleteCommand.RaiseCanExecuteChanged();
                 EditCommand.RaiseCanExecuteChanged();
+                if (SelectedEmployee != null)
+                {
+                    CurrentAvailabilityModel = DataBaseHelper.ReadAvailability(SelectedEmployee);
+                    UpdateAvailability();
+                    IsDirty = false;
+                }
             } 
+        }
+
+        // Availability Model Used to populate the Availability Menu 
+        private AvailabilityModel currentAvailabilityModel;
+
+        public AvailabilityModel CurrentAvailabilityModel
+        {
+            get 
+            { 
+                IsDirty = true;
+                if (IsDirty)
+                    UpdateWageControlCommand.RaiseCanExecuteChanged();
+                return currentAvailabilityModel;
+            }
+            set 
+            {
+                currentAvailabilityModel = value; 
+                OnPropertyChanged(nameof(CurrentAvailabilityModel));
+            }
         }
 
         private bool leftControlEnabled;
@@ -100,66 +145,12 @@ namespace EmployeeManagementSystem
 
         #region Contact Properties 
 
-        private string firstName;
-
-        public string FirstName
+        private EmployeeModel addEmployeeModel;
+        public EmployeeModel AddEmployeeModel
         {
-            get { return firstName; }
-            set { firstName = value; OnPropertyChanged(nameof(FirstName)); SaveCommand.RaiseCanExecuteChanged(); }
+            get { return addEmployeeModel; }
+            set { addEmployeeModel = value; OnPropertyChanged(nameof(AddEmployeeModel)); }
         }
-        private string lastName;
-
-        public string LastName
-        {
-            get { return lastName; }
-            set { lastName = value; OnPropertyChanged(nameof(LastName)); SaveCommand.RaiseCanExecuteChanged(); }
-        }
-        private string position;
-
-        public string Position
-        {
-            get { return position; }
-            set { position = value; OnPropertyChanged(nameof(Position)); }
-        }
-        private string phoneNumber;
-
-        public string PhoneNumber
-        {
-            get { return phoneNumber; }
-            set { phoneNumber = value; OnPropertyChanged(nameof(PhoneNumber)); }
-        }
-        private string wage;
-
-        public string Wage
-        {
-            get { return wage; }
-            set { wage = value; OnPropertyChanged(nameof(Wage)); }
-        }
-
-        private string employeeId;
-
-        public string EmployeeId
-        {
-            get { return employeeId; }
-            set { employeeId = value; OnPropertyChanged(nameof(EmployeeId)); }
-        }
-
-        private int authorityLevel;
-
-        public int AuthorityLevel
-        {
-            get { return authorityLevel; }
-            set { authorityLevel = value; }
-        }
-
-        private string ext;
-
-        public string Ext
-        {
-            get { return ext; }
-            set { ext = value; OnPropertyChanged(nameof(Ext)); }
-        }
-
 
 
         #endregion
@@ -176,10 +167,16 @@ namespace EmployeeManagementSystem
             EditCommand = new RelayCommand(() => EditEmployee(), () => CheckSelected<EmployeeModel>(SelectedEmployee));
             CancelAddCommand = new RelayCommand(() => CancelAdd());
             CancelEditCommand = new RelayCommand(() => CancelEdit());
-            SaveCommand = new RelayCommand(() => Save(), () => CheckBeforeSave());
+            SaveCommand = new RelayCommand(() => Save());
             AddCommand = new RelayCommand(() => OpenAddControl());
             DeleteCommand = new RelayCommand(() => DeleteEmployee(SelectedEmployee), () => CheckSelected<EmployeeModel>(SelectedEmployee));
-            UpdateCommand = new RelayCommand(() => UpdateEmployee(), () => CheckSelected<EmployeeModel>(SelectedEmployee));
+            ClearAllCommand = new RelayCommand(() => ClearAvailability());
+            SelectAllCommand = new RelayCommand(() => SelectAllAvailability());
+
+            UpdateCommand = new RelayCommand(() => UpdateEmployee());
+            UpdateWageControlCommand = new RelayCommand(() => UpdateAll(CurrentAvailabilityModel), () => IsDirty ? true : false); 
+
+            // Commands used for testing 
 
             // False means not collapsed, true is collapsed 
             EmployeeInfoControlVisibility = false;
@@ -189,6 +186,10 @@ namespace EmployeeManagementSystem
             // DB Methods 
             EmployeeList = DataBaseHelper.ReadEmployeeDB();
             PositionList = DataBaseHelper.ReadPositionDB();
+
+            // Sets instance to allow for binding 
+            CurrentAvailabilityModel = new AvailabilityModel();
+            AddEmployeeModel = new EmployeeModel();
 
             LeftControlEnabled = true;
         }
@@ -243,14 +244,12 @@ namespace EmployeeManagementSystem
             AddEmployeeControlVisibility = true;
 
             // When collapsing the control, reset all values 
-            FirstName = string.Empty;
-            LastName = string.Empty;
-            PhoneNumber = string.Empty;
-            AuthorityLevel = 0;
-            EmployeeId = string.Empty;
-            Position = string.Empty;
-            Wage = string.Empty;
-            Ext = string.Empty;
+            AddEmployeeModel.FirstName = string.Empty;
+            AddEmployeeModel.LastName = string.Empty;
+            AddEmployeeModel.PhoneNumber = string.Empty;
+            AddEmployeeModel.AuthorityLevel = 0;
+            AddEmployeeModel.Position = string.Empty;
+            AddEmployeeModel.Ext = string.Empty;
         }
 
         // Return to main employee informatin page from edit 
@@ -265,8 +264,11 @@ namespace EmployeeManagementSystem
         public void Save()
         {
             // Saves Employee, updates selectedEmployee and updates the Employee List 
-            SelectedEmployee = DataBaseHelper.AddEmplyee(FirstName, LastName, AuthorityLevel, EmployeeId, PhoneNumber, Position, Wage);
+            SelectedEmployee = DataBaseHelper.AddEmplyee(AddEmployeeModel);
             EmployeeList = DataBaseHelper.ReadEmployeeDB();
+
+            // Clears the Added Employee
+            AddEmployeeModel = new EmployeeModel();
 
             // Updates Visiblity of Controls 
             AddEmployeeControlVisibility = true;
@@ -276,7 +278,9 @@ namespace EmployeeManagementSystem
         // Check desired textboxes before saving 
         public bool CheckBeforeSave()
         {
-            return !string.IsNullOrEmpty(FirstName) && !string.IsNullOrWhiteSpace(LastName) ? true : false;
+            return !string.IsNullOrEmpty(AddEmployeeModel.FirstName) && 
+                !string.IsNullOrWhiteSpace(AddEmployeeModel.LastName) &&
+                !string.IsNullOrWhiteSpace(AddEmployeeModel.DOB)? true : false;
         }
 
         // Selected selected employee
@@ -290,11 +294,65 @@ namespace EmployeeManagementSystem
         public void UpdateEmployee()
         {
             // Update Employee
-            DataBaseHelper.UpdateEmployee(SelectedEmployee);
+            SelectedEmployee = DataBaseHelper.UpdateEmployee(SelectedEmployee);
+
             // Update the list 
             EmployeeList = DataBaseHelper.ReadEmployeeDB();
+
+            // Return Visibilities to normal 
+            LeftControlEnabled = true;
+            EditEmployeeControlVisibility = true;
+            EmployeeInfoControlVisibility = false;
         }
 
+        // Update the availability whenever 
+        public void UpdateAvailability()
+        {
+            CurrentAvailabilityModel = DataBaseHelper.ReadAvailability(SelectedEmployee);
+
+            IsDirty = false;
+            UpdateWageControlCommand.RaiseCanExecuteChanged();
+        }
+
+        // This is used to save the Availability Model To DB
+        public void UpdateAll(AvailabilityModel availabilityModel)
+        {
+            DataBaseHelper.UpdateAvailability(availabilityModel);
+            IsDirty = false;
+            UpdateWageControlCommand.RaiseCanExecuteChanged();
+        }
+
+        // Makes all bool values in availability false
+        public void ClearAvailability()
+        {
+            // Gets all properties from a class and puts them into an array 
+            PropertyInfo[] propertyInfos = typeof(AvailabilityModel).GetProperties();
+
+            // Iterates over the list and updates the values to false 
+            foreach (var property in propertyInfos)
+            {
+                // Checks if the property is a boolean and then changes the values of the 
+                // Given object 
+                if(property.PropertyType == typeof(bool))
+                    property.SetValue(CurrentAvailabilityModel, false);
+            }
+        
+            OnPropertyChanged(nameof(CurrentAvailabilityModel)) ;
+        }
+
+        // Makes all bool values in availability true 
+        public void SelectAllAvailability()
+        {
+            PropertyInfo[] propertyInfos = typeof(AvailabilityModel).GetProperties();
+
+            foreach (var property in propertyInfos)
+            {
+                if (property.PropertyType == typeof(bool))
+                    property.SetValue(CurrentAvailabilityModel, true);
+            }
+
+            OnPropertyChanged(nameof(CurrentAvailabilityModel));
+        }
         #endregion
     }
 }
