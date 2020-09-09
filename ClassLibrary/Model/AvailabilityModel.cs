@@ -1,9 +1,8 @@
 ﻿using SQLite;
-using System.Windows.Documents.DocumentStructures;
 
-namespace EmployeeManagementSystem
+namespace ClassLibrary
 {
-    public class AvailabilityModel : BaseViewModel
+    public class AvailabilityModel
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }

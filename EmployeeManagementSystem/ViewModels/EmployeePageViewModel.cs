@@ -1,4 +1,4 @@
-﻿using EmployeeManagementSystem.Model;
+﻿using ClassLibrary;
 using EmployeeManagementSystem.Pages;
 using GalaSoft.MvvmLight.Command;
 using System;

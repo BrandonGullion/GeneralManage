@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmployeeManagementSystem.Model
+namespace ClassLibrary
 {
     public class PositionModel
     {

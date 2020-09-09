@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SQLite;
 
-namespace EmployeeManagementSystem
+namespace ClassLibrary
 {
     public class Users
     {

@@ -52,9 +52,21 @@
                         <TextBlock Text="Choose Desired Date"
                                    Margin="5"
                                    FontSize="16"/>
+
+                        <TextBlock Text="Start Date:"
+                                   Margin="5 0 0 0"/>
                         <DatePicker IsTodayHighlighted="True"
+                                    BorderBrush="{StaticResource DarkGreyBrush}"
                                     SelectedDate="{Binding SelectedShiftDate}"
                                     Margin="5"/>
+
+                        <TextBlock Text="End Date:"
+                                   Margin="5 0 0 0"/>
+
+                        <DatePicker Margin="5 0 5 0"
+                                    BorderBrush="{StaticResource DarkGreyBrush}"
+                                    IsTodayHighlighted="True"
+                                    SelectedDate="{Binding SelectedShiftEndDate}"/>
 
                         <StackPanel Orientation="Horizontal">
                             <RadioButton Content="AM"

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmployeeManagementSystem
+namespace ClassLibrary
 {
     public class ShiftModel
     {
@@ -16,11 +16,11 @@ namespace EmployeeManagementSystem
         [NotNull]
         public int StartHourValue { get; set; }
         [NotNull]
-        public int StartMinValue { get; set; }
+        public decimal StartMinValue { get; set; }
         [NotNull]
         public int EndtHourValue { get; set; }
         [NotNull]
-        public int EndMinValue { get; set; }
+        public decimal EndMinValue { get; set; }
         [NotNull]
         public int Day { get; set; }
         [NotNull]
@@ -35,5 +35,7 @@ namespace EmployeeManagementSystem
         public int Width { get; set; }
         [NotNull]
         public int Margin { get; set; }
+        [NotNull]
+        public decimal Total { get; set; }
     }
 }

@@ -1,8 +1,10 @@
-﻿using EmployeeManagementSystem.Model;
+﻿using ClassLibrary;
 using EmployeeManagementSystem.Pages;
 using GalaSoft.MvvmLight.Command;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 
 namespace EmployeeManagementSystem.ViewModels
@@ -16,8 +18,8 @@ namespace EmployeeManagementSystem.ViewModels
         public RelayCommand AddVacationCommand { get; set; }
         public RelayCommand DeleteVacationCommand { get; set; }
         public RelayCommand EditVacationCommand { get; set; }
-
         public RelayCommand ReturnCommand { get; set; }
+        public RelayCommand UpdateCommand { get; set; }
 
         // Search bar text used to filter results 
         private string searchBarText;
@@ -64,8 +66,58 @@ namespace EmployeeManagementSystem.ViewModels
         public VacationModel SelectedVacation
         {
             get  { return selectedVacation; }
-            set { selectedVacation = value; OnPropertyChanged(nameof(SelectedVacation)); DeleteVacationCommand.RaiseCanExecuteChanged(); }
+            set 
+            { 
+                selectedVacation = value; 
+                OnPropertyChanged(nameof(SelectedVacation));
+                DeleteVacationCommand.RaiseCanExecuteChanged();
+                EditVacationCommand.RaiseCanExecuteChanged();
+            }
         }
+
+        private DateTime vacationStartDate;
+
+        public DateTime VacationStartDate
+        {
+            get { return vacationStartDate; }
+            set 
+            {
+                if (IsEditing)
+                {
+                    vacationStartDate = value;
+                    IsStartDateSet = true;
+                    IsEditing = false; 
+                    StartDateBorderVisibility = true;
+                    EndDateBorderVisibility = false;
+                }
+                else
+                {
+                    vacationStartDate = value; 
+                    OnPropertyChanged(nameof(VacationStartDate));
+                }
+            }
+        }
+
+        private DateTime vacationEndDate;
+
+        public DateTime VacationEndDate
+        {
+            get { return vacationEndDate; }
+            set 
+            {
+                if (IsStartDateSet)
+                {
+                    EndDateBorderVisibility = true;
+                    IsStartDateSet = false;
+                    vacationEndDate = value;
+                    ReadyToUpdate = true;
+                    UpdateCommand.RaiseCanExecuteChanged();
+                }
+                else
+                    vacationEndDate = value;
+            }
+        }
+
 
         // Populates left list view 
         private ObservableCollection<VacationModel> vacationList;
@@ -76,21 +128,49 @@ namespace EmployeeManagementSystem.ViewModels
             set { vacationList = value; OnPropertyChanged(nameof(VacationList)); }
         }
 
-        private DateTime vacationStartDate;
+        public bool IsEditing { get; set; } = false;
 
-        public DateTime VacationStartDate
+        public bool IsStartDateSet { get; set; } = false;
+
+        public bool ReadyToUpdate { get; set; } = false;
+
+        #region Visibilities 
+
+        private bool startDateBorderVisibility;
+
+        public bool StartDateBorderVisibility
         {
-            get { return vacationStartDate; }
-            set { vacationStartDate = value; OnPropertyChanged(nameof(VacationStartDate)); }
+            get { return startDateBorderVisibility; }
+            set { startDateBorderVisibility = value; OnPropertyChanged(nameof(StartDateBorderVisibility)); }
         }
 
-        private DateTime vacationEndDate;
+        private bool endDateBorderVisibility;
 
-        public DateTime VacationEndDate
+        public bool EndDateBorderVisibility
         {
-            get { return vacationEndDate; }
-            set { vacationEndDate = value; OnPropertyChanged(nameof(VacationEndDate)); }
+            get { return endDateBorderVisibility; }
+            set { endDateBorderVisibility = value; OnPropertyChanged(nameof(EndDateBorderVisibility)); }
         }
+
+
+        private bool updateButtonVisibility;
+
+        public bool UpdateButtonVisibility
+        {
+            get { return updateButtonVisibility; }
+            set { updateButtonVisibility = value; OnPropertyChanged(nameof(UpdateButtonVisibility)); }
+        }
+
+        private bool editButtonVisibility;
+
+        public bool EditButtonVisibility
+        {
+            get { return editButtonVisibility; }
+            set { editButtonVisibility = value; OnPropertyChanged(nameof(EditButtonVisibility)); }
+        }
+
+        #endregion
+
 
         #endregion
 
@@ -101,20 +181,30 @@ namespace EmployeeManagementSystem.ViewModels
             // Commands 
             AddVacationCommand = new RelayCommand(() => AddVacation(),
                 () => CheckObject<EmployeeModel>(SelectedEmployeeModel));
-            DeleteVacationCommand = new RelayCommand(() => DeleteVacation(), () => CheckObject<VacationModel>(SelectedVacation));
-            EditVacationCommand = new RelayCommand(() => EditVacation());
+            DeleteVacationCommand = new RelayCommand(() => DeleteVacation(SelectedVacation), () => CheckObject<VacationModel>(SelectedVacation));
+            EditVacationCommand = new RelayCommand(() => EditVacation(), () => CheckObject<VacationModel>(SelectedVacation));
             ReturnCommand = new RelayCommand(() => Return());
+            UpdateCommand = new RelayCommand(() => UpdateVacation(SelectedVacation, VacationStartDate, VacationEndDate), () => ReadyToUpdate ? true : false);
+
+
+            /// TODO :: Figure out how to disable the button when the update is not complete
 
 
             // Reads db, returns a list which is then turned into an observable collection 
             EmployeeList = new ObservableCollection<EmployeeModel>(DataBaseHelper.ReadEmployeeDB());
             VacationList = DataBaseHelper.ReadVacatinDB();
 
+            // Beggining Visibility Properties 
+            StartDateBorderVisibility = true;
+            EndDateBorderVisibility = true;
+            UpdateButtonVisibility = true;
+            EditButtonVisibility = false;
+
+
             // Sets the vacation dates to the current day 
             VacationStartDate = DateTime.Now;
             VacationEndDate = DateTime.Now;
         }
-
 
         #endregion
 
@@ -142,21 +232,21 @@ namespace EmployeeManagementSystem.ViewModels
             return (T)value != null ? true : false;
         }
 
-        public void PopulateVacationList()
+        public void DeleteVacation(VacationModel vacationModel)
         {
-            VacationList = DataBaseHelper.ReadVacatinDB();
-        }
-
-        public void DeleteVacation()
-        {
-            DataBaseHelper.DeleteVacation<VacationModel>(SelectedVacation);
-            VacationList.Remove(SelectedVacation);
+            DataBaseHelper.DeleteVacation<VacationModel>(vacationModel);
+            VacationList.Remove(vacationModel);
             DeleteVacationCommand.RaiseCanExecuteChanged();
         }
 
         public void EditVacation()
         {
-
+            IsEditing = true;
+            StartDateBorderVisibility = false;
+            EditButtonVisibility = true;
+            UpdateButtonVisibility = false;
+            // TODO :: Make it impossible to click any of the other controls 
+            
         }
 
         public void AddVacation()
@@ -169,6 +259,16 @@ namespace EmployeeManagementSystem.ViewModels
         {
             MainWindow.mainWindow.MainContentFrame.Content = new Dashboard();
         }
+
+        public void UpdateVacation(VacationModel vacationModel, DateTime startDate, DateTime endDate)
+        {
+            vacationModel.StartDate = startDate.ToString("MMMM dd, yyyy");
+            vacationModel.EndDate = endDate.ToString("MMMM dd, yyyy");
+            DataBaseHelper.UpdateVacation(vacationModel);
+            VacationList = new ObservableCollection<VacationModel>(DataBaseHelper.ReadVacatinDB().OrderBy(v => v.Name).ToList());
+        }
+
+
 
         #endregion
 

@@ -29,4 +29,16 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type Border}" x:Key="LineBreakGradientW/OFade">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush">
+            <Setter.Value>
+                <LinearGradientBrush>
+                    <GradientStop Color="{StaticResource LightBlue}" Offset="0.0"/>
+                    <GradientStop Color="{StaticResource LightPurple}" Offset="0.1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

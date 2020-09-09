@@ -1,16 +1,12 @@
-﻿using EmployeeManagementSystem.Pages;
+﻿using ClassLibrary;
+using EmployeeManagementSystem.Pages;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace EmployeeManagementSystem
 {
@@ -92,25 +88,32 @@ namespace EmployeeManagementSystem
             set { saturdayList = value; OnPropertyChanged(nameof(SaturdayList)); }
         }
 
+        private WeekdayControllerList weekdayController;
+
+        public WeekdayControllerList WeekdayController
+        {
+            get { return weekdayController; }
+            set { weekdayController = value; OnPropertyChanged(nameof(WeekdayController)); }
+        }
+
+
         #endregion
 
         // Regular Props
         public bool Complete { get; set; }
+        public bool IsEditing { get; set; }
         public bool HasStartTimeBeenSet { get; set; }
         public int WeekCounter { get; set; }
 
         private bool manualShiftInputBool;
-
         public bool ManualShiftInputBool
         {
             get { return manualShiftInputBool; }
             set { manualShiftInputBool = value; OnPropertyChanged(nameof(ManualShiftInputBool)); }
         }
 
-
-        private int calcWorkHours;
-
-        public int CalcWorkHours
+        private decimal calcWorkHours;
+        public decimal CalcWorkHours
         {
             get { return calcWorkHours; }
             set { calcWorkHours = value; OnPropertyChanged(nameof(CalcWorkHours)); }
@@ -169,6 +172,7 @@ namespace EmployeeManagementSystem
                 selectedShift = value; 
                 OnPropertyChanged(nameof(SelectedShift));
                 DeleteShiftCommand.RaiseCanExecuteChanged();
+                EditShiftCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -186,17 +190,17 @@ namespace EmployeeManagementSystem
             {
                 selectedShiftDate = value;
                 OnPropertyChanged(nameof(SelectedShiftDate));
-
-                // Updates properties and allows for saving to database 
-                Day = SelectedShiftDate.Day;
-                Month = SelectedShiftDate.Month;
-                Year = SelectedShiftDate.Year;
+                EditShiftCommand.RaiseCanExecuteChanged();
             }
         }
 
-        public int Day { get; set; }
-        public int Month { get; set; }
-        public int Year { get; set; }
+        private DateTime selectedShiftEndDate;
+
+        public DateTime SelectedShiftEndDate
+        {
+            get { return selectedShiftEndDate; }
+            set { selectedShiftEndDate = value; OnPropertyChanged(nameof(SelectedShiftEndDate)); }
+        }
 
         public DateTime CurrentDate { get; set; }
 
@@ -268,9 +272,9 @@ namespace EmployeeManagementSystem
             }
         }
 
-        private int startSelectedMinute;
+        private decimal startSelectedMinute;
 
-        public int StartSelectedMinute
+        public decimal StartSelectedMinute
         {
             get { return startSelectedMinute; }
             set { startSelectedMinute = value; OnPropertyChanged(nameof(StartSelectedMinute)); }
@@ -289,9 +293,9 @@ namespace EmployeeManagementSystem
             }
         }
 
-        private int endSelectedMinute;
+        private decimal endSelectedMinute;
 
-        public int EndSelectedMinute
+        public decimal EndSelectedMinute
         {
             get { return endSelectedMinute; }
             set { endSelectedMinute = value; OnPropertyChanged(nameof(EndSelectedMinute)); }
@@ -332,8 +336,6 @@ namespace EmployeeManagementSystem
             set { confirmationVisibility = value; OnPropertyChanged(nameof(ConfirmationVisiblity)); }
         }
 
-
-
         #endregion
 
 
@@ -361,7 +363,6 @@ namespace EmployeeManagementSystem
             get { return fullShiftList; }
             set { fullShiftList = value; OnPropertyChanged(nameof(FullShiftList)); }
         }
-
 
         #endregion
 
@@ -403,6 +404,7 @@ namespace EmployeeManagementSystem
 
             // Setting selected Date to current date 
             SelectedShiftDate = DateTime.Now;
+            SelectedShiftEndDate = DateTime.Now;
 
             // Sets the default clock display text 
             ClockDisplayText = "Select Starting Hour";
@@ -512,9 +514,96 @@ namespace EmployeeManagementSystem
         // Commits the shift to save 
         public void SaveShift()
         {
+            // Checks if the timespan is over 2 days 
+            if(SelectedShiftDate != SelectedShiftEndDate)
+            {
+                // Throws exception if start date begins after the end date 
+                if(SelectedShiftDate > SelectedShiftEndDate)
+                {
+                    MessageBox.Show("Shift start date cannot be after end date");
+
+                    // Hides the Control on save 
+                    ClockControlVisibility = true;
+                    MinClockVisibility = true;
+                    HourClockVisibility = true;
+                    ConfirmationVisiblity = true;
+                    return;
+                }
+
+                // throws exception if the shift selected is more than 1 day 
+                if (Math.Abs(SelectedShiftEndDate.Day - SelectedShiftDate.Day) > 1)
+                {
+                    MessageBox.Show("The shift end date can not span more than 1 day");
+                    ClockControlVisibility = true;
+                    MinClockVisibility = true;
+                    HourClockVisibility = true;
+                    ConfirmationVisiblity = true;
+                    return;
+                }
+
+                /// If IsEditing and shift extends over 2 days then split into 2 shifts and save again 
+                if (IsEditing)
+                {
+                    // Splits the Shift Between days ** particularly for night shift workers **
+                    DataBaseHelper.UpdateShift(SelectedShift, StartSelectedHour, StartSelectedMinute, 24, 0, SelectedShiftDate.Day,
+                        SelectedShiftDate.Month, SelectedShiftDate.Year, 10);
+
+                    DataBaseHelper.UpdateShift(SelectedShift, 0, 0, EndSelectedHour, EndSelectedMinute, SelectedShiftEndDate.Day,
+                        SelectedShiftEndDate.Month, SelectedShiftEndDate.Year, 10);
+
+                    // Hides the Control on save 
+                    ClockControlVisibility = true;
+                    MinClockVisibility = true;
+                    HourClockVisibility = true;
+                    ConfirmationVisiblity = true;
+
+                    // Refresh list to make any changes 
+                    ValidateAndReturnWeekdayLists();
+
+                    return;
+                }
+
+                // Splits the Shift Between days ** particularly for night shift workers **
+                // Code is unreachable when IsEditing is true 
+                DataBaseHelper.AddShift(SelectedEmployee, StartSelectedHour, StartSelectedMinute, 24, 0, SelectedShiftDate.Day,
+                    SelectedShiftDate.Month, SelectedShiftDate.Year, 10);
+
+                DataBaseHelper.AddShift(SelectedEmployee, 0, 0, EndSelectedHour, EndSelectedMinute, SelectedShiftEndDate.Day,
+                    SelectedShiftEndDate.Month, SelectedShiftEndDate.Year, 10);
+
+                // Hides the Control on save 
+                ClockControlVisibility = true;
+                MinClockVisibility = true;
+                HourClockVisibility = true;
+                ConfirmationVisiblity = true;
+
+                // Refresh list to make any changes 
+                ValidateAndReturnWeekdayLists();
+
+                return;
+            }
+
+            // If editing selected shift the saving will end here 
+            if (IsEditing)
+            {
+                DataBaseHelper.UpdateShift(SelectedShift, StartSelectedHour, StartSelectedMinute, EndSelectedHour, EndSelectedMinute,
+                    SelectedShiftDate.Day, SelectedShiftDate.Month, SelectedShiftDate.Year, 10);
+
+                // Hides the Control on save 
+                ClockControlVisibility = true;
+                MinClockVisibility = true;
+                HourClockVisibility = true;
+                ConfirmationVisiblity = true;
+
+                // Refresh list to make any changes 
+                ValidateAndReturnWeekdayLists();
+
+                return;
+            }
+
             // Save to database 
             DataBaseHelper.AddShift(SelectedEmployee, StartSelectedHour, StartSelectedMinute, EndSelectedHour, EndSelectedMinute,
-                Day, Month, Year);
+                SelectedShiftDate.Day, SelectedShiftDate.Month, SelectedShiftDate.Year, 10);
 
             // Hides the Control on save 
             ClockControlVisibility = true;
@@ -522,6 +611,7 @@ namespace EmployeeManagementSystem
             HourClockVisibility = true;
             ConfirmationVisiblity = true;
 
+            // Refresh and return the 
             ValidateAndReturnWeekdayLists();
         }
 
@@ -538,7 +628,10 @@ namespace EmployeeManagementSystem
         // Allows for editing of an existing shift 
         public void EditShift()
         {
-            //TODO :: Open the clocks again and take in new values that will edit the currently selected lists 
+            // Sets IsEditing to true to change save methods 
+            IsEditing = true;
+            ClockControlVisibility = false;
+            HourClockVisibility = false;
         }
 
         // Allows for deleting selected shifts 
@@ -662,6 +755,7 @@ namespace EmployeeManagementSystem
             HourClockVisibility = true;
             MinClockVisibility = true;
             ClockControlVisibility = true;
+            ConfirmationVisiblity = true;
 
             // Reset the values 
             StartSelectedHour = 0;
@@ -671,6 +765,7 @@ namespace EmployeeManagementSystem
 
             // Sets the date picker back to current date 
             SelectedShiftDate = DateTime.Now;
+            SelectedShiftEndDate = DateTime.Now;
 
             // Sets the has time been set to false so it opens proper clock 
             HasStartTimeBeenSet = false;
@@ -689,23 +784,45 @@ namespace EmployeeManagementSystem
             SaturdayList.Clear();
 
             // Iterates over the entire list finding values that match with the required date
+            // Also orders the list 
             FullShiftList = DataBaseHelper.ReadShiftDb();
             foreach(var shift in FullShiftList)
             {
                 if (shift.Day == Convert.ToDateTime(SundayDate).Day && shift.Month == Convert.ToDateTime(SundayDate).Month)
+                {
                     SundayList.Add(shift);
+                    SundayList = new ObservableCollection<ShiftModel>(SundayList.OrderBy(d => d.StartHourValue).ToList());
+                }
                 else if (shift.Day == Convert.ToDateTime(MondayDate).Day && shift.Month == Convert.ToDateTime(MondayDate).Month)
+                {
                     MondayList.Add(shift);
+                    MondayList = new ObservableCollection<ShiftModel>(MondayList.OrderBy(d => d.StartHourValue).ToList());
+                }
                 else if (shift.Day == Convert.ToDateTime(TuesdayDate).Day && shift.Month == Convert.ToDateTime(TuesdayDate).Month)
+                {
                     TuesdayList.Add(shift);
+                    TuesdayList = new ObservableCollection<ShiftModel>(TuesdayList.OrderBy(d => d.StartHourValue).ToList());
+                }
                 else if (shift.Day == Convert.ToDateTime(WednesdayDate).Day && shift.Month == Convert.ToDateTime(WednesdayDate).Month)
+                {
                     WednesdayList.Add(shift);
+                    WednesdayList = new ObservableCollection<ShiftModel>(WednesdayList.OrderBy(d => d.StartHourValue).ToList());
+                }
                 else if (shift.Day == Convert.ToDateTime(ThursdayDate).Day && shift.Month == Convert.ToDateTime(ThursdayDate).Month)
+                {
                     ThursdayList.Add(shift);
+                    ThursdayList = new ObservableCollection<ShiftModel>(ThursdayList.OrderBy(d => d.StartHourValue).ToList());
+                }
                 else if (shift.Day == Convert.ToDateTime(FridayDate).Day && shift.Month == Convert.ToDateTime(FridayDate).Month)
+                {
                     FridayList.Add(shift);
+                    FridayList = new ObservableCollection<ShiftModel>(FridayList.OrderBy(d => d.StartHourValue).ToList());
+                }
                 else if (shift.Day == Convert.ToDateTime(SaturdayDate).Day && shift.Month == Convert.ToDateTime(SaturdayDate).Month)
+                {
                     SaturdayList.Add(shift);
+                    SaturdayList = new ObservableCollection<ShiftModel>(SaturdayList.OrderBy(d => d.StartHourValue).ToList());
+                }
             }
         }
 
@@ -730,7 +847,7 @@ namespace EmployeeManagementSystem
         // Calc shift hours to display total work times 
         public void CalculateShiftHours()
         {
-            CalcWorkHours = (Math.Abs(StartSelectedHour - EndSelectedHour) + (StartSelectedMinute - EndSelectedMinute));
+            CalcWorkHours = Math.Abs(StartSelectedHour - EndSelectedHour) + Math.Abs(StartSelectedMinute - EndSelectedMinute)/60;
         }
 
         // Return to dashboard 

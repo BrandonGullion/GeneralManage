@@ -1,5 +1,5 @@
-﻿using EmployeeManagementSystem.Helpers;
-using EmployeeManagementSystem.Model;
+﻿using ClassLibrary;
+using EmployeeManagementSystem.Helpers;
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -185,8 +185,8 @@ namespace EmployeeManagementSystem
             return ShiftModelList;
         }
 
-        public static void AddShift(EmployeeModel employeeModel, int startHourValue, int startMinValue, int endHourValue,
-            int endMinValue, int day, int month, int year)
+        public static void AddShift(EmployeeModel employeeModel, int startHourValue, decimal startMinValue, int endHourValue,
+            decimal endMinValue, int day, int month, int year, int totalHours)
         {
 
             // Creates a new instance of a shift and adds it to the database 
@@ -202,8 +202,9 @@ namespace EmployeeManagementSystem
                 Year = year,
                 Name = $"{employeeModel.FirstName} {employeeModel.LastName}",
                 Hex = employeeModel.RandomHex,
-                Width = (Math.Abs(startHourValue - endHourValue) * 60) + Math.Abs(startMinValue - endMinValue),
-                Margin = (startHourValue * 60) + startMinValue,
+                Width = Convert.ToInt32((Math.Abs(startHourValue - endHourValue) * 60) + (endMinValue - startMinValue)),
+                Margin = Convert.ToInt32((startHourValue * 60) + startMinValue),
+                Total = totalHours,
             };
 
             using(SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
@@ -229,8 +230,26 @@ namespace EmployeeManagementSystem
             }
         }
 
-        public static void UpdateShift()
+        public static void UpdateShift(ShiftModel shiftModel, int startHourValue, decimal startMinValue, int endHourValue,
+            decimal endMinValue, int day, int month, int year, int totalHours)
         {
+            // Updates the selected shift model 
+            shiftModel.StartHourValue = startHourValue;
+            shiftModel.StartMinValue = startMinValue;
+            shiftModel.EndtHourValue = endHourValue;
+            shiftModel.EndMinValue = endMinValue;
+            shiftModel.Day = day;
+            shiftModel.Month = month;
+            shiftModel.Year = year;
+            shiftModel.Width = Convert.ToInt32((Math.Abs(startHourValue - endHourValue) * 60) + (endMinValue - startMinValue));
+            shiftModel.Margin = Convert.ToInt32((startHourValue * 60) + startMinValue);
+            shiftModel.Total = totalHours;
+
+            // Update within the DB
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                conn.Update(shiftModel);
+            }
 
         }
 
@@ -339,6 +358,25 @@ namespace EmployeeManagementSystem
 
                 // inserts the desired vacation model 
                 conn.Insert(vacationModel);
+            }
+        }
+
+        public static void UpdateVacation(VacationModel vacationModel)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
+            {
+                conn.CreateTable<VacationModel>();
+
+                // This is used to switch the start and end date if the inputs are incorrectly ordered 
+                if (DateTime.Parse(vacationModel.StartDate) > DateTime.Parse(vacationModel.EndDate))
+                {
+                    DateTime _endDate = DateTime.Parse(vacationModel.StartDate);
+                    DateTime _startDate = DateTime.Parse(vacationModel.EndDate);
+                    vacationModel.StartDate = _startDate.ToString("MMMM dd, yyyy");
+                    vacationModel.EndDate = _endDate.ToString("MMMM dd, yyyy");
+                }
+
+                conn.Update(vacationModel);
             }
         }
 
