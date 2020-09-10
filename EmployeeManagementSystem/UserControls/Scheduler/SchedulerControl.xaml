@@ -397,7 +397,7 @@
                     BorderBrush="{StaticResource LightGreyBrush}"
                     Opacity="0.4"/>
 
-            <TextBlock Text="{Binding SundayDate, UpdateSourceTrigger=PropertyChanged, FallbackValue=Example}"
+            <TextBlock Text="{Binding WeekdayController.Weekdays[0], UpdateSourceTrigger=PropertyChanged, FallbackValue=Example}"
                        Margin="5 20 5 5"
                        Grid.Row="1"
                        HorizontalAlignment="Center"
@@ -426,8 +426,8 @@
                     VerticalAlignment="Bottom"
                     BorderBrush="{StaticResource LightGreyBrush}"
                     Opacity="0.4"/>
-            
-            <TextBlock Text="{Binding MondayDate, UpdateSourceTrigger=PropertyChanged, FallbackValue=Example}"
+
+            <TextBlock Text="{Binding  WeekdayController.Weekdays[1], UpdateSourceTrigger=PropertyChanged, FallbackValue=Example}"
                        Grid.Row="2"
                        Margin="5 20 5 5"
                        VerticalAlignment="Center"
@@ -456,8 +456,8 @@
                     VerticalAlignment="Bottom"
                     BorderBrush="{StaticResource LightGreyBrush}"
                     Opacity="0.4"/>
-            
-            <TextBlock Text="{Binding TuesdayDate, FallbackValue=Example, UpdateSourceTrigger=PropertyChanged}"
+
+            <TextBlock Text="{Binding  WeekdayController.Weekdays[2], FallbackValue=Example, UpdateSourceTrigger=PropertyChanged}"
                        Grid.Row="3"
                        Margin="5 20 5 5"
                        HorizontalAlignment="Center"
@@ -478,7 +478,7 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Grid.Column="0"/>
-            <TextBlock Text="{Binding WednesdayDate, UpdateSourceTrigger=PropertyChanged, FallbackValue=Example}"
+            <TextBlock Text="{Binding  WeekdayController.Weekdays[3], UpdateSourceTrigger=PropertyChanged, FallbackValue=Example}"
                        Grid.Row="4"
                        Margin="5 20 5 5"
                        HorizontalAlignment="Center"
@@ -491,7 +491,7 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Grid.Column="0"/>
-            <TextBlock Text="{Binding ThursdayDate, UpdateSourceTrigger=PropertyChanged, FallbackValue=Example}"
+            <TextBlock Text="{Binding  WeekdayController.Weekdays[4], UpdateSourceTrigger=PropertyChanged, FallbackValue=Example}"
                        Margin="5 20 5 5"
                        Grid.Row="5"
                        HorizontalAlignment="Center"
@@ -504,7 +504,7 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Grid.Column="0"/>
-            <TextBlock Text="{Binding FridayDate, UpdateSourceTrigger=PropertyChanged, FallbackValue=Example}"
+            <TextBlock Text="{Binding  WeekdayController.Weekdays[5], UpdateSourceTrigger=PropertyChanged, FallbackValue=Example}"
                        Margin="5 20 5 5"
                        Grid.Row="6"
                        HorizontalAlignment="Center"
@@ -517,7 +517,7 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Grid.Column="0"/>
-            <TextBlock Text="{Binding SaturdayDate, FallbackValue=Example, UpdateSourceTrigger=PropertyChanged}"
+            <TextBlock Text="{Binding  WeekdayController.Weekdays[5], FallbackValue=Example, UpdateSourceTrigger=PropertyChanged}"
                        Margin="5 20 5 5"
                        Grid.Row="7"
                        HorizontalAlignment="Center"
@@ -533,7 +533,7 @@
                       Background="Transparent"
                       Grid.ColumnSpan="24"
                       SelectedItem="{Binding SelectedShift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding SundayList, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding WeekdayController.WeekdayLists[0], UpdateSourceTrigger=PropertyChanged}"
                       HorizontalAlignment="Stretch"
                       BorderThickness="0">
                 <ListView.ItemTemplate>
@@ -551,7 +551,7 @@
                       Grid.Column="1"
                       Grid.ColumnSpan="24"
                       SelectedItem="{Binding SelectedShift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding MondayList, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding WeekdayController.WeekdayLists[1], UpdateSourceTrigger=PropertyChanged}"
                       HorizontalAlignment="Stretch"
                       BorderThickness="0">
                 <ListView.ItemTemplate>
@@ -569,7 +569,7 @@
                       Grid.Column="1"
                       Grid.ColumnSpan="24"
                       SelectedItem="{Binding SelectedShift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding TuesdayList, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding WeekdayController.WeekdayLists[2], UpdateSourceTrigger=PropertyChanged}"
                       HorizontalAlignment="Stretch"
                       BorderThickness="0">
                 <ListView.ItemTemplate>
@@ -587,7 +587,7 @@
                       Grid.Column="1"
                       Grid.ColumnSpan="24"
                       SelectedItem="{Binding SelectedShift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding WednesdayList, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding WeekdayController.WeekdayLists[3], UpdateSourceTrigger=PropertyChanged}"
                       HorizontalAlignment="Stretch"
                       BorderThickness="0">
                 <ListView.ItemTemplate>
@@ -605,7 +605,7 @@
                       Grid.Column="1"
                       Grid.ColumnSpan="24"
                       SelectedItem="{Binding SelectedShift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding ThursdayList, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding WeekdayController.WeekdayLists[4], UpdateSourceTrigger=PropertyChanged}"
                       HorizontalAlignment="Stretch"
                       BorderThickness="0">
                 <ListView.ItemTemplate>
@@ -623,7 +623,7 @@
                       Grid.Column="1"
                       SelectedItem="{Binding SelectedShift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Grid.ColumnSpan="24"
-                      ItemsSource="{Binding FridayList, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding WeekdayController.WeekdayLists[5], UpdateSourceTrigger=PropertyChanged}"
                       HorizontalAlignment="Stretch"
                       BorderThickness="0">
                 <ListView.ItemTemplate>
@@ -641,7 +641,7 @@
                       Grid.Column="1"
                       Grid.ColumnSpan="24"
                       SelectedItem="{Binding SelectedShift, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding SaturdayList, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding WeekdayController.WeekdayLists[6], UpdateSourceTrigger=PropertyChanged}"
                       HorizontalAlignment="Stretch"
                       BorderThickness="0">
                 <ListView.ItemTemplate>

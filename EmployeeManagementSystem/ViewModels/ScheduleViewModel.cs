@@ -30,72 +30,6 @@ namespace EmployeeManagementSystem
 
         #endregion
 
-        #region Weekday List
-
-        private ObservableCollection<ShiftModel> sundayList;
-
-        public ObservableCollection<ShiftModel> SundayList
-        {
-            get { return sundayList; }
-            set { sundayList = value; OnPropertyChanged(nameof(SundayList)); }
-        }
-
-        private ObservableCollection<ShiftModel> mondayList;
-
-        public ObservableCollection<ShiftModel> MondayList
-        {
-            get { return mondayList; }
-            set { mondayList = value; OnPropertyChanged(nameof(MondayList)); }
-        }
-
-        private ObservableCollection<ShiftModel> tuesdayList;
-
-        public ObservableCollection<ShiftModel> TuesdayList
-        {
-            get { return tuesdayList; }
-            set { tuesdayList = value; OnPropertyChanged(nameof(TuesdayList)); }
-        }
-
-        private ObservableCollection<ShiftModel> wednesdayList;
-
-        public ObservableCollection<ShiftModel> WednesdayList
-        {
-            get { return wednesdayList; }
-            set { wednesdayList = value; OnPropertyChanged(nameof(WednesdayList)); }
-        }
-
-        private ObservableCollection<ShiftModel> thursdayList;
-
-        public ObservableCollection<ShiftModel> ThursdayList
-        {
-            get { return thursdayList; }
-            set { thursdayList = value; OnPropertyChanged(nameof(ThursdayList)); }
-        }
-
-        private ObservableCollection<ShiftModel> fridayList;
-
-        public ObservableCollection<ShiftModel> FridayList
-        {
-            get { return fridayList; }
-            set { fridayList = value; OnPropertyChanged(nameof(FridayList)); }
-        }
-
-        private ObservableCollection<ShiftModel> saturdayList;
-
-        public ObservableCollection<ShiftModel> SaturdayList
-        {
-            get { return saturdayList; }
-            set { saturdayList = value; OnPropertyChanged(nameof(SaturdayList)); }
-        }
-
-        private WeekdayControllerList weekdayController;
-
-        public WeekdayControllerList WeekdayController
-        {
-            get { return weekdayController; }
-            set { weekdayController = value; OnPropertyChanged(nameof(WeekdayController)); }
-        }
-
 
         #endregion
 
@@ -110,6 +44,14 @@ namespace EmployeeManagementSystem
         {
             get { return manualShiftInputBool; }
             set { manualShiftInputBool = value; OnPropertyChanged(nameof(ManualShiftInputBool)); }
+        }
+
+
+        private WeekdayControllerList weekdayController;
+        public WeekdayControllerList WeekdayController
+        {
+            get { return weekdayController; }
+            set { weekdayController = value; OnPropertyChanged(nameof(WeekdayController)); }
         }
 
         private decimal calcWorkHours;
@@ -176,8 +118,6 @@ namespace EmployeeManagementSystem
             }
         }
 
-        #region Calendar Dates 
-
         /// <summary>
         /// Saves the selected date for database saving 
         /// </summary>
@@ -201,61 +141,6 @@ namespace EmployeeManagementSystem
             get { return selectedShiftEndDate; }
             set { selectedShiftEndDate = value; OnPropertyChanged(nameof(SelectedShiftEndDate)); }
         }
-
-        public DateTime CurrentDate { get; set; }
-
-        private string sundayDate;
-
-        public string SundayDate
-        {
-            get { return sundayDate; }
-            set { sundayDate = value; OnPropertyChanged(nameof(SundayDate)); }
-        }
-
-        private string mondayDate;
-
-        public string MondayDate
-        {
-            get { return mondayDate; }
-            set { mondayDate = value; OnPropertyChanged(nameof(MondayDate)); }
-        }
-        private string tuesdayDate;
-
-        public string TuesdayDate
-        {
-            get { return tuesdayDate; }
-            set { tuesdayDate = value; OnPropertyChanged(nameof(TuesdayDate)); }
-        }
-        private string wednesdayDate;
-
-        public string WednesdayDate
-        {
-            get { return wednesdayDate; }
-            set { wednesdayDate = value; OnPropertyChanged(nameof(WednesdayDate)); }
-        }
-        private string thursdayDate;
-
-        public string ThursdayDate
-        {
-            get { return thursdayDate; }
-            set { thursdayDate = value; OnPropertyChanged(nameof(ThursdayDate)); }
-        }
-        private string fridayDate;
-
-        public string FridayDate
-        {
-            get { return fridayDate; }
-            set { fridayDate = value; OnPropertyChanged(nameof(FridayDate)); }
-        }
-        private string saturdayDate;
-
-        public string SaturdayDate
-        {
-            get { return saturdayDate; }
-            set { saturdayDate = value; OnPropertyChanged(nameof(SaturdayDate)); }
-        }
-
-        #endregion
 
         #region ClockTimeSelections 
 
@@ -364,7 +249,6 @@ namespace EmployeeManagementSystem
             set { fullShiftList = value; OnPropertyChanged(nameof(FullShiftList)); }
         }
 
-        #endregion
 
         #region Constructor
 
@@ -378,18 +262,9 @@ namespace EmployeeManagementSystem
             EditShiftCommand = new RelayCommand(() => EditShift(), () => CheckValue<ShiftModel>(SelectedShift));
             DeleteShiftCommand = new RelayCommand(() => DeleteShift(), () => CheckValue<ShiftModel>(SelectedShift));
             AddShiftCommand = new RelayCommand(() => AddShift(), () => CheckValue<EmployeeModel>(SelectedEmployee));
-            NextWeekCommand = new RelayCommand(() => IncrementWeek());
-            PreviousWeekCommand = new RelayCommand(() => DecrementWeek());
+            NextWeekCommand = new RelayCommand(() => WeekdayController.ChangeWeek(1));
+            PreviousWeekCommand = new RelayCommand(() => WeekdayController.ChangeWeek(-1));
             ReturnCommand = new RelayCommand(() => Return());
-
-            // Init Lists
-            SundayList = new ObservableCollection<ShiftModel>();
-            MondayList = new ObservableCollection<ShiftModel>();
-            TuesdayList = new ObservableCollection<ShiftModel>();
-            WednesdayList = new ObservableCollection<ShiftModel>();
-            ThursdayList = new ObservableCollection<ShiftModel>();
-            FridayList = new ObservableCollection<ShiftModel>();
-            SaturdayList = new ObservableCollection<ShiftModel>();
 
             HourList = new List<int>() {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 };
             MinList = new List<int>() {0,5,10,15,20,25,30,35,40,45,50,55};
@@ -398,6 +273,7 @@ namespace EmployeeManagementSystem
             CompleteShiftAddCommand = new RelayCommand(() => SaveShift(), () => CheckIfShiftReadyToSave());
             CancelShiftAddCommand = new RelayCommand(() => CancelShiftAdd());
             ManualSaveCommand = new RelayCommand(() => SaveShift(), () => CheckInt(StartSelectedHour, EndSelectedHour));
+
 
             // Generates the list for the Combobox 
             EmployeeList = DataBaseHelper.ReadEmployeeDB();
@@ -412,18 +288,18 @@ namespace EmployeeManagementSystem
             // Sets the starting value to AM
             AMPMBool = true;
 
-            // Gets the current date to populate the scheduler 
-            CurrentDate = DateTime.Now;
-            AdjustWeekDayDates();
-
             // Set Starting visibility of clocks 
             ClockControlVisibility = true;
             HourClockVisibility = true;
             MinClockVisibility = true;
             ConfirmationVisiblity = true;
 
+            // Need to change the database helper and move it to the core of the class library 
+            FullShiftList = DataBaseHelper.ReadShiftDb();
+            WeekdayController = new WeekdayControllerList(DataBaseHelper.ReadShiftDb());
+
             // Sorts through the lists and populates the individual days 
-            ValidateAndReturnWeekdayLists();
+            WeekdayController.UpdateLists(FullShiftList);
         }
 
         #endregion
@@ -557,8 +433,10 @@ namespace EmployeeManagementSystem
                     HourClockVisibility = true;
                     ConfirmationVisiblity = true;
 
+                    FullShiftList = DataBaseHelper.ReadShiftDb();
+
                     // Refresh list to make any changes 
-                    ValidateAndReturnWeekdayLists();
+                    WeekdayController.UpdateLists(FullShiftList);
 
                     return;
                 }
@@ -577,8 +455,10 @@ namespace EmployeeManagementSystem
                 HourClockVisibility = true;
                 ConfirmationVisiblity = true;
 
+                FullShiftList = DataBaseHelper.ReadShiftDb();
+
                 // Refresh list to make any changes 
-                ValidateAndReturnWeekdayLists();
+                WeekdayController.UpdateLists(FullShiftList);
 
                 return;
             }
@@ -595,8 +475,10 @@ namespace EmployeeManagementSystem
                 HourClockVisibility = true;
                 ConfirmationVisiblity = true;
 
+                FullShiftList = DataBaseHelper.ReadShiftDb();
+
                 // Refresh list to make any changes 
-                ValidateAndReturnWeekdayLists();
+                WeekdayController.UpdateLists(FullShiftList);
 
                 return;
             }
@@ -611,8 +493,10 @@ namespace EmployeeManagementSystem
             HourClockVisibility = true;
             ConfirmationVisiblity = true;
 
+            FullShiftList = DataBaseHelper.ReadShiftDb();
+
             // Refresh and return the 
-            ValidateAndReturnWeekdayLists();
+            WeekdayController.UpdateLists(FullShiftList);
         }
 
         // This will wait for the selection of the start and end shift before 
@@ -638,7 +522,9 @@ namespace EmployeeManagementSystem
         public void DeleteShift()
         {
             DataBaseHelper.DeleteShift(SelectedShift);
-            ValidateAndReturnWeekdayLists();
+            FullShiftList = DataBaseHelper.ReadShiftDb();
+
+            WeekdayController.UpdateLists(FullShiftList);
         }
 
         // Adjusts the time value depending on if AM or PM is selected 
@@ -672,83 +558,6 @@ namespace EmployeeManagementSystem
                 return 99;
         }
 
-        // Takes into account the days of the week that the program can 
-        // Be opened to adjust to proper day of week dates 
-        public void AdjustWeekDayDates()
-        {
-            switch (CurrentDate.DayOfWeek)
-            {
-                case DayOfWeek.Sunday:
-                    AugmentDate(0, 1, 2, 3, 4, 5, 6);
-                    break;
-                case DayOfWeek.Monday:
-                    AugmentDate(-1, 0, 1, 2, 3, 4, 5);
-                    break;
-                case DayOfWeek.Tuesday:
-                    AugmentDate(-2,-1,0,1,2,3,4);
-                    break;
-                case DayOfWeek.Wednesday:
-                    AugmentDate(-3, -2, -1, 0, 1, 2, 3);
-                    break;
-                case DayOfWeek.Thursday:
-                    AugmentDate(-4, -3, -2, -1, 0, 1, 2);
-                    break;
-                case DayOfWeek.Friday:
-                    AugmentDate(-5, -4, -3, -2, -1, 0, 1);
-                    break;
-                case DayOfWeek.Saturday:
-                    AugmentDate(-6, -5, -4, -3, -2, -1, 0);
-                    break;
-            }
-        }
-
-        // Sets the date for each day depending on the inputted increments 
-        public void AugmentDate(int sundayIncrement, int mondayIncrement, int tuesdayIncrement, int wednesdayIncrement,
-            int thursdayIncrement, int fridayIncrement, int saturdayIncrement)
-        {
-            SundayDate = CurrentDate.AddDays(sundayIncrement).ToString("MMMM dd, yyyy");
-            MondayDate = CurrentDate.AddDays(mondayIncrement).ToString("MMMM dd, yyyy");
-            TuesdayDate = CurrentDate.AddDays(tuesdayIncrement).ToString("MMMM dd, yyyy");
-            WednesdayDate = CurrentDate.AddDays(wednesdayIncrement).ToString("MMMM dd, yyyy");
-            ThursdayDate = CurrentDate.AddDays(thursdayIncrement).ToString("MMMM dd, yyyy");
-            FridayDate = CurrentDate.AddDays(fridayIncrement).ToString("MMMM dd, yyyy");
-            SaturdayDate = CurrentDate.AddDays(saturdayIncrement).ToString("MMMM dd, yyyy");
-        }
-
-        // Advances the scheduler by 1 week
-        public void IncrementWeek()
-        {
-            // Increments the week counter -> Recalc the dates of the days 
-            WeekCounter = 1;
-            SundayDate = Convert.ToDateTime(SundayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            MondayDate = Convert.ToDateTime(MondayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            TuesdayDate = Convert.ToDateTime(TuesdayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            WednesdayDate = Convert.ToDateTime(WednesdayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            ThursdayDate = Convert.ToDateTime(ThursdayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            FridayDate = Convert.ToDateTime(FridayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            SaturdayDate = Convert.ToDateTime(SaturdayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-
-            // Checks for any dates that are present within the current week 
-            ValidateAndReturnWeekdayLists();
-        }
-
-        // Reduces the scheduler by 1 week
-        public void DecrementWeek()
-        {            
-            // Decrements the week counter -> Recalc the dates of the days 
-            WeekCounter = -1;
-            SundayDate = Convert.ToDateTime(SundayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            MondayDate = Convert.ToDateTime(MondayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            TuesdayDate = Convert.ToDateTime(TuesdayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            WednesdayDate = Convert.ToDateTime(WednesdayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            ThursdayDate = Convert.ToDateTime(ThursdayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            FridayDate = Convert.ToDateTime(FridayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-            SaturdayDate = Convert.ToDateTime(SaturdayDate).AddDays(WeekCounter * 7).ToString("MMMM dd, yyyy");
-
-            // Checks for any dates that are present within the current week 
-            ValidateAndReturnWeekdayLists();
-        }
-
         // Change visibility and return all values back to default 
         public void CancelShiftAdd()
         {
@@ -769,61 +578,6 @@ namespace EmployeeManagementSystem
 
             // Sets the has time been set to false so it opens proper clock 
             HasStartTimeBeenSet = false;
-        }
-
-        // Inserts the required items into the seperate lists that can be populated 
-        public void ValidateAndReturnWeekdayLists()
-        {
-            // Empties lists so they can be filled again depending on the week 
-            SundayList.Clear();
-            MondayList.Clear();
-            TuesdayList.Clear();
-            WednesdayList.Clear();
-            ThursdayList.Clear();
-            FridayList.Clear();
-            SaturdayList.Clear();
-
-            // Iterates over the entire list finding values that match with the required date
-            // Also orders the list 
-            FullShiftList = DataBaseHelper.ReadShiftDb();
-            foreach(var shift in FullShiftList)
-            {
-                if (shift.Day == Convert.ToDateTime(SundayDate).Day && shift.Month == Convert.ToDateTime(SundayDate).Month)
-                {
-                    SundayList.Add(shift);
-                    SundayList = new ObservableCollection<ShiftModel>(SundayList.OrderBy(d => d.StartHourValue).ToList());
-                }
-                else if (shift.Day == Convert.ToDateTime(MondayDate).Day && shift.Month == Convert.ToDateTime(MondayDate).Month)
-                {
-                    MondayList.Add(shift);
-                    MondayList = new ObservableCollection<ShiftModel>(MondayList.OrderBy(d => d.StartHourValue).ToList());
-                }
-                else if (shift.Day == Convert.ToDateTime(TuesdayDate).Day && shift.Month == Convert.ToDateTime(TuesdayDate).Month)
-                {
-                    TuesdayList.Add(shift);
-                    TuesdayList = new ObservableCollection<ShiftModel>(TuesdayList.OrderBy(d => d.StartHourValue).ToList());
-                }
-                else if (shift.Day == Convert.ToDateTime(WednesdayDate).Day && shift.Month == Convert.ToDateTime(WednesdayDate).Month)
-                {
-                    WednesdayList.Add(shift);
-                    WednesdayList = new ObservableCollection<ShiftModel>(WednesdayList.OrderBy(d => d.StartHourValue).ToList());
-                }
-                else if (shift.Day == Convert.ToDateTime(ThursdayDate).Day && shift.Month == Convert.ToDateTime(ThursdayDate).Month)
-                {
-                    ThursdayList.Add(shift);
-                    ThursdayList = new ObservableCollection<ShiftModel>(ThursdayList.OrderBy(d => d.StartHourValue).ToList());
-                }
-                else if (shift.Day == Convert.ToDateTime(FridayDate).Day && shift.Month == Convert.ToDateTime(FridayDate).Month)
-                {
-                    FridayList.Add(shift);
-                    FridayList = new ObservableCollection<ShiftModel>(FridayList.OrderBy(d => d.StartHourValue).ToList());
-                }
-                else if (shift.Day == Convert.ToDateTime(SaturdayDate).Day && shift.Month == Convert.ToDateTime(SaturdayDate).Month)
-                {
-                    SaturdayList.Add(shift);
-                    SaturdayList = new ObservableCollection<ShiftModel>(SaturdayList.OrderBy(d => d.StartHourValue).ToList());
-                }
-            }
         }
 
         // Checks objects to make sure they are not null 
