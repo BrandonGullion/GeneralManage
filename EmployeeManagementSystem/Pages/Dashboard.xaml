@@ -48,7 +48,7 @@
         <local:DashboardControl Grid.Row="1"
                                 Image="/Icons/Money.png"
                                 MouseDown="DashboardControl_MouseDown_3"
-                                ItemText="Payroll"
+                                ItemText="Metrics"
                                 Grid.Column="0"
                                 DesiredCornerRadius="5"
                                 Margin="30"/>

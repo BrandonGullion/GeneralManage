@@ -6,6 +6,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Windows;
 using System.Windows.Markup;
 
 namespace EmployeeManagementSystem
@@ -29,10 +30,6 @@ namespace EmployeeManagementSystem
         public RelayCommand ClearAllCommand { get; set; }
         public RelayCommand SelectAllCommand { get; set; }
 
-
-        // Regular Properties 
-
-
         // Used to check if there are any changes to the Availability Control 
         private bool isDirty;
         public bool IsDirty
@@ -40,8 +37,6 @@ namespace EmployeeManagementSystem
             get { return isDirty; }
             set { isDirty = value; OnPropertyChanged(nameof(IsDirty)); }
         }
-
-
 
         private List<EmployeeModel> employeeList;
         public List<EmployeeModel> EmployeeList
@@ -264,23 +259,22 @@ namespace EmployeeManagementSystem
         public void Save()
         {
             // Saves Employee, updates selectedEmployee and updates the Employee List 
-            SelectedEmployee = DataBaseHelper.AddEmplyee(AddEmployeeModel);
-            EmployeeList = DataBaseHelper.ReadEmployeeDB();
+            if (!string.IsNullOrWhiteSpace(AddEmployeeModel.FirstName) && !string.IsNullOrWhiteSpace(AddEmployeeModel.LastName)
+                && !string.IsNullOrWhiteSpace(AddEmployeeModel.DOB))
+            {
+                SelectedEmployee = DataBaseHelper.AddEmplyee(AddEmployeeModel);
+                EmployeeList = DataBaseHelper.ReadEmployeeDB();
 
-            // Clears the Added Employee
-            AddEmployeeModel = new EmployeeModel();
+                // Clears the Added Employee
+                AddEmployeeModel = new EmployeeModel();
 
-            // Updates Visiblity of Controls 
-            AddEmployeeControlVisibility = true;
-            EmployeeInfoControlVisibility = false;
-        }
+                // Updates Visiblity of Controls 
+                AddEmployeeControlVisibility = true;
+                EmployeeInfoControlVisibility = false;
+            }
 
-        // Check desired textboxes before saving 
-        public bool CheckBeforeSave()
-        {
-            return !string.IsNullOrEmpty(AddEmployeeModel.FirstName) && 
-                !string.IsNullOrWhiteSpace(AddEmployeeModel.LastName) &&
-                !string.IsNullOrWhiteSpace(AddEmployeeModel.DOB)? true : false;
+            else
+                MessageBox.Show("First Name, Last Name and DOB required");
         }
 
         // Selected selected employee

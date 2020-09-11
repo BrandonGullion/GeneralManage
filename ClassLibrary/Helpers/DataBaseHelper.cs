@@ -1,32 +1,29 @@
 ﻿using ClassLibrary;
-using EmployeeManagementSystem.Helpers;
 using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.SqlClient;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
-using System.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EmployeeManagementSystem
+namespace ClassLibrary
 {
     public class DataBaseHelper
     {
         // Get current program directory
         public static string CurrentDirectory { get; set; } = Directory.GetCurrentDirectory();
+        public static string DatabaseSaveDirectory { get; set; } = Path.Combine(CurrentDirectory, "Databases");
+
         // Static naming for user db
         public static string UserDatabaseName { get; set; } = "User.db";
         public static string EmployeeDatabaseName { get; set; } = "Employee.db";
         public static string PositionDatabaseName { get; set; } = "Position.db";
 
         // Combine to save to current directory 
-        public static string UserDatabase { get; set; } = Path.Combine(CurrentDirectory, UserDatabaseName);
-        public static string EmployeeDatabase { get; set; } = Path.Combine(CurrentDirectory, EmployeeDatabaseName);
-        public static string PositionDatabase { get; set; } = Path.Combine(CurrentDirectory, PositionDatabaseName);
+        public static string UserDatabase { get; set; } = Path.Combine(DatabaseSaveDirectory, UserDatabaseName);
+        public static string EmployeeDatabase { get; set; } = Path.Combine(DatabaseSaveDirectory, EmployeeDatabaseName);
+        public static string PositionDatabase { get; set; } = Path.Combine(DatabaseSaveDirectory, PositionDatabaseName);
 
         #region Management User DB Methods 
 
@@ -103,6 +100,9 @@ namespace EmployeeManagementSystem
 
         public static List<EmployeeModel> ReadEmployeeDB()
         {
+            // Creates Directory for saving the databases 
+            Directory.CreateDirectory(DatabaseSaveDirectory);
+
             var EmployeeList = new List<EmployeeModel>();
 
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
@@ -172,6 +172,9 @@ namespace EmployeeManagementSystem
         // Read Database and return list 
         public static List<ShiftModel> ReadShiftDb()
         {
+            // Creates Database save directory 
+            Directory.CreateDirectory(DatabaseSaveDirectory);
+
             List<ShiftModel> ShiftModelList = new List<ShiftModel>();
 
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
@@ -185,8 +188,8 @@ namespace EmployeeManagementSystem
             return ShiftModelList;
         }
 
-        public static void AddShift(EmployeeModel employeeModel, int startHourValue, decimal startMinValue, int endHourValue,
-            decimal endMinValue, int day, int month, int year, int totalHours)
+        public static void AddShift(EmployeeModel employeeModel, int startHourValue, double startMinValue, int endHourValue,
+            double endMinValue, int day, int month, int year, int totalHours)
         {
 
             // Creates a new instance of a shift and adds it to the database 
@@ -230,8 +233,8 @@ namespace EmployeeManagementSystem
             }
         }
 
-        public static void UpdateShift(ShiftModel shiftModel, int startHourValue, decimal startMinValue, int endHourValue,
-            decimal endMinValue, int day, int month, int year, int totalHours)
+        public static void UpdateShift(ShiftModel shiftModel, int startHourValue, double startMinValue, int endHourValue,
+            double endMinValue, int day, int month, int year, int totalHours)
         {
             // Updates the selected shift model 
             shiftModel.StartHourValue = startHourValue;
@@ -340,6 +343,7 @@ namespace EmployeeManagementSystem
             }
         }
 
+        // Adds vacation model to the db
         public static void AddVacation(EmployeeModel employeeModel, DateTime startDate, DateTime endDate)
         {
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
@@ -361,6 +365,7 @@ namespace EmployeeManagementSystem
             }
         }
 
+        // Updates existing vacation model within db 
         public static void UpdateVacation(VacationModel vacationModel)
         {
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
@@ -456,6 +461,84 @@ namespace EmployeeManagementSystem
 
         #endregion
 
-    }
+        #region Metrics Methods 
 
+        // Trying something new to make the database more robust 
+
+        #endregion
+
+        #region Generic Methods
+
+
+        // Generic Method for deleting selected objects w/ null check
+        public static void DeleteModel<T>(object model, string database)
+        {
+            if (model != null)
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(database))
+                {
+                    conn.CreateTable<T>();
+
+                    conn.Delete((T)model);
+                }
+            }
+            else
+                Console.WriteLine($"{model} was not cast and or has null values");
+        }
+
+        // Generic Method for adding objects to DB
+        public static void AddModel<T>(object model, string database)
+        {
+            // Creates save directory if not currently present 
+            Directory.CreateDirectory(DatabaseSaveDirectory);
+
+            if (model != null)
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(database))
+                {
+                    // Creates table depending on the type passed in 
+                    conn.CreateTable<T>();
+
+                    // inserts the object after being cast to required type 
+                    conn.Insert((T)model);
+                }
+            }
+
+            else
+                Console.WriteLine($"{model} was not cast and or has null values");
+        }
+
+        // Generic Method for updating objects in db 
+        public static void UpdateModel<T>(object model, string database)
+        {
+            if (model != null)
+            {
+                using (SQLiteConnection conn = new SQLiteConnection(database))
+                {
+                    // Creates table depending on the type passed in 
+                    conn.CreateTable<T>();
+
+                    // inserts the object after being cast to required type 
+                    conn.Update((T)model);
+                }
+            }
+
+            else
+                Console.WriteLine($"{model} was not cast and or has null values");
+        }
+
+        public static ObservableCollection<T> ReadAllDB<T>(string database)
+            where T : new()
+        {
+            using(SQLiteConnection conn = new SQLiteConnection(database))
+            {
+                // Creates the generic table 
+                conn.CreateTable<T>();
+
+                return new ObservableCollection<T>(conn.Table<T>().ToList());
+            }
+        }  
+
+        #endregion
+    }
 }

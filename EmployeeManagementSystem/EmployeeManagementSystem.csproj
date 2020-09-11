@@ -50,6 +50,12 @@
     <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="SQLite-net, Version=1.7.335.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\sqlite-net-pcl.1.7.335\lib\netstandard2.0\SQLite-net.dll</HintPath>
@@ -111,8 +117,6 @@
     <Compile Include="AttachedProperties\MonitorPasswordProperty.cs" />
     <Compile Include="CustomControls\DashboardControl.cs" />
     <Compile Include="DataModels\ApplicationPage.cs" />
-    <Compile Include="Helpers\DataBaseHelper.cs" />
-    <Compile Include="Helpers\RandomRGBHelper.cs" />
     <Compile Include="Pages\BasePage.cs" />
     <Compile Include="Pages\Dashboard.xaml.cs">
       <DependentUpon>Dashboard.xaml</DependentUpon>
@@ -122,6 +126,21 @@
     </Compile>
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Metric Pages\BiWeeklyMetricPage.xaml.cs">
+      <DependentUpon>BiWeeklyMetricPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Metric Pages\EmployeeMetricPage.xaml.cs">
+      <DependentUpon>EmployeeMetricPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Metric Pages\MonthlyMetricPage.xaml.cs">
+      <DependentUpon>MonthlyMetricPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Metric Pages\WeeklyMetricPage.xaml.cs">
+      <DependentUpon>WeeklyMetricPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\MetricPage.xaml.cs">
+      <DependentUpon>MetricPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\SchedulePage.xaml.cs">
       <DependentUpon>SchedulePage.xaml</DependentUpon>
@@ -190,6 +209,7 @@
     </Compile>
     <Compile Include="ValueConverters\ApplicationPageValueConverter.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
+    <Compile Include="ValueConverters\BooleanInverter.cs" />
     <Compile Include="ValueConverters\BoolToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\MarginToThicknessConverter.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
@@ -197,8 +217,14 @@
     <Compile Include="ViewModels\EmployeePageViewModel.cs" />
     <Compile Include="ViewModels\LoginPageViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MetricsViewModel.cs" />
+    <Compile Include="ViewModels\MetricViewModels\BiWeeklyViewModel.cs" />
+    <Compile Include="ViewModels\MetricViewModels\EmployeeMetricsViewModel.cs" />
+    <Compile Include="ViewModels\MetricViewModels\MonthlyMetricsViewModel.cs" />
     <Compile Include="ViewModels\ScheduleViewModel.cs" />
+    <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="ViewModels\VacationViewModel.cs" />
+    <Compile Include="ViewModels\MetricViewModels\WeeklyMetricViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -220,6 +246,26 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Metric Pages\BiWeeklyMetricPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Metric Pages\EmployeeMetricPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Metric Pages\MonthlyMetricPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Metric Pages\WeeklyMetricPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\MetricPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -388,6 +434,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Helpers\" />
     <Folder Include="Windows\" />
   </ItemGroup>
   <ItemGroup>

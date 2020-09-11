@@ -10,6 +10,10 @@ namespace EmployeeManagementSystem
     {
         // The initial login page 
         Login = 1,
+        WeeklyMetricPage = 2,
+        BiWeeklyMetricPage = 3,
+        MonthlyMetricPage = 4,
+        EmployeeMetricPage = 5,
 
     }
 }

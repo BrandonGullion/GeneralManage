@@ -1,0 +1,83 @@
+﻿<local:BasePage x:Class="EmployeeManagementSystem.Pages.MetricPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:EmployeeManagementSystem.Pages"
+      xmlns:lvs="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      xmlns:converters="clr-namespace:EmployeeManagementSystem.ValueConverters"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MetricPage">
+    <local:BasePage.Resources>
+        <Image Source="/Icons/Home.png" x:Key="Home"/>
+    </local:BasePage.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Background="White"
+                CornerRadius="5"
+                Margin="5">
+            
+            <!-- Left Side Bar -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel>
+                    <Button Style="{StaticResource TextWithHover}"
+                            FontSize="16"
+                            Command="{Binding WeeklyMetricsCommand}"
+                            Margin="15 5 15 0"
+                            Foreground="{StaticResource DarkGreyBrush}"
+                            Content="Weekly Metrics"/>
+
+                    <Button Style="{StaticResource TextWithHover}"
+                            FontSize="16"
+                            Margin="15 5 15 0"
+                            Content="Bi-Weekly Metrics"
+                            Foreground="{StaticResource DarkGreyBrush}"/>
+
+
+                    <Button Style="{StaticResource TextWithHover}"
+                            FontSize="16"
+                            Margin="15 5 15 0"
+                            Content="Monthly Metrics"
+                            Foreground="{StaticResource DarkGreyBrush}"/>
+
+
+                    <Button Style="{StaticResource TextWithHover}"
+                            FontSize="16"
+                            Margin="15 5 15 0"
+                            Content="Employee Metrics"
+                            Foreground="{StaticResource DarkGreyBrush}"/>
+
+
+                </StackPanel>
+
+                <Button Style="{StaticResource TextImageButton}"
+                        Content="{StaticResource Home}"
+                        Name="Dashboard"
+                        Command="{Binding ReturnHomeCommand}"
+                        Grid.Row="1"
+                        Height="40"/>
+
+            </Grid>
+        </Border>
+        
+        <!-- Right Side of Page -->
+
+        <Frame Content="{Binding DisplayPage, Converter={converters:ApplicationPageValueConverter}, UpdateSourceTrigger=PropertyChanged}"
+               Grid.Column="1"
+               Margin="5"/>
+
+    </Grid>
+
+
+</local:BasePage>

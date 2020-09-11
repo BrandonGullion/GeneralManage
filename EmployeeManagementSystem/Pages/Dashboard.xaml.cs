@@ -1,6 +1,4 @@
 ﻿using EmployeeManagementSystem.Animations;
-using EmployeeManagementSystem.Helpers;
-using System;
 using System.Threading.Tasks;
 
 namespace EmployeeManagementSystem.Pages
@@ -45,8 +43,13 @@ namespace EmployeeManagementSystem.Pages
 
         }
 
-        private void DashboardControl_MouseDown_3(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async void DashboardControl_MouseDown_3(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            SelectedPageAnimation = PageAnimationEnum.FadeOut;
+            await Animate();
+
+            await Task.Delay(1000);
+            MainWindow.mainWindow.MainContentFrame.Content = new MetricPage();
         }
 
         private void DashboardControl_MouseDown_4(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -54,8 +57,12 @@ namespace EmployeeManagementSystem.Pages
             MainWindow.mainWindow.MainContentFrame.Content = new Test();
         }
 
-        private void DashboardControl_MouseDown_5(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private async void DashboardControl_MouseDown_5(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
+            SelectedPageAnimation = PageAnimationEnum.FadeOut;
+            await Animate();
+
+            await Task.Delay(1000);
             MainWindow.mainWindow.MainContentFrame.Content = new SettingsPage();
         }
     }

@@ -1,4 +1,5 @@
-﻿using EmployeeManagementSystem.Animations;
+﻿using ClassLibrary;
+using EmployeeManagementSystem.Animations;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;

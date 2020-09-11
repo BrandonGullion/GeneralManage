@@ -9,6 +9,7 @@ namespace EmployeeManagementSystem.Pages
     {
         public SettingsPage()
         {
+            DataContext = new SettingsPageViewModel();
             InitializeComponent();
         }
     }

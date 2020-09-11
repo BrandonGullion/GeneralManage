@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 
 namespace EmployeeManagementSystem
 {
@@ -31,13 +32,15 @@ namespace EmployeeManagementSystem
         #endregion
 
 
-        #endregion
 
         // Regular Props
         public bool Complete { get; set; }
         public bool IsEditing { get; set; }
         public bool HasStartTimeBeenSet { get; set; }
         public int WeekCounter { get; set; }
+        public List<int> HourList { get; set; }
+        public List<double> MinList { get; set; }
+
 
         private bool manualShiftInputBool;
         public bool ManualShiftInputBool
@@ -54,8 +57,8 @@ namespace EmployeeManagementSystem
             set { weekdayController = value; OnPropertyChanged(nameof(WeekdayController)); }
         }
 
-        private decimal calcWorkHours;
-        public decimal CalcWorkHours
+        private double calcWorkHours;
+        public double CalcWorkHours
         {
             get { return calcWorkHours; }
             set { calcWorkHours = value; OnPropertyChanged(nameof(CalcWorkHours)); }
@@ -69,11 +72,6 @@ namespace EmployeeManagementSystem
             get { return manualInputBool; }
             set { manualInputBool = value; OnPropertyChanged(nameof(ManualInputBool)); }
         }
-
-        public List<int> HourList { get; set; }
-        public List<int> MinList { get; set; }
-
-
         private List<EmployeeModel> employeeList;
 
         public List<EmployeeModel> EmployeeList
@@ -157,9 +155,9 @@ namespace EmployeeManagementSystem
             }
         }
 
-        private decimal startSelectedMinute;
+        private double startSelectedMinute;
 
-        public decimal StartSelectedMinute
+        public double StartSelectedMinute
         {
             get { return startSelectedMinute; }
             set { startSelectedMinute = value; OnPropertyChanged(nameof(StartSelectedMinute)); }
@@ -178,9 +176,9 @@ namespace EmployeeManagementSystem
             }
         }
 
-        private decimal endSelectedMinute;
+        private double endSelectedMinute;
 
-        public decimal EndSelectedMinute
+        public double EndSelectedMinute
         {
             get { return endSelectedMinute; }
             set { endSelectedMinute = value; OnPropertyChanged(nameof(EndSelectedMinute)); }
@@ -189,37 +187,7 @@ namespace EmployeeManagementSystem
 
         #region Clock Visibility 
 
-        private bool clockControlVisibility;
-
-        public bool ClockControlVisibility
-        {
-            get { return clockControlVisibility; }
-            set { clockControlVisibility = value; OnPropertyChanged(nameof(ClockControlVisibility)); }
-        }
-
-        private bool hourClockVisibility;
-
-        public bool HourClockVisibility
-        {
-            get { return hourClockVisibility; }
-            set { hourClockVisibility = value; OnPropertyChanged(nameof(HourClockVisibility)); }
-        }
-
-        private bool minClockVisibility;
-
-        public bool MinClockVisibility
-        {
-            get { return minClockVisibility; }
-            set { minClockVisibility = value; OnPropertyChanged(nameof(minClockVisibility)); }
-        }
-
-        private bool confirmationVisibility;
-
-        public bool ConfirmationVisiblity
-        {
-            get { return confirmationVisibility; }
-            set { confirmationVisibility = value; OnPropertyChanged(nameof(ConfirmationVisiblity)); }
-        }
+        public VisibilityController VisibilityController { get; set; }
 
         #endregion
 
@@ -249,6 +217,7 @@ namespace EmployeeManagementSystem
             set { fullShiftList = value; OnPropertyChanged(nameof(FullShiftList)); }
         }
 
+        #endregion
 
         #region Constructor
 
@@ -267,13 +236,12 @@ namespace EmployeeManagementSystem
             ReturnCommand = new RelayCommand(() => Return());
 
             HourList = new List<int>() {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 };
-            MinList = new List<int>() {0,5,10,15,20,25,30,35,40,45,50,55};
+            MinList = new List<double>() {0,5,10,15,20,25,30,35,40,45,50,55};
 
             // This will be used to commit the shift and save 
             CompleteShiftAddCommand = new RelayCommand(() => SaveShift(), () => CheckIfShiftReadyToSave());
             CancelShiftAddCommand = new RelayCommand(() => CancelShiftAdd());
             ManualSaveCommand = new RelayCommand(() => SaveShift(), () => CheckInt(StartSelectedHour, EndSelectedHour));
-
 
             // Generates the list for the Combobox 
             EmployeeList = DataBaseHelper.ReadEmployeeDB();
@@ -288,11 +256,7 @@ namespace EmployeeManagementSystem
             // Sets the starting value to AM
             AMPMBool = true;
 
-            // Set Starting visibility of clocks 
-            ClockControlVisibility = true;
-            HourClockVisibility = true;
-            MinClockVisibility = true;
-            ConfirmationVisiblity = true;
+            VisibilityController = new VisibilityController();
 
             // Need to change the database helper and move it to the core of the class library 
             FullShiftList = DataBaseHelper.ReadShiftDb();
@@ -314,8 +278,8 @@ namespace EmployeeManagementSystem
                 try
                 {
                     EndSelectedHour = AdjustClockToMilitary((Button)sender);
-                    HourClockVisibility = true;
-                    MinClockVisibility = false;
+                    VisibilityController.HourClockVisibility = true;
+                    VisibilityController.MinClockVisibility = false;
                     ClockDisplayText = "Select Ending Minutes";
 
                 }
@@ -329,8 +293,8 @@ namespace EmployeeManagementSystem
                 try
                 {
                     StartSelectedHour = AdjustClockToMilitary((Button)sender);
-                    HourClockVisibility = true;
-                    MinClockVisibility = false;
+                    VisibilityController.HourClockVisibility = true;
+                    VisibilityController.MinClockVisibility = false;
                     ClockDisplayText = "Select Starting Hour";
                 }
                 catch (Exception)
@@ -348,10 +312,10 @@ namespace EmployeeManagementSystem
                 try
                 {
                     EndSelectedMinute = Int32.Parse(((Button)sender).Content.ToString());
-                    HourClockVisibility = true;
-                    MinClockVisibility = true;
+                    VisibilityController.HourClockVisibility = true;
+                    VisibilityController.MinClockVisibility = true;
                     HasStartTimeBeenSet = false;
-                    ConfirmationVisiblity = false;
+                    VisibilityController.ConfirmationVisiblity = false;
                     CalculateShiftHours();
                     
                     // Sets that the final time has been inputted 
@@ -368,8 +332,9 @@ namespace EmployeeManagementSystem
                 try
                 {
                     StartSelectedMinute = Int32.Parse(((Button)sender).Content.ToString());
-                    HourClockVisibility = false;
-                    MinClockVisibility = true;
+                    VisibilityController.HourClockVisibility = false;
+                    VisibilityController.MinClockVisibility = true;
+                    AMPMBool = false;
                     HasStartTimeBeenSet = true;
                     ClockDisplayText = "Select Ending Hour";
                 }
@@ -383,8 +348,8 @@ namespace EmployeeManagementSystem
         // Changes visibility of clock controls 
         public void AddShift()
         {
-            ClockControlVisibility = false;
-            HourClockVisibility = false;
+            VisibilityController.ClockControlVisibility = false;
+            VisibilityController.HourClockVisibility = false;
         }
 
         // Commits the shift to save 
@@ -399,10 +364,10 @@ namespace EmployeeManagementSystem
                     MessageBox.Show("Shift start date cannot be after end date");
 
                     // Hides the Control on save 
-                    ClockControlVisibility = true;
-                    MinClockVisibility = true;
-                    HourClockVisibility = true;
-                    ConfirmationVisiblity = true;
+                    VisibilityController.ClockControlVisibility = true;
+                    VisibilityController.MinClockVisibility = true;
+                    VisibilityController.HourClockVisibility = true;
+                    VisibilityController.ConfirmationVisiblity = true;
                     return;
                 }
 
@@ -410,10 +375,10 @@ namespace EmployeeManagementSystem
                 if (Math.Abs(SelectedShiftEndDate.Day - SelectedShiftDate.Day) > 1)
                 {
                     MessageBox.Show("The shift end date can not span more than 1 day");
-                    ClockControlVisibility = true;
-                    MinClockVisibility = true;
-                    HourClockVisibility = true;
-                    ConfirmationVisiblity = true;
+                    VisibilityController.ClockControlVisibility = true;
+                    VisibilityController.MinClockVisibility = true;
+                    VisibilityController.HourClockVisibility = true;
+                    VisibilityController.ConfirmationVisiblity = true;
                     return;
                 }
 
@@ -428,10 +393,12 @@ namespace EmployeeManagementSystem
                         SelectedShiftEndDate.Month, SelectedShiftEndDate.Year, 10);
 
                     // Hides the Control on save 
-                    ClockControlVisibility = true;
-                    MinClockVisibility = true;
-                    HourClockVisibility = true;
-                    ConfirmationVisiblity = true;
+                    VisibilityController.ClockControlVisibility = true;
+                    VisibilityController.MinClockVisibility = true;
+                    VisibilityController.HourClockVisibility = true;
+                    VisibilityController.ConfirmationVisiblity = true;
+
+                    AMPMBool = false;
 
                     FullShiftList = DataBaseHelper.ReadShiftDb();
 
@@ -450,15 +417,17 @@ namespace EmployeeManagementSystem
                     SelectedShiftEndDate.Month, SelectedShiftEndDate.Year, 10);
 
                 // Hides the Control on save 
-                ClockControlVisibility = true;
-                MinClockVisibility = true;
-                HourClockVisibility = true;
-                ConfirmationVisiblity = true;
+                VisibilityController.ClockControlVisibility = true;
+                VisibilityController.MinClockVisibility = true;
+                VisibilityController.HourClockVisibility = true;
+                VisibilityController.ConfirmationVisiblity = true;
 
                 FullShiftList = DataBaseHelper.ReadShiftDb();
 
                 // Refresh list to make any changes 
                 WeekdayController.UpdateLists(FullShiftList);
+
+                AMPMBool = false;
 
                 return;
             }
@@ -470,15 +439,17 @@ namespace EmployeeManagementSystem
                     SelectedShiftDate.Day, SelectedShiftDate.Month, SelectedShiftDate.Year, 10);
 
                 // Hides the Control on save 
-                ClockControlVisibility = true;
-                MinClockVisibility = true;
-                HourClockVisibility = true;
-                ConfirmationVisiblity = true;
+                VisibilityController.ClockControlVisibility = true;
+                VisibilityController.MinClockVisibility = true;
+                VisibilityController.HourClockVisibility = true;
+                VisibilityController.ConfirmationVisiblity = true;
 
                 FullShiftList = DataBaseHelper.ReadShiftDb();
 
                 // Refresh list to make any changes 
                 WeekdayController.UpdateLists(FullShiftList);
+
+                AMPMBool = false;
 
                 return;
             }
@@ -488,12 +459,14 @@ namespace EmployeeManagementSystem
                 SelectedShiftDate.Day, SelectedShiftDate.Month, SelectedShiftDate.Year, 10);
 
             // Hides the Control on save 
-            ClockControlVisibility = true;
-            MinClockVisibility = true;
-            HourClockVisibility = true;
-            ConfirmationVisiblity = true;
+            VisibilityController.ClockControlVisibility = true;
+            VisibilityController.MinClockVisibility = true;
+            VisibilityController.HourClockVisibility = true;
+            VisibilityController.ConfirmationVisiblity = true;
 
             FullShiftList = DataBaseHelper.ReadShiftDb();
+
+            AMPMBool = false;
 
             // Refresh and return the 
             WeekdayController.UpdateLists(FullShiftList);
@@ -514,8 +487,8 @@ namespace EmployeeManagementSystem
         {
             // Sets IsEditing to true to change save methods 
             IsEditing = true;
-            ClockControlVisibility = false;
-            HourClockVisibility = false;
+            VisibilityController.ClockControlVisibility = false;
+            VisibilityController.HourClockVisibility = false;
         }
 
         // Allows for deleting selected shifts 
@@ -561,10 +534,10 @@ namespace EmployeeManagementSystem
         // Change visibility and return all values back to default 
         public void CancelShiftAdd()
         {
-            HourClockVisibility = true;
-            MinClockVisibility = true;
-            ClockControlVisibility = true;
-            ConfirmationVisiblity = true;
+            VisibilityController.HourClockVisibility = true;
+            VisibilityController.MinClockVisibility = true;
+            VisibilityController.ClockControlVisibility = true;
+            VisibilityController.ConfirmationVisiblity = true;
 
             // Reset the values 
             StartSelectedHour = 0;

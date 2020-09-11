@@ -1,4 +1,5 @@
 ﻿using EmployeeManagementSystem.Pages;
+using EmployeeManagementSystem.Pages.Metric_Pages;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmployeeManagementSystem
+namespace EmployeeManagementSystem.ValueConverters
 {
     public class ApplicationPageValueConverter : BaseValueConverter<ApplicationPageValueConverter>
     {
@@ -19,9 +20,20 @@ namespace EmployeeManagementSystem
                 case ApplicationPage.Login:
                     return new LoginPage();
 
+                case ApplicationPage.WeeklyMetricPage:
+                    return new WeeklyMetricPage();
+
+                case ApplicationPage.BiWeeklyMetricPage:
+                    return new BiWeeklyMetricPage();
+
+                case ApplicationPage.MonthlyMetricPage:
+                    return new MonthlyMetricPage();
+
+                case ApplicationPage.EmployeeMetricPage:
+                    return new EmployeeMetricPage();
+
                 // Default if a value is not thrown 
                 default:
-                    Debugger.Break();
                     return null;
             }
         }

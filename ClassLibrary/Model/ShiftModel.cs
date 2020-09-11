@@ -16,11 +16,11 @@ namespace ClassLibrary
         [NotNull]
         public int StartHourValue { get; set; }
         [NotNull]
-        public decimal StartMinValue { get; set; }
+        public double StartMinValue { get; set; }
         [NotNull]
         public int EndtHourValue { get; set; }
         [NotNull]
-        public decimal EndMinValue { get; set; }
+        public double EndMinValue { get; set; }
         [NotNull]
         public int Day { get; set; }
         [NotNull]
