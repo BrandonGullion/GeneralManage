@@ -149,7 +149,6 @@ namespace ClassLibrary
             // Checks for any dates that are present within the current week 
             UpdateLists(FullShiftList);
         }
-
         #endregion
     }
 }

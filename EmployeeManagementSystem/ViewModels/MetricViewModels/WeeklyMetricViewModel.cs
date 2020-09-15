@@ -1,4 +1,5 @@
 ﻿using ClassLibrary;
+using GalaSoft.MvvmLight.Command;
 using LiveCharts;
 using LiveCharts.Wpf;
 using System;
@@ -13,21 +14,44 @@ namespace EmployeeManagementSystem
     public class WeeklyMetricViewModel : BaseViewModel
     {
         #region Properties 
+        // Commands 
+        public RelayCommand IncrementWeekCommand { get; set; }
+        public RelayCommand DecrementWeekCommand { get; set; }
+
+        // Observable Collections 
+        public ObservableCollection<double> WeeklyHourList { get; set; }
+        public ObservableCollection<double> WeeklyWageCostList { get; set; }
+        public ObservableCollection<DateTime> Weekdays { get; set; }
+        public ObservableCollection<MetricModel> MetricModelList { get; set; }
+
+        // Series 
+        private SeriesCollection weeklyHourUsageSeries;
+        public SeriesCollection WeeklyHourUsageSeries
+        {
+            get { return weeklyHourUsageSeries; }
+            set { weeklyHourUsageSeries = value; OnPropertyChanged(nameof(WeeklyHourUsageSeries)); }
+        }
+
+        private SeriesCollection weeklyWageCostSeries;
+        public SeriesCollection WeeklyWageCostSeries
+        {
+            get { return weeklyWageCostSeries; }
+            set { weeklyWageCostSeries = value; OnPropertyChanged(nameof(WeeklyWageCostSeries)); }
+        }
+
+        private SeriesCollection hoursByEmployeeSeries;
+        public SeriesCollection HoursByEmployeeSeries
+        {
+            get { return hoursByEmployeeSeries; }
+            set { hoursByEmployeeSeries = value; OnPropertyChanged(nameof(HoursByEmployeeSeries)); }
+        }
+
+        // Regular Properties 
+        public Func<double, string> Formatter { get; set; }
+        public ConcurrentDictionary<string, double> valuePairs { get; set; }
         public string[] WeekdayLabels { get; set; } = { "Sunday", "Monday", "Tuesday", "Wednesday",
             "Thursday", "Friday", "Saturday"};
         public DateTime CurrentDate { get; set; }
-        public ObservableCollection<double> WeeklyHourList { get; set; }
-        public ObservableCollection<double> WeeklyWageCostList { get; set; }
-
-        public ObservableCollection<DateTime> Weekdays { get; set; }
-        public ObservableCollection<MetricModel> MetricModelList { get; set; }
-        public SeriesCollection WeeklyHourUsageSeries { get; set; }
-        public SeriesCollection WeeklyWageCostSeries { get; set; }
-        public SeriesCollection HoursByEmployeeSeries { get; set; }
-        public Func<double, string> Formatter { get; set; }
-
-        public ConcurrentDictionary<string, double> valuePairs { get; set; }
-
 
         #endregion
 
@@ -38,6 +62,7 @@ namespace EmployeeManagementSystem
             // Sets the current time 
             CurrentDate = DateTime.Now;
 
+            // This is used to format the actual numbers in the charts 
             Formatter = value => value.ToString("N");
 
             // Fills list with Weekdays of type DateTime 
@@ -58,13 +83,15 @@ namespace EmployeeManagementSystem
             // Updates the list and populates the required information depending on the week 
             UpdateLists();
 
+            // Runs to make sure that the value pairs are up to date 
             UpdateEmployeeHourDictionary();
 
             // Creating series for the associated charts to bind to 
-            WeeklyHourUsageSeries = new SeriesCollection() { new ColumnSeries { Values = new ChartValues<double>(WeeklyHourList) } };
-            WeeklyWageCostSeries = new SeriesCollection() { new ColumnSeries { Values = new ChartValues<double>(WeeklyWageCostList) } };
-            HoursByEmployeeSeries = new SeriesCollection() { new RowSeries { Values = new ChartValues<double>(valuePairs.Values) } };
+            UpdateSeries();
 
+            // RelayCommands
+            IncrementWeekCommand = new RelayCommand(() => ChangeWeek(1));
+            DecrementWeekCommand = new RelayCommand(() => ChangeWeek(-1));
         }
 
         #endregion
@@ -136,6 +163,13 @@ namespace EmployeeManagementSystem
             }
         }
 
+        // Updates depending on the employee name and associates a metric model accumulated hours 
+
+        /// <summary>
+        /// TODO :: Check the days against the metric model and only add it to the dictionary if the metric 
+        ///         model days are within the correct days 
+        /// </summary>
+
         public void UpdateEmployeeHourDictionary()
         {
             foreach (var metricModel in MetricModelList)
@@ -143,6 +177,42 @@ namespace EmployeeManagementSystem
                 valuePairs.AddOrUpdate(metricModel.Name, metricModel.Hours, (metricModelName, hours) => hours + metricModel.Hours);
             }
         }
+
+        /// <summary>
+        /// Increments or decrements the current week and fills lists accordingly 
+        /// </summary>
+        /// <param name="weekCounter">1 to increment by a week, or -1 to decrement</param>
+        public void ChangeWeek(int weekCounter)
+        {
+            // Increments the weekdays depending on the button pressed 
+            for (int i = 0; i < Weekdays.Count; i++)
+                Weekdays[i] = Weekdays[i].AddDays(weekCounter * 7);
+
+            ClearAllLists();
+
+            UpdateLists();
+            UpdateEmployeeHourDictionary();
+            UpdateSeries();
+        }
+
+        public void UpdateSeries()
+        {
+            WeeklyHourUsageSeries = new SeriesCollection() { new ColumnSeries { Values = new ChartValues<double>(WeeklyHourList) } };
+            WeeklyWageCostSeries = new SeriesCollection() { new ColumnSeries { Values = new ChartValues<double>(WeeklyWageCostList) } };
+            HoursByEmployeeSeries = new SeriesCollection() { new RowSeries { Values = new ChartValues<double>(valuePairs.Values) } };
+        }
+
+        public void ClearAllLists()
+        {
+            for(var i = 0; i < 7; i++)
+            {
+                WeeklyHourList[i] = 0;
+                WeeklyWageCostList[i] = 0;
+                valuePairs.Clear();
+            }
+        }
+
+
         #endregion
     }
 
