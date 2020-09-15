@@ -36,6 +36,6 @@ namespace ClassLibrary
         [NotNull]
         public int Margin { get; set; }
         [NotNull]
-        public decimal Total { get; set; }
+        public double Total { get; set; }
     }
 }

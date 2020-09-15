@@ -20,7 +20,8 @@ namespace ClassLibrary
         [NotNull]
         public string LastName { get; set; }
         public string Position { get; set; }
-        public string HourlyWage { get; set; }
+        public double HourlyWage { get; set; }
+        public string StringWage { get; set; }
         public string PhoneNumber { get; set; }
         public string EmergencyContactName { get; set; }
         public string EmergencyContactNumber { get; set; }

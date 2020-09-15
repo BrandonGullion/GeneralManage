@@ -29,6 +29,7 @@ namespace EmployeeManagementSystem
         public RelayCommand UpdateWageControlCommand { get; set; }
         public RelayCommand ClearAllCommand { get; set; }
         public RelayCommand SelectAllCommand { get; set; }
+        public RelayCommand MakeWageVisibleCommand { get; set; }
 
         // Used to check if there are any changes to the Availability Control 
         private bool isDirty;
@@ -38,6 +39,7 @@ namespace EmployeeManagementSystem
             set { isDirty = value; OnPropertyChanged(nameof(IsDirty)); }
         }
 
+        // Employee List that is used in the side menu 
         private List<EmployeeModel> employeeList;
         public List<EmployeeModel> EmployeeList
         {
@@ -45,6 +47,7 @@ namespace EmployeeManagementSystem
             set { employeeList = value; OnPropertyChanged(nameof(EmployeeList)); }
         }
 
+        // Position list that is used when updating or creating an employee 
         public List<PositionModel> PositionList { get; set; }
 
         // Search bar text to filter list simultaneously 
@@ -62,10 +65,14 @@ namespace EmployeeManagementSystem
 
         // Selected Employye within the List View 
         private EmployeeModel selectedEmployee;
-
         public EmployeeModel SelectedEmployee
         {
-            get { return selectedEmployee; }
+            get 
+            {
+                IsDirty = true;
+                UpdateWageControlCommand.RaiseCanExecuteChanged();
+                return selectedEmployee; 
+            }
             set { 
                 selectedEmployee = value; 
                 OnPropertyChanged(nameof(SelectedEmployee)); 
@@ -82,7 +89,6 @@ namespace EmployeeManagementSystem
 
         // Availability Model Used to populate the Availability Menu 
         private AvailabilityModel currentAvailabilityModel;
-
         public AvailabilityModel CurrentAvailabilityModel
         {
             get 
@@ -100,45 +106,19 @@ namespace EmployeeManagementSystem
         }
 
         private bool leftControlEnabled;
-
         public bool LeftControlEnabled
         {
             get { return leftControlEnabled; }
             set { leftControlEnabled = value; OnPropertyChanged(nameof(LeftControlEnabled)); }
         }
 
-
-        #region Visibility Properties 
-
-        // Bind control visibility for seamless transitions 
-        private bool addEmployeeControlVisibility;
-
-        public bool AddEmployeeControlVisibility
+        private EmployeePageVisibilityController evc;
+        public EmployeePageVisibilityController Evc
         {
-            get { return addEmployeeControlVisibility; }
-            set { addEmployeeControlVisibility = value; OnPropertyChanged(nameof(AddEmployeeControlVisibility)); }
+            get { return evc; }
+            set { evc = value; OnPropertyChanged(nameof(Evc)); }
+
         }
-
-        // Bind control visibility to allow for easy changing of controls 
-        private bool employeeInfoControlVisibility;
-
-        public bool EmployeeInfoControlVisibility
-        {
-            get { return employeeInfoControlVisibility; }
-            set { employeeInfoControlVisibility = value; OnPropertyChanged(nameof(EmployeeInfoControlVisibility)); }
-        }
-
-        private bool editEmployeeControlVisibility;
-
-        public bool EditEmployeeControlVisibility
-        {
-            get { return editEmployeeControlVisibility; }
-            set { editEmployeeControlVisibility = value; OnPropertyChanged(nameof(EditEmployeeControlVisibility)); }
-        }
-
-        #endregion
-
-        #region Contact Properties 
 
         private EmployeeModel addEmployeeModel;
         public EmployeeModel AddEmployeeModel
@@ -147,16 +127,17 @@ namespace EmployeeManagementSystem
             set { addEmployeeModel = value; OnPropertyChanged(nameof(AddEmployeeModel)); }
         }
 
-
         #endregion
 
 
-        #endregion
 
         #region Constructor 
 
         public EmployeePageViewModel()
         {
+            // Create new instance of the visibility controller 
+            Evc = new EmployeePageVisibilityController();
+
             // Commands 
             DashboardCommand = new RelayCommand(() => ReturnToDashboard());
             EditCommand = new RelayCommand(() => EditEmployee(), () => CheckSelected<EmployeeModel>(SelectedEmployee));
@@ -167,16 +148,10 @@ namespace EmployeeManagementSystem
             DeleteCommand = new RelayCommand(() => DeleteEmployee(SelectedEmployee), () => CheckSelected<EmployeeModel>(SelectedEmployee));
             ClearAllCommand = new RelayCommand(() => ClearAvailability());
             SelectAllCommand = new RelayCommand(() => SelectAllAvailability());
+            MakeWageVisibleCommand = new RelayCommand(() => ChangeWageVisibility());
 
             UpdateCommand = new RelayCommand(() => UpdateEmployee());
-            UpdateWageControlCommand = new RelayCommand(() => UpdateAll(CurrentAvailabilityModel), () => IsDirty ? true : false); 
-
-            // Commands used for testing 
-
-            // False means not collapsed, true is collapsed 
-            EmployeeInfoControlVisibility = false;
-            AddEmployeeControlVisibility = true;
-            EditEmployeeControlVisibility = true;
+            UpdateWageControlCommand = new RelayCommand(() => UpdateAll(CurrentAvailabilityModel), () => IsDirty ? true : false);
 
             // DB Methods 
             EmployeeList = DataBaseHelper.ReadEmployeeDB();
@@ -214,15 +189,15 @@ namespace EmployeeManagementSystem
         // Makes the add employee control visible 
         public void OpenAddControl()
         {
-            EmployeeInfoControlVisibility = true;
-            AddEmployeeControlVisibility = false;
+            Evc.EmployeeInfoControlVisibility = true;
+            Evc.AddEmployeeControlVisibility = false;
         }
 
         // Makes the edit employee control visible 
         public void EditEmployee()
         {
-            EmployeeInfoControlVisibility = true;
-            EditEmployeeControlVisibility = false;
+            Evc.EmployeeInfoControlVisibility = true;
+            Evc.EditEmployeeControlVisibility = false;
             LeftControlEnabled = false;
         }
 
@@ -235,8 +210,8 @@ namespace EmployeeManagementSystem
         // Return to main employee information page from add
         public void CancelAdd()
         {
-            EmployeeInfoControlVisibility = false;
-            AddEmployeeControlVisibility = true;
+            Evc.EmployeeInfoControlVisibility = false;
+            Evc.AddEmployeeControlVisibility = true;
 
             // When collapsing the control, reset all values 
             AddEmployeeModel.FirstName = string.Empty;
@@ -250,8 +225,8 @@ namespace EmployeeManagementSystem
         // Return to main employee informatin page from edit 
         public void CancelEdit()
         {
-            EmployeeInfoControlVisibility = false;
-            EditEmployeeControlVisibility = true;
+            Evc.EmployeeInfoControlVisibility = false;
+            Evc.EditEmployeeControlVisibility = true;
             LeftControlEnabled = true;
         }
 
@@ -269,8 +244,8 @@ namespace EmployeeManagementSystem
                 AddEmployeeModel = new EmployeeModel();
 
                 // Updates Visiblity of Controls 
-                AddEmployeeControlVisibility = true;
-                EmployeeInfoControlVisibility = false;
+                Evc.AddEmployeeControlVisibility = true;
+                Evc.EmployeeInfoControlVisibility = false;
             }
 
             else
@@ -290,13 +265,15 @@ namespace EmployeeManagementSystem
             // Update Employee
             SelectedEmployee = DataBaseHelper.UpdateEmployee(SelectedEmployee);
 
+            DataBaseHelper.FindAndUpdateMetricModel(SelectedEmployee);
+
             // Update the list 
             EmployeeList = DataBaseHelper.ReadEmployeeDB();
 
             // Return Visibilities to normal 
             LeftControlEnabled = true;
-            EditEmployeeControlVisibility = true;
-            EmployeeInfoControlVisibility = false;
+            Evc.EditEmployeeControlVisibility = true;
+            Evc.EmployeeInfoControlVisibility = false;
         }
 
         // Update the availability whenever 
@@ -311,7 +288,16 @@ namespace EmployeeManagementSystem
         // This is used to save the Availability Model To DB
         public void UpdateAll(AvailabilityModel availabilityModel)
         {
+            // Updates the current availability 
             DataBaseHelper.UpdateAvailability(availabilityModel);
+
+            // Updates any wage changes of the employee *** This needs to come before the metric update! ***
+            SelectedEmployee = DataBaseHelper.UpdateEmployee(SelectedEmployee);
+
+            /// Gets associated metric models and updates the wage depending on the employee id
+            /// Note: This will cause troubles within the associated metrics if the wages for each employee are constantly changing 
+            DataBaseHelper.FindAndUpdateMetricModel(SelectedEmployee);
+
             IsDirty = false;
             UpdateWageControlCommand.RaiseCanExecuteChanged();
         }
@@ -346,6 +332,11 @@ namespace EmployeeManagementSystem
             }
 
             OnPropertyChanged(nameof(CurrentAvailabilityModel));
+        }
+
+        public void ChangeWageVisibility()
+        {
+            Evc.WageVisibility = Evc.WageVisibility ? false : true;
         }
         #endregion
     }

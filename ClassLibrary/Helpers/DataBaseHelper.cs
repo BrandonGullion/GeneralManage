@@ -25,6 +25,7 @@ namespace ClassLibrary
         public static string EmployeeDatabase { get; set; } = Path.Combine(DatabaseSaveDirectory, EmployeeDatabaseName);
         public static string PositionDatabase { get; set; } = Path.Combine(DatabaseSaveDirectory, PositionDatabaseName);
 
+        // Used to set up managers that are allowed onto the propgram 
         #region Management User DB Methods 
 
         /// <summary>
@@ -96,6 +97,7 @@ namespace ClassLibrary
         }
         #endregion
 
+        // Methods that affect employee models 
         #region EmployeeDB Methods 
 
         public static List<EmployeeModel> ReadEmployeeDB()
@@ -132,6 +134,8 @@ namespace ClassLibrary
                 // Convert First Name to char array, using the first letter to populate the field 
                 employeeModel.FirstLetter = employeeModel.FirstName.ToCharArray().FirstOrDefault().ToString();
 
+                employeeModel.HourlyWage = Convert.ToDouble(employeeModel.StringWage);
+
                 // Insert employee model into the 
                 conn.Insert(employeeModel);
                 /// Creates the generic availability for the employee
@@ -162,6 +166,10 @@ namespace ClassLibrary
         {
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
             {
+                // **** Creating type safe value converter ****
+                employeeModel.HourlyWage = StringToDoubleConverter.ConvertToDouble(employeeModel.StringWage);
+                employeeModel.StringWage = employeeModel.HourlyWage.ToString();
+
                 // sends to db 
                 conn.Update(employeeModel);
             }
@@ -189,7 +197,7 @@ namespace ClassLibrary
         }
 
         public static void AddShift(EmployeeModel employeeModel, int startHourValue, double startMinValue, int endHourValue,
-            double endMinValue, int day, int month, int year, int totalHours)
+            double endMinValue, int day, int month, int year, double totalHours)
         {
 
             // Creates a new instance of a shift and adds it to the database 
@@ -210,23 +218,46 @@ namespace ClassLibrary
                 Total = totalHours,
             };
 
+
+
             using(SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
             {
                 // Creates the table 
                 conn.CreateTable<ShiftModel>();
+                conn.CreateTable<MetricModel>();
 
                 // Inserts the shift into the db 
                 conn.Insert(shiftModel);
+
+                // Creates a metric model that uses the similar data 
+                MetricModel metricModel = new MetricModel()
+                {
+                    Name = $"{shiftModel.Name}",
+                    EmployeeId = employeeModel.Id,
+                    Hours = totalHours,
+                    Day = day,
+                    Month = month,
+                    Year = year,
+                    Wage = employeeModel.HourlyWage,
+                    ShiftId = shiftModel.Id,
+                };
+
+                // Inserts the metric model after the shift id has been assigned 
+                conn.Insert(metricModel);
             }
 
         }
 
         public static void DeleteShift(ShiftModel shiftModel)
         {
+            // Finds the metric model associated with the passed in shift model and deletes it 
+            FindAndDeleteMetricModel(shiftModel.Id);
+
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
             {
                 // make sure that the table is present 
                 conn.CreateTable<ShiftModel>();
+                conn.CreateTable<MetricModel>();
 
                 // Delete the selected model 
                 conn.Delete(shiftModel);
@@ -234,7 +265,7 @@ namespace ClassLibrary
         }
 
         public static void UpdateShift(ShiftModel shiftModel, int startHourValue, double startMinValue, int endHourValue,
-            double endMinValue, int day, int month, int year, int totalHours)
+            double endMinValue, int day, int month, int year, double totalHours)
         {
             // Updates the selected shift model 
             shiftModel.StartHourValue = startHourValue;
@@ -248,6 +279,9 @@ namespace ClassLibrary
             shiftModel.Margin = Convert.ToInt32((startHourValue * 60) + startMinValue);
             shiftModel.Total = totalHours;
 
+            // Updates metric models that are associated with the shift 
+            FindAndUpdateMetricModel(shiftModel);
+
             // Update within the DB
             using (SQLiteConnection conn = new SQLiteConnection(EmployeeDatabase))
             {
@@ -259,6 +293,7 @@ namespace ClassLibrary
 
         #endregion
 
+        // Methods that include employement positions that can be associated with employees 
         #region PositionDB Methods
 
         // Read position db and store in list 
@@ -313,6 +348,7 @@ namespace ClassLibrary
         }
         #endregion
 
+        // Vacation methods used when displaying associated employee scheduled vacation 
         #region Vacation Methods
 
 
@@ -387,6 +423,7 @@ namespace ClassLibrary
 
         #endregion
 
+        // Availability methods that will display when the employee wishes to work 
         #region Availability Methods 
 
         public static AvailabilityModel ReadAvailability(EmployeeModel employeeModel)
@@ -461,12 +498,64 @@ namespace ClassLibrary
 
         #endregion
 
+        // Metric methods that find and associate with required shift or employee models 
         #region Metrics Methods 
 
-        // Trying something new to make the database more robust 
+        // Finds the metric model that was assigned the matching shift id
+        public static void FindAndDeleteMetricModel(int shiftId)
+        {
+            // Creates the list that we should iterate over 
+            ObservableCollection<MetricModel> metricModels = ReadAllDB<MetricModel>(EmployeeDatabase);
+
+            // Iterates over the metric model list, checking if any match with the shift Id passed in, delete the according metric model 
+            foreach (var metricModel in metricModels)
+                if (metricModel.ShiftId == shiftId)
+                    DataBaseHelper.DeleteModel<MetricModel>(metricModel, EmployeeDatabase);
+        }
+
+        // Uses 2 overrides depending on the model that is being updated 
+        public static void FindAndUpdateMetricModel(EmployeeModel employeeModel)
+        {
+            // Fills required List 
+            ObservableCollection<MetricModel> metricModels = ReadAllDB<MetricModel>(EmployeeDatabase);
+
+            // Iterates, finds metric models with matching employee id, then updates the wage 
+            foreach (var metricModel in metricModels)
+            {
+                if (metricModel.EmployeeId == employeeModel.Id)
+                {
+                    metricModel.Wage = employeeModel.HourlyWage;
+                    metricModel.Name = $"{employeeModel.FirstName} {employeeModel.LastName}";
+                }
+
+                // Updates within the database 
+                UpdateModel<MetricModel>(metricModel, EmployeeDatabase);
+            }
+        }
+        public static void FindAndUpdateMetricModel(ShiftModel shiftModel)
+        {
+            // Fills the metric list to check if there are any matching when the shift model is changed 
+            ObservableCollection<MetricModel> metricModels = ReadAllDB<MetricModel>(EmployeeDatabase);
+            
+            // Iterate over the collection 
+            foreach(var metricModel in metricModels)
+            {
+                // If the shift model matches with a metric model, the metric model is then updated 
+                if(metricModel.ShiftId == shiftModel.Id)
+                {
+                    metricModel.Day = shiftModel.Day;
+                    metricModel.Month = shiftModel.Month;
+                    metricModel.Year = shiftModel.Year;
+                    metricModel.Hours = shiftModel.Total;
+
+                    UpdateModel<MetricModel>(metricModel, EmployeeDatabase);
+                }
+            }
+        }
 
         #endregion
 
+        // Generic Methods that allow for any of the DB to be accessed easily and quickly 
         #region Generic Methods
 
 
@@ -540,5 +629,7 @@ namespace ClassLibrary
         }  
 
         #endregion
+
+
     }
 }

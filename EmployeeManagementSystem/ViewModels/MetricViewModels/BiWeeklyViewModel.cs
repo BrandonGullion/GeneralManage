@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagementSystem
 {
-    class BiWeeklyViewModel : BaseViewModel
+    public class BiWeeklyViewModel : BaseViewModel
     {
+
     }
 }

@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using EmployeeManagementSystem.Animations;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EmployeeManagementSystem.Pages.Metric_Pages
 {
@@ -22,8 +10,16 @@ namespace EmployeeManagementSystem.Pages.Metric_Pages
     {
         public WeeklyMetricPage()
         {
+            SelectedPageAnimation = PageAnimationEnum.FadeIn;
             DataContext = new WeeklyMetricViewModel();
             InitializeComponent();
+            StartAnimation();
+        }
+
+        public async void StartAnimation()
+        {
+            await Animate();
+            await Task.Delay(1000);
         }
     }
 }

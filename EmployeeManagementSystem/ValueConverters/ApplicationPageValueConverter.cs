@@ -1,4 +1,5 @@
-﻿using EmployeeManagementSystem.Pages;
+﻿using ClassLibrary;
+using EmployeeManagementSystem.Pages;
 using EmployeeManagementSystem.Pages.Metric_Pages;
 using System;
 using System.Collections.Generic;

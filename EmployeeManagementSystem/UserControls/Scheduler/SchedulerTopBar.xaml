@@ -45,11 +45,19 @@
                                        VerticalAlignment="Center"/>
 
                     <ComboBox Width="200"
-                                  Style="{StaticResource ComboBoxStyle1}"
-                                  ItemsSource="{Binding EmployeeList}"
-                                  DisplayMemberPath="FirstName"
-                                  SelectedItem="{Binding SelectedEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  VerticalAlignment="Center"/>
+                              Style="{StaticResource ComboBoxStyle1}"
+                              ItemsSource="{Binding EmployeeList}"
+                              SelectedItem="{Binding SelectedEmployee, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalAlignment="Center">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Run Text="{Binding FirstName}"/>
+                                    <Run Text="{Binding LastName}"/>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
                     <Button Style="{StaticResource ImageButton}"
                                     Content="{StaticResource plus}"

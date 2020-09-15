@@ -3,11 +3,8 @@ using EmployeeManagementSystem.Pages;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Animation;
 
 namespace EmployeeManagementSystem
 {
@@ -387,10 +384,10 @@ namespace EmployeeManagementSystem
                 {
                     // Splits the Shift Between days ** particularly for night shift workers **
                     DataBaseHelper.UpdateShift(SelectedShift, StartSelectedHour, StartSelectedMinute, 24, 0, SelectedShiftDate.Day,
-                        SelectedShiftDate.Month, SelectedShiftDate.Year, 10);
+                        SelectedShiftDate.Month, SelectedShiftDate.Year, calcWorkHours/2);
 
                     DataBaseHelper.UpdateShift(SelectedShift, 0, 0, EndSelectedHour, EndSelectedMinute, SelectedShiftEndDate.Day,
-                        SelectedShiftEndDate.Month, SelectedShiftEndDate.Year, 10);
+                        SelectedShiftEndDate.Month, SelectedShiftEndDate.Year, calcWorkHours/2);
 
                     // Hides the Control on save 
                     VisibilityController.ClockControlVisibility = true;
@@ -411,10 +408,10 @@ namespace EmployeeManagementSystem
                 // Splits the Shift Between days ** particularly for night shift workers **
                 // Code is unreachable when IsEditing is true 
                 DataBaseHelper.AddShift(SelectedEmployee, StartSelectedHour, StartSelectedMinute, 24, 0, SelectedShiftDate.Day,
-                    SelectedShiftDate.Month, SelectedShiftDate.Year, 10);
+                    SelectedShiftDate.Month, SelectedShiftDate.Year, calcWorkHours/2);
 
                 DataBaseHelper.AddShift(SelectedEmployee, 0, 0, EndSelectedHour, EndSelectedMinute, SelectedShiftEndDate.Day,
-                    SelectedShiftEndDate.Month, SelectedShiftEndDate.Year, 10);
+                    SelectedShiftEndDate.Month, SelectedShiftEndDate.Year, calcWorkHours/2);
 
                 // Hides the Control on save 
                 VisibilityController.ClockControlVisibility = true;
@@ -436,7 +433,7 @@ namespace EmployeeManagementSystem
             if (IsEditing)
             {
                 DataBaseHelper.UpdateShift(SelectedShift, StartSelectedHour, StartSelectedMinute, EndSelectedHour, EndSelectedMinute,
-                    SelectedShiftDate.Day, SelectedShiftDate.Month, SelectedShiftDate.Year, 10);
+                    SelectedShiftDate.Day, SelectedShiftDate.Month, SelectedShiftDate.Year, calcWorkHours);
 
                 // Hides the Control on save 
                 VisibilityController.ClockControlVisibility = true;
@@ -456,7 +453,7 @@ namespace EmployeeManagementSystem
 
             // Save to database 
             DataBaseHelper.AddShift(SelectedEmployee, StartSelectedHour, StartSelectedMinute, EndSelectedHour, EndSelectedMinute,
-                SelectedShiftDate.Day, SelectedShiftDate.Month, SelectedShiftDate.Year, 10);
+                SelectedShiftDate.Day, SelectedShiftDate.Month, SelectedShiftDate.Year, calcWorkHours);
 
             // Hides the Control on save 
             VisibilityController.ClockControlVisibility = true;

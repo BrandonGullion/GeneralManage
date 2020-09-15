@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace EmployeeManagementSystem
+namespace ClassLibrary
 {
     /// <summary>
     /// A Base Value Converter that allows for direct xaml usage 

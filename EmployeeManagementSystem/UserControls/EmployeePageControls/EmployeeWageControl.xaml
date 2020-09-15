@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:EmployeeManagementSystem.UserControls.EmployeePageControls"
              xmlns:UserControlFolder="clr-namespace:EmployeeManagementSystem.UserControls"
+             xmlns:Converters="clr-namespace:EmployeeManagementSystem.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="600">
 
@@ -14,6 +15,7 @@
         <Image Source="/Icons/plus.png" x:Key="Plus"/>
         <Image Source="/Icons/Minus.png" x:Key="Minus"/>
         <Image Source="/Icons/Delete.png" x:Key="Delete"/>
+        <Image Source="/Icons/DollarSign.png" x:Key="DollarSign"/>
     </UserControl.Resources>
     
     <Border Background="White"
@@ -56,21 +58,39 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                
-                <Border Padding="5"
-                        BorderBrush="{StaticResource LightBlueBrush}"
-                        CornerRadius="5"
-                        BorderThickness="2">
 
-                    <TextBlock Text="{Binding SelectedEmployee.HourlyWage}"
-                               Foreground="{StaticResource DarkGreyBrush}"
-                               FontSize="12"/>
-                </Border>
+                <ContentPresenter Content="{StaticResource DollarSign}"
+                                  Height="30"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Left"
+                                  Margin="5 0 0 0"/>
+
+                <Rectangle Width="70"
+                           Height="30"
+                           Margin="45 0 0 0"
+                           HorizontalAlignment="Left"
+                           Fill="White"
+                           Visibility="{Binding Evc.WageVisibility, Converter={Converters:BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}"
+                           IsHitTestVisible="False"
+                           Panel.ZIndex="1"
+                           />
+
+                <!-- Wage Textbox-->
+                <TextBox Style="{StaticResource DefaultTextBox}"
+                         Text="{Binding SelectedEmployee.StringWage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                         Foreground="{StaticResource DarkGreyBrush}"
+                         FontSize="14"
+                         Width="80"
+                         Tag="12.34"
+                         Margin="40 0 0 0"
+                         HorizontalAlignment="Left"
+                         BorderThickness="2"/>
 
                 <!-- Used to toggle visibility -->
                 <Button Content="{StaticResource Eye}"
-                        Grid.Column="1"
+                        Margin="130 0 0 0"
                         Width="30"
+                        HorizontalAlignment="Left"
                         Command="{Binding MakeWageVisibleCommand}"
                         Style="{StaticResource ImageButton}"/>
 
@@ -86,7 +106,7 @@
             <Border Padding="10"
                     Grid.Row="3"
                     BorderBrush="{StaticResource LightBlueBrush}"
-                    CornerRadius="10"
+                    CornerRadius="5"
                     Grid.Column="0"
                     Margin="0 0 5 0"
                     BorderThickness="2">
@@ -114,7 +134,7 @@
 
                 <Border Padding="10"
                         BorderBrush="{StaticResource LightBlueBrush}"
-                        CornerRadius="10"
+                        CornerRadius="5"
                         Grid.Column="0"
                         BorderThickness="2">
 

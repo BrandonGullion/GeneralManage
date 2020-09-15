@@ -34,7 +34,7 @@ namespace ClassLibrary
         public ObservableCollection<ShiftModel> ThursdayList { get; set; }
         public ObservableCollection<ShiftModel> FridayList { get; set; }
         public ObservableCollection<ShiftModel> SaturdayList { get; set; }
-        public ObservableCollection<ObservableCollection<ShiftModel>> WeekdayLists { get; set; } 
+        public ObservableCollection<ObservableCollection<ShiftModel>> WeekdayLists { get; set; }
 
         #endregion
 

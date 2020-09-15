@@ -17,13 +17,13 @@
             <Grid>
                 
                 <userControls:EmployeeInformationSideMenuControl
-                    Visibility="{Binding EmployeeInfoControlVisibility, Converter={Converters:BoolToVisibilityConverter}}"/>
+                    Visibility="{Binding Evc.EmployeeInfoControlVisibility, Converter={Converters:BoolToVisibilityConverter}}"/>
 
                 <userControls:AddEmployeeMenuControl
-                    Visibility="{Binding AddEmployeeControlVisibility, Converter={Converters:BoolToVisibilityConverter}}"/>
+                    Visibility="{Binding Evc.AddEmployeeControlVisibility, Converter={Converters:BoolToVisibilityConverter}}"/>
 
                 <local:EditEmployeeControl
-                    Visibility="{Binding EditEmployeeControlVisibility, Converter={Converters:BoolToVisibilityConverter}}"/>
+                    Visibility="{Binding Evc.EditEmployeeControlVisibility, Converter={Converters:BoolToVisibilityConverter}}"/>
 
             </Grid>
 

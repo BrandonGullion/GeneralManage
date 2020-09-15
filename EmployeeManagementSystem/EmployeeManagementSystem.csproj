@@ -185,6 +185,18 @@
     <Compile Include="UserControls\EmployeePageControls\EmployeeWageControl.xaml.cs">
       <DependentUpon>EmployeeWageControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\MetricUserControls\BiWeeklyControls\BiWeeklyChartControl.xaml.cs">
+      <DependentUpon>BiWeeklyChartControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MetricUserControls\WeeklyControls\HoursByEmployeeChartControl.xaml.cs">
+      <DependentUpon>HoursByEmployeeChartControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MetricUserControls\WeeklyControls\WeeklyChart.xaml.cs">
+      <DependentUpon>WeeklyChart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MetricUserControls\WeeklyControls\WeeklyWageChartControl.xaml.cs">
+      <DependentUpon>WeeklyWageChartControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Scheduler\AppointmentItemControl.xaml.cs">
       <DependentUpon>AppointmentItemControl.xaml</DependentUpon>
     </Compile>
@@ -365,6 +377,22 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\MetricUserControls\BiWeeklyControls\BiWeeklyChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MetricUserControls\WeeklyControls\HoursByEmployeeChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MetricUserControls\WeeklyControls\WeeklyChart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MetricUserControls\WeeklyControls\WeeklyWageChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\Scheduler\AppointmentItemControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -488,6 +516,9 @@
       <Project>{b3138214-eb3a-4f09-bc60-08953c102741}</Project>
       <Name>ClassLibrary</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\DollarSign.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />

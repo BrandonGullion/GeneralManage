@@ -5,12 +5,31 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:EmployeeManagementSystem.Pages.Metric_Pages"
       xmlns:pages="clr-namespace:EmployeeManagementSystem.Pages"
+      xmlns:WeeklyMetricUserControls="clr-namespace:EmployeeManagementSystem.UserControls.MetricUserControls.WeeklyControls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="WeeklyMetricPage">
 
     <Grid>
-        <TextBlock Text="{Binding Text}"/>
-        <TextBlock Text="Example"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <WeeklyMetricUserControls:WeeklyChart/>
+        
+        <WeeklyMetricUserControls:WeeklyWageChartControl
+            Grid.Row="1"/>
+
+        <WeeklyMetricUserControls:HoursByEmployeeChartControl
+            Grid.Column="1"
+            Grid.RowSpan="2"
+            Margin="10 0 0 0"/>
+
     </Grid>
 </pages:BasePage>
