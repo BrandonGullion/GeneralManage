@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EmployeeManagementSystem.UserControls.MetricUserControls
+namespace EmployeeManagementSystem.UserControls.MetricUserControls.BiWeeklyControls
 {
     /// <summary>
-    /// Interaction logic for BiWeeklyChartControl.xaml
+    /// Interaction logic for BiWeeklyWageChartControl.xaml
     /// </summary>
-    public partial class BiWeeklyChartControl : UserControl
+    public partial class BiWeeklyWageChartControl : UserControl
     {
-        public BiWeeklyChartControl()
+        public BiWeeklyWageChartControl()
         {
             InitializeComponent();
         }

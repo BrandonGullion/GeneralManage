@@ -4,13 +4,71 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:EmployeeManagementSystem.Pages.Metric_Pages"
+      xmlns:biWeeklyControls="clr-namespace:EmployeeManagementSystem.UserControls.MetricUserControls.BiWeeklyControls"          
       xmlns:pages="clr-namespace:EmployeeManagementSystem.Pages"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+                
       mc:Ignorable="d" 
-     
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BiWeeklyMetricPage">
 
+    <pages:BasePage.Resources>
+        <Image Source="/Icons/RightArrow.png" x:Key="RightArrow"/>
+        <Image Source="/Icons/LeftArrow.png" x:Key="LeftArrow"/>
+    </pages:BasePage.Resources>
+
+
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <Border Background="White"
+                    CornerRadius="5"
+                    Height="50" Width="50"
+                    Margin="0 0 0 5"
+                    HorizontalAlignment="Left">
+                <Button Style="{StaticResource ImageButton}"
+                        Content="{StaticResource LeftArrow}"
+                        Command="{Binding DecrementWeekCommand}"/>
+            </Border>
+
+            <Border Background="White"
+                    CornerRadius="5"
+                    Margin="5 0 5 5">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Weekdays[0], UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:MMMM dd, yyyy}}"
+                               Foreground="{StaticResource DarkGreyBrush}"
+                               FontSize="14"
+                               VerticalAlignment="Center"
+                               Margin="5"/>
+
+                    <TextBlock Text="{Binding Weekdays[13], UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:MMMM dd, yyyy}}"
+                               Foreground="{StaticResource DarkGreyBrush}"
+                               FontSize="14"
+                               VerticalAlignment="Center"
+                               Margin="10 5 5 5"/>
+                </StackPanel>
+            </Border>
+
+            <Border Background="White"
+                    CornerRadius="5"
+                    Height="50" Width="50"
+                    Margin="0 0 0 5"
+                    HorizontalAlignment="Left">
+                <Button Style="{StaticResource ImageButton}"
+                        Content="{StaticResource RightArrow}"
+                        Command="{Binding IncrementWeekCommand}"/>
+            </Border>
+
+        </StackPanel>
+
+        <biWeeklyControls:BiWeeklyHourChartControl Grid.Row="1"/>
+
+        <biWeeklyControls:BiWeeklyWageChartControl Grid.Row="2"/>
+
     </Grid>
 </pages:BasePage>

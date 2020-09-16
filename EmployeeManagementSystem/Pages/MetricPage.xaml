@@ -40,6 +40,7 @@
 
                     <Button Style="{StaticResource TextWithHover}"
                             FontSize="16"
+                            Command="{Binding BiWeeklyMetricsCommand}"
                             Margin="15 5 15 0"
                             Content="Bi-Weekly Metrics"
                             Foreground="{StaticResource DarkGreyBrush}"/>
@@ -48,12 +49,14 @@
                     <Button Style="{StaticResource TextWithHover}"
                             FontSize="16"
                             Margin="15 5 15 0"
+                            Command="{Binding MonthlyMetricsCommand}"
                             Content="Monthly Metrics"
                             Foreground="{StaticResource DarkGreyBrush}"/>
 
 
                     <Button Style="{StaticResource TextWithHover}"
                             FontSize="16"
+                            Command="{Binding EmployeeMetricsCommand}"
                             Margin="15 5 15 0"
                             Content="Employee Metrics"
                             Foreground="{StaticResource DarkGreyBrush}"/>

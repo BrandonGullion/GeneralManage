@@ -185,8 +185,11 @@
     <Compile Include="UserControls\EmployeePageControls\EmployeeWageControl.xaml.cs">
       <DependentUpon>EmployeeWageControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\MetricUserControls\BiWeeklyControls\BiWeeklyChartControl.xaml.cs">
-      <DependentUpon>BiWeeklyChartControl.xaml</DependentUpon>
+    <Compile Include="UserControls\MetricUserControls\BiWeeklyControls\BiWeeklyHourChartControl.xaml.cs">
+      <DependentUpon>BiWeeklyHourChartControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MetricUserControls\BiWeeklyControls\BiWeeklyWageChartControl.xaml.cs">
+      <DependentUpon>BiWeeklyWageChartControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\MetricUserControls\WeeklyControls\HoursByEmployeeChartControl.xaml.cs">
       <DependentUpon>HoursByEmployeeChartControl.xaml</DependentUpon>
@@ -377,7 +380,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\MetricUserControls\BiWeeklyControls\BiWeeklyChartControl.xaml">
+    <Page Include="UserControls\MetricUserControls\BiWeeklyControls\BiWeeklyHourChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MetricUserControls\BiWeeklyControls\BiWeeklyWageChartControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

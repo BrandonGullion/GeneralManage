@@ -1,20 +1,21 @@
 ﻿using ClassLibrary;
 using GalaSoft.MvvmLight.Command;
 using LiveCharts;
+using LiveCharts.Helpers;
+using LiveCharts.SeriesAlgorithms;
 using LiveCharts.Wpf;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Controls;
 
 namespace EmployeeManagementSystem
 {
     public class WeeklyMetricViewModel : BaseViewModel
     {
         #region Properties 
-        // Commands 
+        // RelayCommands 
         public RelayCommand IncrementWeekCommand { get; set; }
         public RelayCommand DecrementWeekCommand { get; set; }
 
@@ -24,7 +25,7 @@ namespace EmployeeManagementSystem
         public ObservableCollection<DateTime> Weekdays { get; set; }
         public ObservableCollection<MetricModel> MetricModelList { get; set; }
 
-        // Series 
+        // Series Properties 
         private SeriesCollection weeklyHourUsageSeries;
         public SeriesCollection WeeklyHourUsageSeries
         {
@@ -39,16 +40,27 @@ namespace EmployeeManagementSystem
             set { weeklyWageCostSeries = value; OnPropertyChanged(nameof(WeeklyWageCostSeries)); }
         }
 
-        private SeriesCollection hoursByEmployeeSeries;
-        public SeriesCollection HoursByEmployeeSeries
+        private SeriesCollection employeeHourSeries;
+
+        public SeriesCollection EmployeeHourSeries
         {
-            get { return hoursByEmployeeSeries; }
-            set { hoursByEmployeeSeries = value; OnPropertyChanged(nameof(HoursByEmployeeSeries)); }
+            get { return employeeHourSeries; }
+            set { employeeHourSeries = value; OnPropertyChanged(nameof(EmployeeHourSeries)); }
         }
+
+        private ConcurrentDictionary<string, double> valuePairs;
+
+        public ConcurrentDictionary<string, double> ValuePairs
+        {
+            get { return valuePairs; }
+            set { valuePairs = value; OnPropertyChanged(nameof(ValuePairs)); }
+        }
+
+
 
         // Regular Properties 
         public Func<double, string> Formatter { get; set; }
-        public ConcurrentDictionary<string, double> valuePairs { get; set; }
+
         public string[] WeekdayLabels { get; set; } = { "Sunday", "Monday", "Tuesday", "Wednesday",
             "Thursday", "Friday", "Saturday"};
         public DateTime CurrentDate { get; set; }
@@ -78,13 +90,12 @@ namespace EmployeeManagementSystem
             WeeklyHourList = new ObservableCollection<double>() { 0,0,0,0,0,0,0};
             WeeklyWageCostList = new ObservableCollection<double>() { 0, 0, 0, 0, 0, 0, 0 };
 
-            valuePairs = new ConcurrentDictionary<string, double>();
+            // Create new instance of the concurrent dictionary 
+            ValuePairs = new ConcurrentDictionary<string, double>();
+
 
             // Updates the list and populates the required information depending on the week 
             UpdateLists();
-
-            // Runs to make sure that the value pairs are up to date 
-            UpdateEmployeeHourDictionary();
 
             // Creating series for the associated charts to bind to 
             UpdateSeries();
@@ -158,23 +169,10 @@ namespace EmployeeManagementSystem
 
                         // Adds hours * wage to get total dollars spent and adds to associated day 
                         WeeklyWageCostList[i] += (metricModel.Hours * metricModel.Wage);
+
+                        ValuePairs.AddOrUpdate(metricModel.Name, metricModel.Hours, (metricModelName, hours) => hours + metricModel.Hours);
                     }
                 }
-            }
-        }
-
-        // Updates depending on the employee name and associates a metric model accumulated hours 
-
-        /// <summary>
-        /// TODO :: Check the days against the metric model and only add it to the dictionary if the metric 
-        ///         model days are within the correct days 
-        /// </summary>
-
-        public void UpdateEmployeeHourDictionary()
-        {
-            foreach (var metricModel in MetricModelList)
-            {
-                valuePairs.AddOrUpdate(metricModel.Name, metricModel.Hours, (metricModelName, hours) => hours + metricModel.Hours);
             }
         }
 
@@ -191,7 +189,6 @@ namespace EmployeeManagementSystem
             ClearAllLists();
 
             UpdateLists();
-            UpdateEmployeeHourDictionary();
             UpdateSeries();
         }
 
@@ -199,19 +196,19 @@ namespace EmployeeManagementSystem
         {
             WeeklyHourUsageSeries = new SeriesCollection() { new ColumnSeries { Values = new ChartValues<double>(WeeklyHourList) } };
             WeeklyWageCostSeries = new SeriesCollection() { new ColumnSeries { Values = new ChartValues<double>(WeeklyWageCostList) } };
-            HoursByEmployeeSeries = new SeriesCollection() { new RowSeries { Values = new ChartValues<double>(valuePairs.Values) } };
+            EmployeeHourSeries = new SeriesCollection() { new RowSeries { Values = new ChartValues<double>(ValuePairs.Values) } };
         }
 
         public void ClearAllLists()
         {
-            for(var i = 0; i < 7; i++)
+            for (var i = 0; i < 7; i++)
             {
                 WeeklyHourList[i] = 0;
                 WeeklyWageCostList[i] = 0;
-                valuePairs.Clear();
             }
-        }
 
+            ValuePairs.Clear();
+        }
 
         #endregion
     }
