@@ -11,7 +11,7 @@ namespace EmployeeManagementSystem
         public RelayCommand WeeklyMetricsCommand { get; set; }
         public RelayCommand BiWeeklyMetricsCommand { get; set; }
         public RelayCommand MonthlyMetricsCommand { get; set; }
-        public RelayCommand EmployeeMetricsCommand { get; set; }
+        public RelayCommand YearlyMetricCommand { get; set; }
 
 
         // Current Display page for the right side of the screen
@@ -33,7 +33,7 @@ namespace EmployeeManagementSystem
             WeeklyMetricsCommand = new RelayCommand(() => DisplayPage = ApplicationPage.WeeklyMetricPage);
             BiWeeklyMetricsCommand = new RelayCommand(() => DisplayPage = ApplicationPage.BiWeeklyMetricPage);
             MonthlyMetricsCommand = new RelayCommand(() => DisplayPage = ApplicationPage.MonthlyMetricPage);
-            EmployeeMetricsCommand = new RelayCommand(() => DisplayPage = ApplicationPage.EmployeeMetricPage);
+            YearlyMetricCommand = new RelayCommand(() => DisplayPage = ApplicationPage.YearlyMetricPage);
 
         }
 

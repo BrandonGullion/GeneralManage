@@ -31,7 +31,10 @@ namespace EmployeeManagementSystem.ValueConverters
                     return new MonthlyMetricPage();
 
                 case ApplicationPage.EmployeeMetricPage:
-                    return new EmployeeMetricPage();
+                    return new YearlyMetricPage();
+
+                case ApplicationPage.YearlyMetricPage:
+                    return new YearlyMetricPage();
 
                 // Default if a value is not thrown 
                 default:

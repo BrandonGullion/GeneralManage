@@ -16,10 +16,9 @@
         <lvc:CartesianChart Series="{Binding EmployeeHourSeries, UpdateSourceTrigger=PropertyChanged}">
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Title="Total Weekly Hours By Employee"
-                          FontSize="12">
-                    <lvc:Axis.Separator>
-                        <lvc:Separator Step="1"/>
-                    </lvc:Axis.Separator>
+                          FontSize="12"
+                          Position="LeftBottom">
+                    
                 </lvc:Axis>
             </lvc:CartesianChart.AxisX>
 
@@ -27,6 +26,7 @@
                 <lvc:Axis Labels="{Binding ValuePairs.Keys, UpdateSourceTrigger=PropertyChanged}"
                           Title="Employee Name"
                           FontSize="12">
+                    
                     <lvc:Axis.Separator>
                         <lvc:Separator Step="1"/>
                     </lvc:Axis.Separator>

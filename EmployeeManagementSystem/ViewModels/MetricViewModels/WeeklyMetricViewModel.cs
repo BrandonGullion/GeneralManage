@@ -194,9 +194,15 @@ namespace EmployeeManagementSystem
 
         public void UpdateSeries()
         {
-            WeeklyHourUsageSeries = new SeriesCollection() { new ColumnSeries { Values = new ChartValues<double>(WeeklyHourList) } };
-            WeeklyWageCostSeries = new SeriesCollection() { new ColumnSeries { Values = new ChartValues<double>(WeeklyWageCostList) } };
-            EmployeeHourSeries = new SeriesCollection() { new RowSeries { Values = new ChartValues<double>(ValuePairs.Values) } };
+            WeeklyHourUsageSeries = new SeriesCollection() { new ColumnSeries { 
+                Values = new ChartValues<double>(WeeklyHourList),
+                DataLabels=true} };
+            WeeklyWageCostSeries = new SeriesCollection() { new ColumnSeries {
+                Values = new ChartValues<double>(WeeklyWageCostList),
+                DataLabels=true} };
+            EmployeeHourSeries = new SeriesCollection() { new RowSeries { 
+                Values = new ChartValues<double>(ValuePairs.Values),
+                DataLabels=true} };
         }
 
         public void ClearAllLists()

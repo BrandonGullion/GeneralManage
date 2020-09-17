@@ -14,6 +14,7 @@ namespace EmployeeManagementSystem
         BiWeeklyMetricPage = 3,
         MonthlyMetricPage = 4,
         EmployeeMetricPage = 5,
+        YearlyMetricPage = 6,
 
     }
 }

@@ -56,9 +56,9 @@
 
                     <Button Style="{StaticResource TextWithHover}"
                             FontSize="16"
-                            Command="{Binding EmployeeMetricsCommand}"
+                            Command="{Binding YearlyMetricCommand}"
                             Margin="15 5 15 0"
-                            Content="Employee Metrics"
+                            Content="Yearly Metrics"
                             Foreground="{StaticResource DarkGreyBrush}"/>
 
 

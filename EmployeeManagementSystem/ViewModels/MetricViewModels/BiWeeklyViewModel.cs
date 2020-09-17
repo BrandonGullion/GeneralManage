@@ -158,8 +158,12 @@ namespace EmployeeManagementSystem
 
         public void UpdateSeries()
         {
-            BiWeeklyHoursSeries = new SeriesCollection() { new ColumnSeries { Values = new ChartValues<double>(BiWeeklyHourList) } };
-            BiWeeklyWageSeries = new SeriesCollection() { new ColumnSeries { Values = new ChartValues<double>(BiWeeklyWageCostList) } };
+            BiWeeklyHoursSeries = new SeriesCollection() { new ColumnSeries { 
+                Values = new ChartValues<double>(BiWeeklyHourList),
+                DataLabels=true} };
+            BiWeeklyWageSeries = new SeriesCollection() { new ColumnSeries { 
+                Values = new ChartValues<double>(BiWeeklyWageCostList),
+                DataLabels=true} };
         }
 
         public void ChangeWeek(int weekCounter)

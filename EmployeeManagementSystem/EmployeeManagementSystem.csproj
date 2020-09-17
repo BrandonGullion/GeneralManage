@@ -130,8 +130,8 @@
     <Compile Include="Pages\Metric Pages\BiWeeklyMetricPage.xaml.cs">
       <DependentUpon>BiWeeklyMetricPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\Metric Pages\EmployeeMetricPage.xaml.cs">
-      <DependentUpon>EmployeeMetricPage.xaml</DependentUpon>
+    <Compile Include="Pages\Metric Pages\YearlyMetricPage.xaml.cs">
+      <DependentUpon>YearlyMetricPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Metric Pages\MonthlyMetricPage.xaml.cs">
       <DependentUpon>MonthlyMetricPage.xaml</DependentUpon>
@@ -191,6 +191,12 @@
     <Compile Include="UserControls\MetricUserControls\BiWeeklyControls\BiWeeklyWageChartControl.xaml.cs">
       <DependentUpon>BiWeeklyWageChartControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\MetricUserControls\MonthlyControls\MonthlyHourChartControl.xaml.cs">
+      <DependentUpon>MonthlyHourChartControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MetricUserControls\MonthlyControls\MonthyWageChartControl.xaml.cs">
+      <DependentUpon>MonthyWageChartControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\MetricUserControls\WeeklyControls\HoursByEmployeeChartControl.xaml.cs">
       <DependentUpon>HoursByEmployeeChartControl.xaml</DependentUpon>
     </Compile>
@@ -199,6 +205,12 @@
     </Compile>
     <Compile Include="UserControls\MetricUserControls\WeeklyControls\WeeklyWageChartControl.xaml.cs">
       <DependentUpon>WeeklyWageChartControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MetricUserControls\YearlyControls\YearlyHourChartControl.xaml.cs">
+      <DependentUpon>YearlyHourChartControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MetricUserControls\YearlyControls\YearlyWageChartControl.xaml.cs">
+      <DependentUpon>YearlyWageChartControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Scheduler\AppointmentItemControl.xaml.cs">
       <DependentUpon>AppointmentItemControl.xaml</DependentUpon>
@@ -234,7 +246,7 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MetricsViewModel.cs" />
     <Compile Include="ViewModels\MetricViewModels\BiWeeklyViewModel.cs" />
-    <Compile Include="ViewModels\MetricViewModels\EmployeeMetricsViewModel.cs" />
+    <Compile Include="ViewModels\MetricViewModels\YearlyMetricViewModel.cs" />
     <Compile Include="ViewModels\MetricViewModels\MonthlyMetricsViewModel.cs" />
     <Compile Include="ViewModels\ScheduleViewModel.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
@@ -268,7 +280,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Metric Pages\EmployeeMetricPage.xaml">
+    <Page Include="Pages\Metric Pages\YearlyMetricPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -388,6 +400,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\MetricUserControls\MonthlyControls\MonthlyHourChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MetricUserControls\MonthlyControls\MonthyWageChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\MetricUserControls\WeeklyControls\HoursByEmployeeChartControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -397,6 +417,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\MetricUserControls\WeeklyControls\WeeklyWageChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MetricUserControls\YearlyControls\YearlyHourChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MetricUserControls\YearlyControls\YearlyWageChartControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

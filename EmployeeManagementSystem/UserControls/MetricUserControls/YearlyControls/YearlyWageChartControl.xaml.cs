@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EmployeeManagementSystem.Pages.Metric_Pages
+namespace EmployeeManagementSystem.UserControls.MetricUserControls.YearlyControls
 {
     /// <summary>
-    /// Interaction logic for EmployeeMetricPage.xaml
+    /// Interaction logic for YearlyWageChartControl.xaml
     /// </summary>
-    public partial class EmployeeMetricPage : BasePage
+    public partial class YearlyWageChartControl : UserControl
     {
-        public EmployeeMetricPage()
+        public YearlyWageChartControl()
         {
-            DataContext = new EmployeeMetricsViewModel();
             InitializeComponent();
         }
     }
