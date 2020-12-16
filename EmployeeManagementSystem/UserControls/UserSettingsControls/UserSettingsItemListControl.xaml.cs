@@ -13,16 +13,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EmployeeManagementSystem.Pages
+namespace EmployeeManagementSystem.UserControls.UserSettingsControls
 {
     /// <summary>
-    /// Interaction logic for EmployeePage.xaml
+    /// Interaction logic for UserSettingsItemListControl.xaml
     /// </summary>
-    public partial class EmployeePage : BasePage
+    public partial class UserSettingsItemListControl : UserControl
     {
-        public EmployeePage(MainWindowViewModel mainWindowViewModel)
+        public UserSettingsItemListControl()
         {
-            DataContext = new EmployeePageViewModel(mainWindowViewModel);
             InitializeComponent();
         }
     }

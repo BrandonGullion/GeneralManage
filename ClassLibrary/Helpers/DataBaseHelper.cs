@@ -26,52 +26,185 @@ namespace ClassLibrary
         public static string PositionDatabase { get; set; } = Path.Combine(DatabaseSaveDirectory, PositionDatabaseName);
 
         // Used to set up managers that are allowed onto the propgram 
+
         #region Management User DB Methods 
 
         /// <summary>
         /// DB Used to access SQL server and return a list of users for login 
         /// </summary>
         /// <returns></returns>
-        public static List<Users> ReadDB()
+        public static List<UserModel> ReadDB()
         {
-            var UserList = new List<Users>();
+            var UserList = new List<UserModel>();
 
             using (SQLiteConnection conn = new SQLiteConnection(UserDatabase))
             {
                 // Create table if not currently there
-                conn.CreateTable<Users>();
+                conn.CreateTable<UserModel>();
 
                 // Store all management users into the user list 
-                UserList = conn.Table<Users>().ToList();
+                UserList = conn.Table<UserModel>().ToList();
             }
 
             // Return the list 
             return UserList;
         }
 
-        // Create User TODO:: Implement only when manager is logged in 
-        public static void AddUser(string userName, string password, int authorityLevel = 1)
+        /// <summary>
+        /// Takes in the 
+        /// </summary>
+        /// <param name="username">usernametextbox value</param>
+        /// <param name="password">password textbox value</param>
+        /// <returns></returns>
+        public static UserModel GetUserModel(string username, string password, out string message, out bool success)
         {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                // Creates new user info to return
+                var _user = new UserModel();
+
+                // Logging the error 
+                message = "Username/Password Incorrect";
+                success = false;
+
+                // Leaving the loop
+                return _user;
+            }
+
+            using (SQLiteConnection connection = new SQLiteConnection(UserDatabase))
+            {
+                // Creates a new user model to be filled with the found data 
+                var _user = new UserModel();
+                
+                // Create the table if not currently present
+                connection.CreateTable<UserModel>();
+
+                // Attempting to find if the user is there via username
+                _user = connection.Table<UserModel>().FirstOrDefault(u => u.UserName == username);
+
+                // Checking if a valid user came back
+                if(_user != null)
+                {
+                    // Getting the salt from the user db
+                    var salt = _user.Salt;
+                    var hash = HashGenerator.GenerateHashSHA256Hash(password, salt);
+                    if (hash == _user.Password)
+                    {
+                        success = true;
+                        message = "Login Successfully Complete";
+                        return _user;
+                    }
+
+                }
+
+                message = "Username/Password Incorrect";
+                success = false;
+                return _user;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// Updates the users password 
+        /// 
+        /// </summary>
+        /// <param name="oldPass">users old password</param>
+        /// <param name="newPass">new desired password</param>
+        /// <param name="message">loggin message</param>
+        /// <returns></returns>
+        public static bool UpdatePassword(UserModel userModel, string newPass, string reNewPass, out string message)
+        {
+            // If the entered passwords match, continue 
+            if(HashGenerator.GenerateHashSHA256Hash(newPass, userModel.Salt) == HashGenerator.GenerateHashSHA256Hash(reNewPass, userModel.Salt))
+            {
+                // Update the password 
+                userModel.Password = HashGenerator.GenerateHashSHA256Hash(newPass, userModel.Salt);
+
+                // Enter it into the database 
+                DataBaseHelper.UpdateModel<UserModel>(userModel, UserDatabase);
+
+                // Log message 
+                message = "Password successfully updated";
+
+                // Return Task completed successfully 
+                return true;
+            }
+
+            else
+            {
+
+                message = "Error, make sure both passwords match"; 
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// Insert a user to the database, logic to check for null values present. 
+        /// Returns true if completed successfully, false if there is an error 
+        /// 
+        /// Redundency check of current user authority, this will allow for checking again if user 
+        /// is allowed to add other accounts 
+        /// 
+        /// </summary>
+        /// <param name="userName">username given to the inserted user</param>
+        /// <param name="password">password gathered from passwordbox</param>
+        /// <param name="firstName">user's Real first name</param>
+        /// <param name="lastName">users real last name</param>
+        /// <param name="authorityLevel">the desired authority level the user will have</param>
+        /// <param name="currentAuthorityLevel">current authority level of the user creating the account</param>
+        /// <returns></returns>
+        public static bool InsertUserModel(string userName, string password, string firstName, string lastName,
+            int currentAuthorityLevel, out string message, int authorityLevel = 3)
+        {
+            // Check the users current authority level, only over 1 can make another user account and cannot make an account 
+            // With higher authority.
+            if (currentAuthorityLevel < 1 || currentAuthorityLevel > authorityLevel)
+            {
+                message = "Error: You do not have security access to this command/Security level not high enough";
+                return false;
+            }
+
+            // Check for null or empty values to ensure all data is accounted for 
+            if (String.IsNullOrWhiteSpace(userName) || String.IsNullOrWhiteSpace(firstName) || String.IsNullOrWhiteSpace(lastName))
+            {
+                message = "Error: One or more fields have been left blank";
+                return false;
+            }
             using (SQLiteConnection conn = new SQLiteConnection(UserDatabase))
             {
                 // Create table if not currently there
-                conn.CreateTable<Users>();
+                conn.CreateTable<UserModel>();
 
-                Users NewUser = new Users();
-                NewUser.UserName = userName;
-                NewUser.Password = password;
+                // Create unique salt for each user 
+                var salt = SaltGenerator.GenerateSalt(32);
 
-                // Store all management users into the user list 
-                conn.Insert(NewUser);
+                // Create a new instance of the user model to be inserted 
+                UserModel userModel = new UserModel
+                {
+                    UserFirstName = firstName,
+                    UserLastName = lastName,
+                    UserName = userName,
+                    Salt = salt,
+                    Password = HashGenerator.GenerateHashSHA256Hash(password, salt),
+                    AuthorityLevel = authorityLevel,
+                };
+
+                // Insert the userModel into the database 
+                conn.Insert(userModel);
+
+                // Return true if the task was completed successfully 
+                message = "New user account was successfully created";
+                return true;
             }
         }
 
         // Delete the user that is selected 
-        public static void DeleteUser(Users users)
+        public static void DeleteUser(UserModel userModel)
         {
             using (SQLiteConnection conn = new SQLiteConnection(UserDatabase))
             {
-                conn.Delete(users);
+                conn.Delete(userModel);
             }
         }
 
@@ -80,7 +213,7 @@ namespace ClassLibrary
         {
             using (SQLiteConnection conn = new SQLiteConnection(UserDatabase))
             {
-                List<Users> users = new List<Users>();
+                List<UserModel> users = new List<UserModel>();
 
                 users = ReadDB();
 
@@ -177,7 +310,11 @@ namespace ClassLibrary
             return employeeModel;
         }
 
+        #endregion
+
         // Read Database and return list 
+        #region Shift Methods
+
         public static List<ShiftModel> ReadShiftDb()
         {
             // Creates Database save directory 

@@ -7,9 +7,9 @@ namespace EmployeeManagementSystem.Pages
     /// </summary>
     public partial class SettingsPage : BasePage
     {
-        public SettingsPage()
+        public SettingsPage(MainWindowViewModel mainWindowViewModel)
         {
-            DataContext = new SettingsPageViewModel();
+            DataContext = new SettingsPageViewModel(mainWindowViewModel);
             InitializeComponent();
         }
     }

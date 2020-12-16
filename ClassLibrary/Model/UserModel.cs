@@ -8,8 +8,10 @@ using SQLite;
 
 namespace ClassLibrary
 {
-    public class Users
+    public class UserModel
     {
+        // SQL Props
+
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         [NotNull]
@@ -18,5 +20,19 @@ namespace ClassLibrary
         public string Password { get; set; }
         [NotNull]
         public int AuthorityLevel { get; set; }
+        [NotNull]
+        public string Salt { get; set; }
+        public string UserFirstName { get; set; }
+        public string UserLastName { get; set; }
+
+        // Regular Props 
+        [Ignore]
+        public UserSettings CurrentUserSettings { get; set; }
+
+        // Constructor 
+        public UserModel()
+        {
+            CurrentUserSettings = new UserSettings(AuthorityLevel);
+        }
     }
 }

@@ -7,9 +7,9 @@ namespace EmployeeManagementSystem.Pages
     /// </summary>
     public partial class SchedulePage : BasePage
     {
-        public SchedulePage()
+        public SchedulePage(MainWindowViewModel mainWindowViewModel)
         {
-            DataContext = new ScheduleViewModel();
+            DataContext = new ScheduleViewModel(mainWindowViewModel);
             InitializeComponent();
         }
     }

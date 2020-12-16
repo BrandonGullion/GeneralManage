@@ -1,14 +1,10 @@
-﻿using EmployeeManagementSystem.Animations;
+﻿using ClassLibrary;
+using EmployeeManagementSystem.Animations;
 using EmployeeManagementSystem.Pages;
 using GalaSoft.MvvmLight.Command;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Xml.Linq;
 
 namespace EmployeeManagementSystem
 {
@@ -16,26 +12,35 @@ namespace EmployeeManagementSystem
     {
         #region Properties 
 
-        public MainWindowViewModel MainWindowViewModel { get; set; }
 
-        private ApplicationPage applicationPage;
+        // Relay Commands 
+        public RelayCommand LoginCommand { get; set; }
 
-        public ApplicationPage ApplicationPage
+        private MainWindowViewModel mainWindowVM;
+        public MainWindowViewModel MainWindowVM
         {
-            get { return applicationPage; }
-            set { applicationPage = value; OnPropertyChanged(nameof(ApplicationPage)); }
+            get { return mainWindowVM; }
+            set { mainWindowVM = value; OnPropertyChanged(nameof(MainWindowVM)); }
+        }
+
+        private bool passErrorVis;
+        public bool PassErrorVis
+        {
+            get { return passErrorVis; }
+            set { passErrorVis = value; OnPropertyChanged(nameof(PassErrorVis)); }
         }
 
 
-        /// <summary>
-        /// This will be used to set an authority level that must be passed throughout the 
-        /// application to allow for differing controls to be visible, particularly the 
-        /// settings control that will allow for addition or removal of managers 
-        /// </summary>
-        public int AuthorityLevel { get; set; }
+        private object desiredPage;
+        public object DesiredPage
+        {
+            get { return desiredPage; }
+            set { desiredPage = value; OnPropertyChanged(nameof(DesiredPage)); }
+        }
 
         // Login page so the animation features can be accessed  
-        public LoginPage Page { get; set; }
+        public LoginPage LoginPage { get; set; }
+        public MainWindowViewModel MainWindowViewModel { get; set; }
 
         // Setting page height in view model 
         public int PageHeight { get; set; } = 200;
@@ -43,18 +48,20 @@ namespace EmployeeManagementSystem
 
         // Secure String for password login
 
-        private SecureString password;
-
-        public SecureString Password
+        private string password;
+        public string Password
         {
             get { return password; }
-            set { password = value; OnPropertyChanged(nameof(Password)); }
+            set
+            {
+                password = new string('*', value.Length);
+                OnPropertyChanged(nameof(Password));
+                Console.WriteLine(Password);
+            }
         }
 
         // Username to check against Db
-
         private string userName;
-
         public string UserName
         {
             get { return userName; }
@@ -64,18 +71,46 @@ namespace EmployeeManagementSystem
 
         #endregion
 
-        #region Commands
-
-        #endregion
 
         #region Constructor 
 
-        public LoginPageViewModel(LoginPage page)
+        public LoginPageViewModel(LoginPage loginPage, MainWindowViewModel VM)
         {
-            Page = page;
+            MainWindowVM = VM;
+
+            // Relay Commands
+            LoginCommand = new RelayCommand(() => Login());
+            LoginPage = loginPage;
+
+            // Initial Prop Values 
+            PassErrorVis = true;
+
         }
 
         #endregion
 
+
+        #region Methods
+
+        /// <summary>
+        /// Sets the selected animation of the login page and init animate method
+        /// to complete transfer to main dashboard 
+        /// </summary>
+        public async void Login()
+        {
+            // TODO :: Implement Login protocols with security measures  
+
+            // Sets the visibility within the main window view model 
+            MainWindowVM.CurrentUserHitTestBool = true;
+            MainWindowVM.CurrentUserOpacity = 1;
+
+            LoginPage.SelectedPageAnimation = PageAnimationEnum.SlideToLeft;
+            await LoginPage.Animate();
+
+            await Task.Delay(500);
+
+            MainWindowVM.CurrentPage = ApplicationPage.Dashboard;
+        }
+        #endregion
     }
 }

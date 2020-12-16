@@ -1,29 +1,80 @@
-﻿using EmployeeManagementSystem.Pages;
+﻿using ClassLibrary;
+using EmployeeManagementSystem.ValueConverters;
 using GalaSoft.MvvmLight.Command;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace EmployeeManagementSystem
 {
     public class MainWindowViewModel : BaseViewModel
     {
-
-        #region Commands
-        public RelayCommand MaxWindowCommand { get; set; }
-
-        public RelayCommand MinWindowCommand { get; set; }
-
-        public RelayCommand CloseWindowCommand { get; set; }
-        #endregion
-
+        /// <summary>
+        /// 
+        /// View Model for the entire window itself, including the minus, max, min and close buttons
+        /// Logic for maximize and minimize within this view model
+        /// 
+        /// </summary>
 
 
         #region Properties
+
+        // Commands 
+        public RelayCommand MaxWindowCommand { get; set; }
+        public RelayCommand MinWindowCommand { get; set; }
+        public RelayCommand CloseWindowCommand { get; set; }
+        public RelayCommand OpenUserInfoCommand { get; set; }
+
+        // Current page that the application begins on 
+
+        private object currentPage;
+        public object CurrentPage
+        {
+            get { return currentPage; }
+            set { currentPage = AppEnumToPageConverter.ChangePage(value, this); OnPropertyChanged(nameof(CurrentPage)); }
+        }
+
+        // Opacity that will allow for animation of the current user once signed in 
+        private int currentUserOpacity;
+        public int CurrentUserOpacity
+        {
+            get { return currentUserOpacity; }
+            set { currentUserOpacity = value; OnPropertyChanged(nameof(CurrentUserOpacity)); }
+        }
+
+        // Visibility for the CurrentUserInfoVisibility
+        private bool currentUserInfoVisibility;
+        public bool CurrentUserInfoVisibility
+        {
+            get { return currentUserInfoVisibility; }
+            set { currentUserInfoVisibility = value; OnPropertyChanged(nameof(CurrentUserInfoVisibility)); }
+        }
+
+        // Hit test bool for the current user toolbar 
+        private bool currentUserHitTestBool;
+        public bool CurrentUserHitTestBool
+        {
+            get { return currentUserHitTestBool; }
+            set { currentUserHitTestBool = value; OnPropertyChanged(nameof(CurrentUserHitTestBool)); }
+        }
+
+        private UserModel currentUser;
+        public UserModel CurrentUser
+        {
+            get { return currentUser; }
+            set 
+            { 
+                currentUser = value;
+                OnPropertyChanged(nameof(CurrentUser));
+                if(CurrentUser.UserFirstName != null && CurrentUser.UserLastName != null)
+                {
+                    CurrentUserOpacity = 1;
+                    CurrentUserHitTestBool = true;
+                }
+            }
+        }
+
+
+
 
         // Current window for state checks 
         private Window window { get; set; }
@@ -36,7 +87,6 @@ namespace EmployeeManagementSystem
 
         // Corner Radius for entire Window
         private int cornerRadius = 10;
-
         public int CornerRadius
         {
             get { return window.WindowState == WindowState.Maximized ? 0 : cornerRadius; }
@@ -45,14 +95,11 @@ namespace EmployeeManagementSystem
 
         // Caption click and drag height 
         private int captionHeight;
-
         public int CaptionHeight
         {
             get { return captionHeight; }
             set { captionHeight = value; OnPropertyChanged(nameof(CaptionHeight)); }
         }
-
-        public Page CurrentPage { get; set; } = new Dashboard();
 
         #endregion
 
@@ -63,20 +110,23 @@ namespace EmployeeManagementSystem
             // Get the current window
             window = Window;
 
+            // Sets the starting page of the entire window 
+            CurrentPage = ApplicationPage.Login;
+
             // Commands 
             MaxWindowCommand = new RelayCommand(() => MaximizeWindow());
             MinWindowCommand = new RelayCommand(() => MinimizeWindow());
             CloseWindowCommand = new RelayCommand(() => CloseWindow());
+            OpenUserInfoCommand = new RelayCommand(() => ToggleUserInfoBox());
 
             // Listen Out for window state changes 
-            window.StateChanged += (sender, e) =>
-            { 
-                OnPropertyChanged(nameof(CornerRadius));
-            };
+            window.StateChanged += (sender, e) => { OnPropertyChanged(nameof(CornerRadius));};
 
             // Adds the margin associated with the drop shadow effect 
             CaptionHeight = 40;
-            
+            CurrentUserOpacity = 0;
+            CurrentUserInfoVisibility = true;
+            CurrentUserHitTestBool = false; 
         }
         #endregion
 
@@ -105,8 +155,10 @@ namespace EmployeeManagementSystem
             window.Close();
         }
 
-
-
+        public void ToggleUserInfoBox()
+        {
+            CurrentUserInfoVisibility = CurrentUserInfoVisibility == true ? false : true;
+        }
 
         #endregion
     }

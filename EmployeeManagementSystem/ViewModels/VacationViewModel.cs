@@ -21,9 +21,15 @@ namespace EmployeeManagementSystem.ViewModels
         public RelayCommand ReturnCommand { get; set; }
         public RelayCommand UpdateCommand { get; set; }
 
+        private MainWindowViewModel mainWindowVM;
+        public MainWindowViewModel MainWindowVM
+        {
+            get { return mainWindowVM; }
+            set { mainWindowVM = value; OnPropertyChanged(nameof(MainWindowVM)); }
+        }
+
         // Search bar text used to filter results 
         private string searchBarText;
-
         public string SearchBarText
         {
             get { return searchBarText; }
@@ -176,14 +182,16 @@ namespace EmployeeManagementSystem.ViewModels
 
         #region Constructor
 
-        public VacationViewModel()
+        public VacationViewModel(MainWindowViewModel vm)
         {
+            MainWindowVM = vm;
+
             // Commands 
             AddVacationCommand = new RelayCommand(() => AddVacation(),
                 () => CheckObject<EmployeeModel>(SelectedEmployeeModel));
             DeleteVacationCommand = new RelayCommand(() => DeleteVacation(SelectedVacation), () => CheckObject<VacationModel>(SelectedVacation));
             EditVacationCommand = new RelayCommand(() => EditVacation(), () => CheckObject<VacationModel>(SelectedVacation));
-            ReturnCommand = new RelayCommand(() => Return());
+            ReturnCommand = new RelayCommand(() => MainWindowVM.CurrentPage = ApplicationPage.Dashboard);
             UpdateCommand = new RelayCommand(() => UpdateVacation(SelectedVacation, VacationStartDate, VacationEndDate), () => ReadyToUpdate ? true : false);
 
 
@@ -246,18 +254,12 @@ namespace EmployeeManagementSystem.ViewModels
             EditButtonVisibility = true;
             UpdateButtonVisibility = false;
             // TODO :: Make it impossible to click any of the other controls 
-            
         }
 
         public void AddVacation()
         {
             DataBaseHelper.AddVacation(SelectedEmployeeModel, VacationStartDate, VacationEndDate);
             VacationList = DataBaseHelper.ReadVacatinDB();
-        }
-
-        public void Return()
-        {
-            MainWindow.mainWindow.MainContentFrame.Content = new Dashboard();
         }
 
         public void UpdateVacation(VacationModel vacationModel, DateTime startDate, DateTime endDate)

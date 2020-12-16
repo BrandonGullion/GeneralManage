@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:EmployeeManagementSystem.Pages"
       xmlns:controls="clr-namespace:EmployeeManagementSystem.UserControls"
+      xmlns:converters="clr-namespace:EmployeeManagementSystem.ValueConverters"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="SettingsPage">
@@ -20,8 +21,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        <Border Background="White"
-                CornerRadius="5"
+        <!-- Main Border  -->
+        <Border CornerRadius="5"
                 Margin="5 5 5 0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -29,9 +30,33 @@
                     <ColumnDefinition Width="3*"/>
                 </Grid.ColumnDefinitions>
 
-            
+                <!-- Left Panel Buttons -->
+                <Border Background="White"
+                        CornerRadius="5">
+                    <StackPanel>
+                        <Button Style="{StaticResource TextWithHover}"
+                                Command="{Binding OpenUserPageCommand}"
+                                Content="Users"
+                                FontSize="14"/>
+
+                        <Button Style="{StaticResource TextWithHover}"
+                                Content="-- N/A --"
+                                FontSize="14"/>
+
+                        <Button Style="{StaticResource TextWithHover}"
+                                Content="-- N/A --"
+                                FontSize="14"/>
+
+                    </StackPanel>
+                </Border>
+
+                <Frame Content="{Binding CurrentApplicationPage, UpdateSourceTrigger=PropertyChanged}"
+                       Grid.Column="1"/>
+
             </Grid>
         </Border>
+        
+        
 
         <Border Grid.Row="1"
                 Margin="5"

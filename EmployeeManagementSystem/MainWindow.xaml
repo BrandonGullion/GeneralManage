@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmployeeManagementSystem"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:converter="clr-namespace:EmployeeManagementSystem.ValueConverters"
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -19,8 +21,8 @@
                       ResizeBorderThickness="{Binding ResizeBorderThickness}"/>
     </WindowChrome.WindowChrome>
 
+    <!-- Entire Window Frame -->
     <Border CornerRadius="{Binding CornerRadius, UpdateSourceTrigger=PropertyChanged}"
-            Margin="{Binding Margin, UpdateSourceTrigger=PropertyChanged, FallbackValue=10}"
             Background="White">
         <Border.Effect>
             <DropShadowEffect Color="Black"
@@ -40,6 +42,7 @@
                    HorizontalAlignment="Left"
                    Margin="5 5 2 2"/>
 
+            <!-- GM Logo -->
             <TextBlock Grid.Row="0"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center">
@@ -51,9 +54,20 @@
                      Foreground="{StaticResource PurpleToBlueGradient}"/>
             </TextBlock>
 
+            <!-- Top bar right stackpanel -->
             <StackPanel Orientation="Horizontal"
-                        HorizontalAlignment="Right">
+                        HorizontalAlignment="Right"
+                        Panel.ZIndex="5">
 
+                <!-- Current User Textbox -->
+                <Button Style="{StaticResource TwoTextButton}"
+                        Command="{Binding OpenUserInfoCommand}"
+                        IsHitTestVisible="{Binding CurrentUserHitTestBool, UpdateSourceTrigger=PropertyChanged}"
+                        Opacity="{Binding CurrentUserOpacity, UpdateSourceTrigger=PropertyChanged}"
+                        Tag="{Binding CurrentUser.UserFirstName, FallbackValue=FirstName}"
+                        Content="{Binding CurrentUser.UserLastName, FallbackValue=LastName}">
+                </Button>
+                        
                 <Button Content="-"
                         Width="30"
                         FontWeight="Bold"
@@ -73,6 +87,24 @@
                         Style="{StaticResource CloseIconButton}"/>
             </StackPanel>
 
+            <!-- Current user info display -->
+            <Border Grid.Row="2"
+                    CornerRadius="5"
+                    Background="White"
+                    Height="150"
+                    Width="120"
+                    Panel.ZIndex="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Visibility="{Binding CurrentUserInfoVisibility, Converter={converter:BoolToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}"
+                    Margin="0 5 132 0">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="5"
+                                      ShadowDepth="0"
+                                      Color="{StaticResource Grey}"/>
+                </Border.Effect>
+            </Border>
+
             <Border Grid.Row="1"
                     Style="{StaticResource LineBreak}"/>
 
@@ -90,7 +122,7 @@
                        ClipToBounds="True"
                        x:Name="MainContentFrame"
                        NavigationUIVisibility="Hidden"
-                       Content="{Binding CurrentPage}"/>
+                       Content="{Binding CurrentPage, UpdateSourceTrigger=PropertyChanged}"/>
 
             </Border>
 

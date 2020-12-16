@@ -28,9 +28,15 @@ namespace EmployeeManagementSystem
 
         #endregion
 
-
-
         // Regular Props
+
+        private MainWindowViewModel mainWindowVM;
+        public MainWindowViewModel MainWindowVM
+        {
+            get { return mainWindowVM; }
+            set { mainWindowVM = value; OnPropertyChanged(nameof(MainWindowVM)); }
+        }
+
         public bool Complete { get; set; }
         public bool IsEditing { get; set; }
         public bool HasStartTimeBeenSet { get; set; }
@@ -218,8 +224,10 @@ namespace EmployeeManagementSystem
 
         #region Constructor
 
-        public ScheduleViewModel()
+        public ScheduleViewModel(MainWindowViewModel vm)
         {
+            MainWindowVM = vm;
+
             // Init Commands 
             // This command allows for access of the current element being clicked 
             MinSelectCommand = new RelayCommand<object>(CheckMinPressed);
@@ -230,7 +238,7 @@ namespace EmployeeManagementSystem
             AddShiftCommand = new RelayCommand(() => AddShift(), () => CheckValue<EmployeeModel>(SelectedEmployee));
             NextWeekCommand = new RelayCommand(() => WeekdayController.ChangeWeek(1));
             PreviousWeekCommand = new RelayCommand(() => WeekdayController.ChangeWeek(-1));
-            ReturnCommand = new RelayCommand(() => Return());
+            ReturnCommand = new RelayCommand(() => MainWindowVM.CurrentPage = ApplicationPage.Dashboard);
 
             HourList = new List<int>() {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 };
             MinList = new List<double>() {0,5,10,15,20,25,30,35,40,45,50,55};
@@ -572,12 +580,6 @@ namespace EmployeeManagementSystem
         public void CalculateShiftHours()
         {
             CalcWorkHours = Math.Abs(StartSelectedHour - EndSelectedHour) + Math.Abs(StartSelectedMinute - EndSelectedMinute)/60;
-        }
-
-        // Return to dashboard 
-        public void Return()
-        {
-            MainWindow.mainWindow.MainContentFrame.Content = new Dashboard();
         }
 
         #endregion

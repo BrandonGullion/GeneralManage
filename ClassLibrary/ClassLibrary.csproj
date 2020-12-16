@@ -72,29 +72,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorityEnum.cs" />
+    <Compile Include="DataModels\ApplicationPage.cs" />
     <Compile Include="DataModels\DayOfWeekEnum.cs" />
     <Compile Include="EmployeePageClasses\EmployeePageVisibilityController.cs" />
     <Compile Include="Helpers\DataBaseHelper.cs" />
     <Compile Include="Helpers\RandomRGBHelper.cs" />
     <Compile Include="Helpers\WeekdayGenerator.cs" />
+    <Compile Include="HashGenerator.cs" />
+    <Compile Include="SaltGenerator.cs" />
     <Compile Include="MetricClasses\MetricListController.cs" />
     <Compile Include="Model\AvailabilityModel.cs" />
     <Compile Include="Model\EmployeeModel.cs" />
     <Compile Include="Model\MetricModel.cs" />
     <Compile Include="Model\PositionModel.cs" />
     <Compile Include="Model\ShiftModel.cs" />
-    <Compile Include="Model\Users.cs" />
+    <Compile Include="Model\UserModel.cs" />
     <Compile Include="Model\VacationModel.cs" />
     <Compile Include="PropChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleClasses\VisibilityController.cs" />
     <Compile Include="ScheduleClasses\WeekdayControllerList.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="ValueConverters\StringToDoubleConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="SettingsPageClasses\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.2.0.3\build\net461\SQLitePCLRaw.lib.e_sqlite3.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

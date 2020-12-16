@@ -27,7 +27,7 @@ namespace EmployeeManagementSystem.Pages
                 this.Visibility = Visibility.Collapsed;
 
             // Listen for the page loading 
-            this.Loaded += BasePage_Loaded;
+            Loaded += BasePage_Loaded;
         }
 
         #endregion

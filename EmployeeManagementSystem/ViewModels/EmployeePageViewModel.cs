@@ -105,12 +105,14 @@ namespace EmployeeManagementSystem
             }
         }
 
+
         private bool leftControlEnabled;
         public bool LeftControlEnabled
         {
             get { return leftControlEnabled; }
             set { leftControlEnabled = value; OnPropertyChanged(nameof(LeftControlEnabled)); }
         }
+
 
         private EmployeePageVisibilityController evc;
         public EmployeePageVisibilityController Evc
@@ -120,11 +122,20 @@ namespace EmployeeManagementSystem
 
         }
 
+
         private EmployeeModel addEmployeeModel;
         public EmployeeModel AddEmployeeModel
         {
             get { return addEmployeeModel; }
             set { addEmployeeModel = value; OnPropertyChanged(nameof(AddEmployeeModel)); }
+        }
+
+
+        private MainWindowViewModel mainWindowVM;
+        public MainWindowViewModel MainWindowVM
+        {
+            get { return mainWindowVM; }
+            set { mainWindowVM = value; OnPropertyChanged(nameof(MainWindowVM)); }
         }
 
         #endregion
@@ -133,13 +144,16 @@ namespace EmployeeManagementSystem
 
         #region Constructor 
 
-        public EmployeePageViewModel()
+        public EmployeePageViewModel(MainWindowViewModel vm)
         {
+            // Passing through mainwindow view model
+            MainWindowVM = vm;
+
             // Create new instance of the visibility controller 
             Evc = new EmployeePageVisibilityController();
 
             // Commands 
-            DashboardCommand = new RelayCommand(() => ReturnToDashboard());
+            DashboardCommand = new RelayCommand(() => MainWindowVM.CurrentPage = ApplicationPage.Dashboard);
             EditCommand = new RelayCommand(() => EditEmployee(), () => CheckSelected<EmployeeModel>(SelectedEmployee));
             CancelAddCommand = new RelayCommand(() => CancelAdd());
             CancelEditCommand = new RelayCommand(() => CancelEdit());
@@ -178,12 +192,6 @@ namespace EmployeeManagementSystem
 
             // Update any ui associated with the Employee List
             OnPropertyChanged(nameof(EmployeeList));
-        }
-
-        // Return the content frame to the main dashboard 
-        public void ReturnToDashboard()
-        {
-            MainWindow.mainWindow.MainContentFrame.Content = new Dashboard();
         }
 
         // Makes the add employee control visible 

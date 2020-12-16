@@ -41,4 +41,33 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type Border}" x:Key="DashboardButton">
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Background" Value="White"/>
+
+        <Style.Triggers>
+            <EventTrigger RoutedEvent="MouseEnter">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation To="{StaticResource HoverBlue}"
+                                        From="White"
+                                        Duration="0:0:0.3"
+                                        Storyboard.TargetProperty="Background.Color"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+
+            <EventTrigger RoutedEvent="MouseLeave">
+                <BeginStoryboard>
+                    <Storyboard>
+                        <ColorAnimation To="White"
+                                        From="{StaticResource HoverBlue}"
+                                        Duration="0:0:0.3"
+                                        Storyboard.TargetProperty="Background.Color"/>
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

@@ -1,8 +1,7 @@
 ﻿using ClassLibrary;
 using EmployeeManagementSystem.Animations;
-using System.Threading.Tasks;
+using System;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace EmployeeManagementSystem.Pages
 {
@@ -11,34 +10,41 @@ namespace EmployeeManagementSystem.Pages
     /// </summary>
     public partial class LoginPage : BasePage
     {
-        public LoginPage()
+        public MainWindowViewModel mainWindowVM { get; set; }
+        public LoginPageViewModel loginVM { get; set; }
+        public LoginPage(MainWindowViewModel mainWindowViewModel)
         {
             SelectedPageAnimation = PageAnimationEnum.SlideFromRight;
-            DataContext = new LoginPageViewModel(this);
+            mainWindowVM = mainWindowViewModel;
+            loginVM = new LoginPageViewModel(this, mainWindowViewModel);
+            DataContext = loginVM;
             InitializeComponent();
         }
 
-        // This check has to be done in the code behind due to password box
-        public async void Login_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Handles user login and logs message details 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void btn_Login_Click(object sender, RoutedEventArgs e)
         {
+            // Create return message to log information 
+            string returnMessage;
 
-            if (DataBaseHelper.ValidateUser(UserNameBox.Text, PasswordBox.Password))
-            {
-                // Sets the page animation
-                SelectedPageAnimation = PageAnimationEnum.SlideToLeft;
+            // Method focused variable for checking if login was successful 
+            bool loginComplete;
 
-                // Does the animations 
-                await Animate();
+            // Check DB against inputted username and password 
+            mainWindowVM.CurrentUser = DataBaseHelper.GetUserModel(UserNameBox.Text, passwordBox.Password, out returnMessage, out loginComplete);
+            
+            // **In future add log feature**
+            Console.WriteLine(returnMessage);
 
-                // Delay to allow for the animation to finish 
-                await Task.Delay(500);
-
-                // Set the new frame content 
-                MainWindow.mainWindow.MainContentFrame.Content = new Dashboard();
-            }
-            // TODO: Create a new window or pop up that will be initiazlied 
+            // Initiate animation to dashboard if login successfully completed, else display 
+            if (loginComplete)
+                mainWindowVM.CurrentPage = ApplicationPage.Dashboard;
             else
-                MessageBox.Show("Incorrect Username / password");
+                loginVM.PassErrorVis = false;
         }
     }
 }

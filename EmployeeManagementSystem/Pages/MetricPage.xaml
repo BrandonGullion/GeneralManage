@@ -76,7 +76,7 @@
         
         <!-- Right Side of Page -->
 
-        <Frame Content="{Binding DisplayPage, Converter={converters:ApplicationPageValueConverter}, UpdateSourceTrigger=PropertyChanged}"
+        <Frame Content="{Binding DisplayPage, UpdateSourceTrigger=PropertyChanged}"
                Grid.Column="1"
                Margin="5"/>
 
